@@ -4,19 +4,18 @@ using RichillCapital.SharedKernel.Specifications.Exceptions;
 
 namespace RichillCapital.SharedKernel.UnitTests.Specifications.Exceptions;
 
-public sealed class DuplicateTakeExceptionTests
+public sealed class DuplicateOrderChainExceptionTests
 {
-    private const string DefaultMessage =
-        "Duplicate take clause detected. Only one take clause is allowed per specification.";
+    private const string DefaultMessage = "The specification contains more than one Order chain!";
 
     [Fact]
-    public void DefaultConstructor_Should_Throw_DuplicateTakeException()
+    public void DefaultConstructor_Should_Throw_DuplicateOrderChainException()
     {
         // Arrange
-        Action action = () => throw new DuplicateTakeException();
+        Action action = () => throw new DuplicateOrderChainException();
 
         // Act & Assert
-        action.Should().Throw<DuplicateTakeException>()
+        action.Should().Throw<DuplicateOrderChainException>()
             .WithMessage(DefaultMessage);
     }
 
@@ -25,10 +24,10 @@ public sealed class DuplicateTakeExceptionTests
     {
         // Arrange
         var innerException = new Exception("Test");
-        Action action = () => throw new DuplicateTakeException(innerException);
+        Action action = () => throw new DuplicateOrderChainException(innerException);
 
         // Act & Assert 
-        action.Should().Throw<DuplicateTakeException>()
+        action.Should().Throw<DuplicateOrderChainException>()
             .WithMessage(DefaultMessage)
             .WithInnerException<Exception>()
             .WithMessage("Test");
