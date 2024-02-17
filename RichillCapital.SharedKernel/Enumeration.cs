@@ -16,6 +16,7 @@ public abstract record class Enumeration<TEnum> :
 
 public abstract record class Enumeration<TEnum, TValue>
     where TEnum : Enumeration<TEnum, TValue>
+    where TValue : notnull
 {
     public static IReadOnlyCollection<TEnum> Members =>
         _fromName.Value.Values.ToList().AsReadOnly();
