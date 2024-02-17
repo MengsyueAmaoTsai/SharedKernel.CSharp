@@ -4,7 +4,7 @@ using RichillCapital.SharedKernel.Monad;
 
 namespace RichillCapital.SharedKernel;
 
-public abstract record class Enumeration<TEnum> :
+public abstract class Enumeration<TEnum> :
     Enumeration<TEnum, int>
     where TEnum : Enumeration<TEnum, int>
 {
@@ -14,7 +14,7 @@ public abstract record class Enumeration<TEnum> :
     }
 }
 
-public abstract record class Enumeration<TEnum, TValue>
+public abstract class Enumeration<TEnum, TValue>
     where TEnum : Enumeration<TEnum, TValue>
     where TValue : notnull
 {
@@ -48,17 +48,16 @@ public abstract record class Enumeration<TEnum, TValue>
             return dictionary;
         });
 
-    protected Enumeration(string name, TValue value)
-    {
-        Name = name;
-        Value = value;
-    }
+    protected Enumeration(string name, TValue value) =>
+        (Name, Value) = (name, value);
 
     public string Name { get; private init; }
 
     public TValue Value { get; private init; }
 
-    public static Maybe<TEnum> FromName(string name, bool ignoreCase = false) =>
+    public static Maybe<TEnum> FromName(
+        string name,
+        bool ignoreCase = false) =>
         string.IsNullOrWhiteSpace(name)
             ? Maybe<TEnum>.Null
             : (ignoreCase ?
@@ -68,10 +67,10 @@ public abstract record class Enumeration<TEnum, TValue>
             Maybe<TEnum>.Null;
 
     public static Maybe<TEnum> FromValue(TValue value) =>
-        value is not null && _fromValue.Value.TryGetValue(value, out var enumeration) ?
+        value is not null &&
+        _fromValue.Value.TryGetValue(value, out var enumeration) ?
             enumeration :
-            _enumOptions.Value.FirstOrDefault(x => x.Value is null) ??
-            Maybe<TEnum>.Null;
+            _enumOptions.Value.FirstOrDefault(x => x.Value is null) ?? Maybe<TEnum>.Null;
 
     public override string ToString() => Name;
 
@@ -80,11 +79,15 @@ public abstract record class Enumeration<TEnum, TValue>
     private static TEnum[] GetAllOptions()
     {
         var enumType = typeof(TEnum);
-        var assembly = Assembly.GetAssembly(enumType) ?? throw new InvalidOperationException();
+        var assembly = Assembly.GetAssembly(enumType) ??
+            throw new InvalidOperationException("Could not find the assembly for the enumeration type.");
 
         return assembly.GetTypes()
             .Where(enumType.IsAssignableFrom)
-            .SelectMany(type => type.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+            .SelectMany(type => type.GetFields(
+                BindingFlags.Public |
+                BindingFlags.Static |
+                BindingFlags.FlattenHierarchy)
                 .Where(field => type.IsAssignableFrom(field.FieldType))
                 .Select(field => (TEnum)field.GetValue(null)!)
                 .ToList())
@@ -105,7 +108,8 @@ public class EnumerationComparerAttribute<T> : Attribute
     public IEqualityComparer<T> Comparer { get; private init; }
 }
 
-public sealed class EnumerationStringComparerAttribute : EnumerationComparerAttribute<string>
+public sealed class EnumerationStringComparerAttribute :
+    EnumerationComparerAttribute<string>
 {
     public EnumerationStringComparerAttribute(StringComparison comparison)
         : base(GetComparer(comparison))
