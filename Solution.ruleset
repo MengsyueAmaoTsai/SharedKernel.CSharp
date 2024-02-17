@@ -275,7 +275,7 @@
     <Rule Id="SA1606" Action="Warning" />
     <Rule Id="SA1607" Action="Warning" />
     <Rule Id="SA1608" Action="Warning" />
-    <Rule Id="SA1609" Action="Warning" />
+    <Rule Id="SA1609" Action="Info" />
     <Rule Id="SA1610" Action="Warning" />
     <Rule Id="SA1611" Action="Warning" />
     <Rule Id="SA1612" Action="Warning" />
