@@ -1,10 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+  <Import Project="./Solution.Build.props" />
+  <Import Project="./Solution.Packages.props" />
 
   <ItemGroup>
     <Compile Remove="Tests\**" />
@@ -14,8 +10,11 @@
 
   <ItemGroup>
     <None Remove=".gitignore" />
+    <None Remove="LICENSE" />
+    <None Remove="README.md" />
     <None Remove="Solution.Build.props" />
     <None Remove="Solution.Packages.props" />
+    <None Remove="Solution.ruleset" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
 using FluentAssertions;
-using RichillCapital.SharedKernel;
 
 namespace RichillCapital.SharedKernel.UnitTests;
 

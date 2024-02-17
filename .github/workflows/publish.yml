@@ -1,0 +1,43 @@
+name: Publish
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  DOTNET_VERSION: 8.0.x
+  SOLUTION_FILE: ./RichillCapital.SharedKernel.sln
+  CONFIGURATION: Release
+  # AZURE_WEB_APP_NAME: richillcapital-exchange-api
+  # AZURE_WEB_APP_PACKAGE_PATH: ./publish    
+
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build ${{ env.SOLUTION_FILE }} --no-restore
+      
+    - name: Test
+      run: dotnet test ${{ env.SOLUTION_FILE }} -c ${{ env.CONFIGURATION }} --no-restore --no-build
+    
+    - name: Pack
+      run: dotnet pack ${{ env.SOLUTION_FILE }} -c ${{ env.CONFIGURATION }} --no-build --no-restore --output ./publish
+
+    - name: Publish to NuGet
+      run: dotnet nuget push ./publish/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
