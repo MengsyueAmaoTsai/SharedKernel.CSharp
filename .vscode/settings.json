@@ -1,0 +1,16 @@
+{
+  "dotnet.defaultSolution": "RichillCapital.SharedKernel.sln",
+  "cSpell.words": [
+    "appsettings",
+    "aspnet",
+    "ASPNETCORE",
+    "datetimeoffset",
+    "Mediat",
+    "Quantower",
+    "Serilog",
+    "Swashbuckle",
+    "Testcontainers",
+    "USERPROFILE",
+    "webapps"
+  ]
+}
