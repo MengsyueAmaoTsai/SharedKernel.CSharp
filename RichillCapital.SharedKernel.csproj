@@ -1,4 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>RichillCapital.SharedKernel</PackageId>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
   <Import Project="./Solution.Build.props" />
   <Import Project="./Solution.Packages.props" />
 
