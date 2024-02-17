@@ -4,11 +4,8 @@ public readonly record struct Maybe<TValue>
 {
     public static Maybe<TValue> Null = new(false, default);
 
-    private Maybe(bool hasValue, TValue value)
-    {
-        HasValue = hasValue;
-        Value = value;
-    }
+    private Maybe(bool hasValue, TValue value) =>
+        (HasValue, Value) = (hasValue, value);
 
     public bool HasValue { get; private init; }
 
@@ -24,4 +21,6 @@ public readonly record struct Maybe<TValue>
 
 public readonly record struct Maybe
 {
+    public static Maybe<TValue> From<TValue>(TValue value) =>
+        Maybe<TValue>.From(value);
 }
