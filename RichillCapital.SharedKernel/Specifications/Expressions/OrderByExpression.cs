@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 
-namespace RichillCapital.SharedKernel.Specifications;
+namespace RichillCapital.SharedKernel.Specifications.Expressions;
 
-public class OrderByExpression<T>
+public sealed class OrderByExpression<T>
 {
     private readonly Lazy<Func<T, object?>> _keySelectorFunc;
 

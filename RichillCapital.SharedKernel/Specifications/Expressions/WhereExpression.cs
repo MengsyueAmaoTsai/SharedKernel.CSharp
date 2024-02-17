@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace RichillCapital.SharedKernel.Specifications.Expressions;
 
-public class WhereExpression<T>
+public sealed class WhereExpression<T>
 {
     private readonly Lazy<Func<T, bool>> _predicateFunc;
 

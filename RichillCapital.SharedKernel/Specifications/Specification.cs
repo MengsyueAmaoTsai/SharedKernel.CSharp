@@ -1,9 +1,28 @@
+using System.Linq.Expressions;
+
 using RichillCapital.SharedKernel.Specifications.Expressions;
 
 namespace RichillCapital.SharedKernel.Specifications;
 
-public abstract class Specification<T, TProperty>
+public abstract class Specification<T, TResult> : Specification<T>
 {
+    protected Specification()
+    {
+        Query = new SpecificationBuilder<T, TResult>(this);
+    }
+
+    public new virtual SpecificationBuilder<T, TResult> Query { get; private init; }
+
+    public Expression<Func<T, TResult>>? Selector { get; private init; }
+
+    public Expression<Func<T, IEnumerable<TResult>>>? SelectorMany { get; private init; }
+
+    public new Func<IEnumerable<TResult>, IEnumerable<TResult>>? PostProcessingAction { get; private init; }
+
+    public new virtual IEnumerable<TResult> Evaluate(IEnumerable<T> entities)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public abstract class Specification<T>
@@ -42,4 +61,14 @@ public abstract class Specification<T>
     public bool AsNoTrackingWithIdentityResolution { get; internal set; } = false;
 
     public bool IgnoreQueryFilters { get; internal set; } = false;
+
+    public virtual IEnumerable<T> Evaluate(IEnumerable<T> entities)
+    {
+        throw new NotImplementedException();
+    }
+
+    public virtual bool IsSatisfiedBy(T entity)
+    {
+        throw new NotImplementedException();
+    }
 }

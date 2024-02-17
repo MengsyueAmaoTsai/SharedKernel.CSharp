@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace RichillCapital.SharedKernel.Specifications;
+namespace RichillCapital.SharedKernel.Specifications.Expressions;
 
 public sealed class IncludeExpression
 {

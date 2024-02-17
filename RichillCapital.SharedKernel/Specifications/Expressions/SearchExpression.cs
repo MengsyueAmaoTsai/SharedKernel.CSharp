@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 
-namespace RichillCapital.SharedKernel.Specifications;
+namespace RichillCapital.SharedKernel.Specifications.Expressions;
 
-public class SearchExpression<T>
+public sealed class SearchExpression<T>
 {
     private readonly Lazy<Func<T, string>> _selectorFunc;
 

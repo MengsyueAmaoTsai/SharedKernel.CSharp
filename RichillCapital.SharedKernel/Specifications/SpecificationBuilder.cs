@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace RichillCapital.SharedKernel.Specifications;
 
-public class SpecificationBuilder<T, TResult> : Specification<T>
+public sealed class SpecificationBuilder<T, TResult> : Specification<T>
 {
     public SpecificationBuilder(Specification<T, TResult> specification) =>
         Specification = specification;
