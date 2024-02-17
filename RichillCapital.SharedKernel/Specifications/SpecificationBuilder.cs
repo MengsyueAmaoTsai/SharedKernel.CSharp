@@ -2,12 +2,18 @@ using System.Linq.Expressions;
 
 namespace RichillCapital.SharedKernel.Specifications;
 
+public class SpecificationBuilder<T, TResult> : Specification<T>
+{
+    public SpecificationBuilder(Specification<T, TResult> specification) =>
+        Specification = specification;
+
+    public Specification<T, TResult> Specification { get; private init; }
+}
+
 public class SpecificationBuilder<T>
 {
-    public SpecificationBuilder(Specification<T> specification)
-    {
+    public SpecificationBuilder(Specification<T> specification) =>
         Specification = specification;
-    }
 
     public Specification<T> Specification { get; private init; }
 
