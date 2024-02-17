@@ -6,6 +6,7 @@ namespace RichillCapital.SharedKernel.UnitTests.Monad;
 
 public sealed class ResultTests
 {
+    [Fact]
     public void Success_Should_CreateSuccessResult()
     {
         // Arrange & Act
