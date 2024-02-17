@@ -2,11 +2,11 @@ using System.Linq.Expressions;
 
 namespace RichillCapital.SharedKernel.Specifications;
 
-public class OrderExpression<T>
+public class OrderByExpression<T>
 {
     private readonly Lazy<Func<T, object?>> _keySelectorFunc;
 
-    public OrderExpression(
+    public OrderByExpression(
         Expression<Func<T, object?>>
         keySelector,
         OrderByType orderByType)

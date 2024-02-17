@@ -36,7 +36,7 @@ public static class SpecificationBuilderExtensions
     {
         if (condition)
         {
-            ((List<Expression<Func<T, object>>>)builder.Specification.OrderExpressions).Add(orderExpression);
+            ((List<Expression<Func<T, object>>>)builder.Specification.OrderByExpressions).Add(orderExpression);
         }
 
         return builder;
@@ -54,7 +54,7 @@ public static class SpecificationBuilderExtensions
     {
         if (condition)
         {
-            ((List<Expression<Func<T, object>>>)builder.Specification.OrderExpressions).Add(orderExpression);
+            ((List<Expression<Func<T, object>>>)builder.Specification.OrderByExpressions).Add(orderExpression);
         }
 
         return builder;

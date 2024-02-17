@@ -1,4 +1,4 @@
-using System.Linq.Expressions;
+using RichillCapital.SharedKernel.Specifications.Expressions;
 
 namespace RichillCapital.SharedKernel.Specifications;
 
@@ -13,13 +13,19 @@ public abstract class Specification<T>
         Query = new SpecificationBuilder<T>(this);
     }
 
+    public IDictionary<string, object> Items { get; private init; } = new Dictionary<string, object>();
+
     public virtual SpecificationBuilder<T> Query { get; private init; }
 
-    public IEnumerable<Expression<Func<T, object>>> IncludeExpressions { get; } = [];
+    public IEnumerable<WhereExpression<T>> WhereExpressions { get; } = [];
 
-    public IEnumerable<Expression<Func<T, bool>>> WhereExpressions { get; } = [];
+    public IEnumerable<OrderByExpression<T>> OrderByExpressions { get; private init; } = [];
 
-    public IEnumerable<Expression<Func<T, object>>> OrderExpressions { get; } = [];
+    public IEnumerable<IncludeExpression> IncludeExpressions { get; } = [];
+
+    public IEnumerable<string> IncludeStrings { get; private init; } = [];
+
+    public IEnumerable<SearchExpression<T>> SearchExpressions { get; private init; } = [];
 
     public Func<IEnumerable<T>, IEnumerable<T>>? PostProcessingAction { get; internal set; } = null;
 
