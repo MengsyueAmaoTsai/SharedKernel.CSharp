@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="StyleCop.Analyzers rules with default action" Description="StyleCop.Analyzers with default action. Rules with IsEnabledByDefault = false are disabled." ToolsVersion="17.0">
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
-    <Rule Id="CA1000" Action="Warning" />
+    <Rule Id="CA1000" Action="Info" />
     <Rule Id="CA1001" Action="Warning" />
     <Rule Id="CA1002" Action="Warning" />
     <Rule Id="CA1003" Action="Warning" />
