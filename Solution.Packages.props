@@ -1,5 +1,6 @@
 <Project>
   <ItemGroup>
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.2" />
   </ItemGroup>
 </Project>
