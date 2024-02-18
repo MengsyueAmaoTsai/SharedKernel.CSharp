@@ -32,4 +32,17 @@ public sealed class MaybeExtensionsTests
         // Assert
         mapped.HasValue.Should().BeFalse();
     }
+
+    [Fact]
+    public void ThrowIfNoValue_Should_ThrowException_WhenMaybeHasNoValue()
+    {
+        // Arrange
+        var maybe = Maybe<int>.Null;
+
+        // Act
+        Action action = () => maybe.ThrowIfNoValue();
+
+        // Assert
+        action.Should().Throw<InvalidOperationException>();
+    }
 }

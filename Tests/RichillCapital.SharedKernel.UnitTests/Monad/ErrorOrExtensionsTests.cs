@@ -36,4 +36,26 @@ public sealed class ErrorOrExtensionsTests
         mappedErrorOr.Error.Should().Be(error);
         mappedErrorOr.Error.Message.Should().Be(errorMessage);
     }
+
+    [Fact]
+    public void ThrowIfError_Should_ThrowException_WhenErrorOrIsError()
+    {
+        // Arrange
+        var errorMessage = "error";
+        ErrorOr errorOr = Error.Invalid(errorMessage);
+        ErrorOr<string> errorOr2 = Error.Invalid(errorMessage);
+
+        // Act
+        Action action = () => errorOr.ThrowIfError();
+        Action action2 = () => errorOr2.ThrowIfError();
+
+        // Assert
+        action.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage(errorMessage);
+
+        action2.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage(errorMessage);
+    }
 }

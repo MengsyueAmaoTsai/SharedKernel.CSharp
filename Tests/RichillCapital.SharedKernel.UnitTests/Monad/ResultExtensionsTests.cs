@@ -33,4 +33,26 @@ public sealed class ResultExtensionsTests
         mappedResult.IsFailure.Should().BeTrue();
         mappedResult.Error.Message.Should().Be("Error message");
     }
+
+    [Fact]
+    public void ThrowIfFailure_Should_ThrowException_When_ResultIsFailure()
+    {
+        // Arrange
+        Result result = Error.Invalid("Error message");
+        Result<int> result2 = Error.Invalid("Error message");
+
+        // Act
+        Action action = () => result.ThrowIfFailure();
+        Action action2 = () => result2.ThrowIfFailure();
+
+        // Assert
+        action.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage("Error message");
+
+
+        action2.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage("Error message");
+    }
 }
