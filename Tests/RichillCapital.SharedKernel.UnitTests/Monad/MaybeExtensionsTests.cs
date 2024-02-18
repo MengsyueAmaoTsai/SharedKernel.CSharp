@@ -45,4 +45,16 @@ public sealed class MaybeExtensionsTests
         // Assert
         action.Should().Throw<InvalidOperationException>();
     }
+
+    [Fact]
+    public void ThrowIfNoValue_Should_ReturnValue_WhenMaybeHasValue()
+    {
+        // Arrange
+        var maybe = Maybe<int>.From(1);
+
+        int value = maybe.ThrowIfNoValue();
+
+        // Act & Assert
+        value.Should().Be(1);
+    }
 }

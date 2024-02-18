@@ -52,4 +52,18 @@ public sealed class MaybeTests
         maybe2.HasValue.Should().BeTrue();
         maybe2.Value.Should().Be(value);
     }
+
+    [Fact]
+    public void ImplicitConversion_Should_ConvertMaybeToValue()
+    {
+        // Arrange
+        var value = 1;
+        var maybe = Maybe<int>.From(value);
+
+        // Act
+        int converted = maybe;
+
+        // Assert
+        converted.Should().Be(value);
+    }
 }
