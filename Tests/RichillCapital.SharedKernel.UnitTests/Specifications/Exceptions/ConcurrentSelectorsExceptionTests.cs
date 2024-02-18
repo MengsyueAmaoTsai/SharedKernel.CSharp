@@ -16,7 +16,8 @@ public sealed class ConcurrentSelectorsExceptionTests
         Action action = () => throw new ConcurrentSelectorsException();
 
         // Act & Assert
-        action.Should().Throw<ConcurrentSelectorsException>()
+        action.Should()
+            .Throw<ConcurrentSelectorsException>()
             .WithMessage(DefaultMessage);
     }
 
@@ -24,13 +25,13 @@ public sealed class ConcurrentSelectorsExceptionTests
     public void Should_Throw_WithInnerException()
     {
         // Arrange
-        var innerException = new Exception("Test");
+        var errorMessage = "Test";
+        var innerException = new Exception(errorMessage);
         Action action = () => throw new ConcurrentSelectorsException(innerException);
 
         // Act & Assert 
-        action.Should().Throw<ConcurrentSelectorsException>()
-            .WithMessage(DefaultMessage)
-            .WithInnerException<Exception>()
-            .WithMessage("Test");
+        action.Should()
+            .Throw<ConcurrentSelectorsException>().WithMessage(DefaultMessage)
+            .WithInnerException<Exception>().WithMessage(errorMessage);
     }
 }
