@@ -24,15 +24,15 @@ public interface ISpecification<T>
 
     IDictionary<string, object> Items { get; }
 
-    IEnumerable<WhereExpression<T>> WhereExpressions { get; }
+    List<WhereExpression<T>> WhereExpressions { get; }
 
-    IEnumerable<OrderByExpression<T>> OrderExpressions { get; }
+    List<OrderByExpression<T>> OrderExpressions { get; }
 
-    IEnumerable<IncludeExpression> IncludeExpressions { get; }
+    List<IncludeExpression> IncludeExpressions { get; }
 
-    IEnumerable<string> IncludeStrings { get; }
+    List<string> IncludeStrings { get; }
 
-    IEnumerable<SearchExpression<T>> SearchExpressions { get; }
+    List<SearchExpression<T>> SearchExpressions { get; }
 
     int? Take { get; }
 

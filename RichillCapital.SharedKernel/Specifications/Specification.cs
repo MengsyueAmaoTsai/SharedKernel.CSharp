@@ -61,15 +61,15 @@ public class Specification<T> : ISpecification<T>
 
     public IDictionary<string, object> Items { get; set; } = new Dictionary<string, object>();
 
-    public IEnumerable<WhereExpression<T>> WhereExpressions { get; } = [];
+    public List<WhereExpression<T>> WhereExpressions { get; } = [];
 
-    public IEnumerable<OrderByExpression<T>> OrderExpressions { get; } = [];
+    public List<OrderByExpression<T>> OrderExpressions { get; } = [];
 
-    public IEnumerable<IncludeExpression> IncludeExpressions { get; } = [];
+    public List<IncludeExpression> IncludeExpressions { get; } = [];
 
-    public IEnumerable<string> IncludeStrings { get; } = [];
+    public List<string> IncludeStrings { get; } = [];
 
-    public IEnumerable<SearchExpression<T>> SearchExpressions { get; } = [];
+    public List<SearchExpression<T>> SearchExpressions { get; } = [];
 
     public int? Take { get; internal set; } = null;
 
