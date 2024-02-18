@@ -2,5 +2,5 @@ namespace RichillCapital.SharedKernel.Specifications;
 
 public interface ISpecificationRepository<T> : ISpecificationReadOnlyRepository<T>
 {
-    Task RemoveRange(ISpecification<T> specification);
+    void RemoveRange(ISpecification<T> specification);
 }
