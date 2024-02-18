@@ -11,7 +11,7 @@ public static class MaybeExtensions
 
     public static void ThrowIfNoValue<TValue>(this Maybe<TValue> maybe)
     {
-        if (!maybe.HasValue)
+        if (maybe.HasNoValue)
         {
             throw new InvalidOperationException("Maybe does not have a value");
         }
