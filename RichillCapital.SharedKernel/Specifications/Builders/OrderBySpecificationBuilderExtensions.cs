@@ -18,7 +18,7 @@ public static class OrderedBuilderExtensions
     {
         if (condition && !orderedBuilder.IsChainDiscarded)
         {
-            ((List<OrderByExpression<T>>)orderedBuilder.Specification.OrderExpressions)
+            orderedBuilder.Specification.OrderExpressions
                 .Add(new OrderByExpression<T>(
                     orderExpression,
                     OrderByExpressionType.ThenBy));
@@ -33,8 +33,8 @@ public static class OrderedBuilderExtensions
 
     public static IOrderedSpecificationBuilder<T> ThenByDescending<T>(
         this IOrderedSpecificationBuilder<T> orderedBuilder,
-        Expression<Func<T, object?>> orderExpression)
-        => ThenByDescending(orderedBuilder, orderExpression, true);
+        Expression<Func<T, object?>> orderExpression) =>
+        ThenByDescending(orderedBuilder, orderExpression, true);
 
     public static IOrderedSpecificationBuilder<T> ThenByDescending<T>(
         this IOrderedSpecificationBuilder<T> orderedBuilder,
@@ -43,7 +43,7 @@ public static class OrderedBuilderExtensions
     {
         if (condition && !orderedBuilder.IsChainDiscarded)
         {
-            ((List<OrderByExpression<T>>)orderedBuilder.Specification.OrderExpressions)
+            orderedBuilder.Specification.OrderExpressions
                 .Add(new OrderByExpression<T>(
                     orderExpression,
                     OrderByExpressionType.ThenByDescending));

@@ -26,7 +26,7 @@ public static class IncludeSpecificationBuilderExtensions
                 typeof(TProperty),
                 typeof(TPreviousProperty));
 
-            ((List<IncludeExpression>)previousBuilder.Specification.IncludeExpressions).Add(info);
+            previousBuilder.Specification.IncludeExpressions.Add(info);
         }
 
         var includeBuilder = new IncludeSpecificationBuilder<TEntity, TProperty>(
@@ -56,7 +56,7 @@ public static class IncludeSpecificationBuilderExtensions
                 typeof(TProperty),
                 typeof(IEnumerable<TPreviousProperty>));
 
-            ((List<IncludeExpression>)previousBuilder.Specification.IncludeExpressions).Add(info);
+            previousBuilder.Specification.IncludeExpressions.Add(info);
         }
 
         var includeBuilder = new IncludeSpecificationBuilder<TEntity, TProperty>(
