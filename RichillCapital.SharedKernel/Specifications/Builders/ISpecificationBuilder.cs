@@ -1,3 +1,4 @@
+
 namespace RichillCapital.SharedKernel.Specifications.Builders;
 
 public interface ISpecificationBuilder<T, TResult> : ISpecificationBuilder<T>
