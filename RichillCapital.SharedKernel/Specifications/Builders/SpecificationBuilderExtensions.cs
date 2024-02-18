@@ -38,7 +38,7 @@ public static class SpecificationBuilderExtensions
     {
         if (condition)
         {
-            ((List<OrderByExpression<T>>)builder.Specification.OrderExpressions)
+            builder.Specification.OrderExpressions
                 .Add(new OrderByExpression<T>(
                     orderExpression,
                     OrderByExpressionType.OrderBy));
@@ -63,7 +63,7 @@ public static class SpecificationBuilderExtensions
     {
         if (condition)
         {
-            ((List<OrderByExpression<T>>)builder.Specification.OrderExpressions)
+            builder.Specification.OrderExpressions
                 .Add(new OrderByExpression<T>(
                     orderExpression,
                     OrderByExpressionType.OrderByDescending));
@@ -95,7 +95,7 @@ public static class SpecificationBuilderExtensions
                 typeof(T),
                 typeof(TProperty));
 
-            ((List<IncludeExpression>)builder.Specification.IncludeExpressions).Add(info);
+            builder.Specification.IncludeExpressions.Add(info);
         }
 
         var includeBuilder = new IncludeSpecificationBuilder<T, TProperty>(
@@ -119,7 +119,7 @@ public static class SpecificationBuilderExtensions
     {
         if (condition)
         {
-            ((List<string>)builder.Specification.IncludeStrings).Add(includeString);
+            builder.Specification.IncludeStrings.Add(includeString);
         }
 
         return builder;
@@ -143,7 +143,7 @@ public static class SpecificationBuilderExtensions
     {
         if (condition)
         {
-            ((List<SearchExpression<T>>)builder.Specification.SearchExpressions)
+            builder.Specification.SearchExpressions
                 .Add(new SearchExpression<T>(selector, searchTerm, searchGroup));
         }
 
