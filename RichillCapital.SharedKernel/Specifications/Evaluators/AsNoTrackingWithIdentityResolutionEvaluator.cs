@@ -1,15 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Ardalis.Specification.EntityFrameworkCore;
+namespace RichillCapital.SharedKernel.Specifications.Evaluators;
 
 public class AsNoTrackingWithIdentityResolutionEvaluator : IEvaluator
 {
-    private AsNoTrackingWithIdentityResolutionEvaluator() { }
-    public static AsNoTrackingWithIdentityResolutionEvaluator Instance { get; } = new AsNoTrackingWithIdentityResolutionEvaluator();
+    private AsNoTrackingWithIdentityResolutionEvaluator()
+    {
+    }
+
+    public static AsNoTrackingWithIdentityResolutionEvaluator Instance { get; } =
+        new AsNoTrackingWithIdentityResolutionEvaluator();
 
     public bool IsCriteriaEvaluator { get; } = true;
 
-    public IQueryable<T> GetQuery<T>(IQueryable<T> query, ISpecification<T> specification) where T : class
+    public IQueryable<T> GetQuery<T>(IQueryable<T> query, ISpecification<T> specification)
+        where T : class
     {
         if (specification.AsNoTrackingWithIdentityResolution)
         {

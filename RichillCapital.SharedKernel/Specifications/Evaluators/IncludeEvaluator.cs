@@ -4,13 +4,11 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-using RichillCapital.SharedKernel.Specifications;
-using RichillCapital.SharedKernel.Specifications.Evaluators;
 using RichillCapital.SharedKernel.Specifications.Expressions;
 
 using IncludeExpression = RichillCapital.SharedKernel.Specifications.Expressions.IncludeExpression;
 
-namespace Ardalis.Specification.EntityFrameworkCore;
+namespace RichillCapital.SharedKernel.Specifications.Evaluators;
 
 public class IncludeEvaluator : IEvaluator
 {

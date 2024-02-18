@@ -1,15 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Ardalis.Specification.EntityFrameworkCore;
+namespace RichillCapital.SharedKernel.Specifications.Evaluators;
 
 public class AsTrackingEvaluator : IEvaluator
 {
-    private AsTrackingEvaluator() { }
+    private AsTrackingEvaluator()
+    {
+    }
+
     public static AsTrackingEvaluator Instance { get; } = new AsTrackingEvaluator();
 
     public bool IsCriteriaEvaluator { get; } = true;
 
-    public IQueryable<T> GetQuery<T>(IQueryable<T> query, ISpecification<T> specification) where T : class
+    public IQueryable<T> GetQuery<T>(IQueryable<T> query, ISpecification<T> specification)
+        where T : class
     {
         if (specification.AsTracking)
         {
