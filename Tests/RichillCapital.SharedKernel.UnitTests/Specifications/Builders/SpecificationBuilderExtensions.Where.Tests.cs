@@ -4,7 +4,7 @@ using RichillCapital.SharedKernel.UnitTests.Specifications.Common.Specs;
 
 namespace RichillCapital.SharedKernel.UnitTests.Specifications.Builders;
 
-public sealed class SpecificationBuilderExtensionsTests
+public sealed class SpecificationBuilderExtensionsWhereTests
 {
     [Fact]
     public void Should_AddNothingToList_WhenNoSpecificationIsAdded()
