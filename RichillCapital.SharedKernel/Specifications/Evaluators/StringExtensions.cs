@@ -4,7 +4,7 @@ using RichillCapital.SharedKernel.Specifications.Exceptions;
 
 namespace RichillCapital.SharedKernel.Specifications.Evaluators;
 
-public static class SearchExtension
+public static class StringExtensions
 {
     public static bool Like(this string input, string pattern)
     {
