@@ -38,7 +38,7 @@ public sealed class ResultTests
     }
 
     [Fact]
-    public void ImplicitCast_Should_CreateFailureResult()
+    public void ImplicitConversion_Should_CreateFailureResult()
     {
         // Arrange & Act
         Result result = Error.Invalid("Error message");
@@ -49,7 +49,7 @@ public sealed class ResultTests
     }
 
     [Fact]
-    public void ImplicitCast_Should_CreateSuccessResult()
+    public void ImplicitConversion_Should_CreateSuccessResult()
     {
         // Arrange & Act
         Result<int> result = 1;
@@ -60,7 +60,7 @@ public sealed class ResultTests
     }
 
     [Fact]
-    public void ImplicitCast_Should_CreateFailureResultWithValue()
+    public void ImplicitConversion_Should_CreateFailureResultWithValue()
     {
         // Arrange & Act
         Result<int> result = Error.Invalid("Error message");
@@ -71,7 +71,7 @@ public sealed class ResultTests
     }
 
     [Fact]
-    public void ImplicitCast_Should_CreateSuccessResultWithValue()
+    public void ImplicitConversion_Should_CreateSuccessResultWithValue()
     {
         // Arrange & Act
         Result<int> result = 1;
