@@ -5,10 +5,8 @@ using RichillCapital.SharedKernel.UnitTests.Specifications.Common;
 
 public sealed class StoreProductNamesSpec : Specification<Store, string?>
 {
-    public StoreProductNamesSpec()
-    {
+    public StoreProductNamesSpec() =>
         Query
             .SelectMany(store => store.Products
                 .Select(product => product.Name));
-    }
 }

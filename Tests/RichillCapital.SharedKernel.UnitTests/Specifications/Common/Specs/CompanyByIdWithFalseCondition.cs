@@ -5,8 +5,7 @@ namespace RichillCapital.SharedKernel.UnitTests.Specifications.Common.Specs;
 
 public sealed class CompanyByIdWithFalseConditions : Specification<Company>
 {
-    public CompanyByIdWithFalseConditions(int id)
-    {
+    public CompanyByIdWithFalseConditions(int id) =>
         Query
             .Where(company => company.Id == id, false)
             .OrderBy(company => company.Id, false)
@@ -23,5 +22,4 @@ public sealed class CompanyByIdWithFalseConditions : Specification<Company>
             .AsSplitQuery(false)
             .IgnoreQueryFilters(false)
             .Search(company => company.Name!, "test", false);
-    }
 }

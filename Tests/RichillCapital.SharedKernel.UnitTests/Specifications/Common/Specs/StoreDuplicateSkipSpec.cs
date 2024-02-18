@@ -5,10 +5,8 @@ using RichillCapital.SharedKernel.UnitTests.Specifications.Common;
 
 public sealed class StoreDuplicateSkipSpec : Specification<Store>
 {
-    public StoreDuplicateSkipSpec()
-    {
+    public StoreDuplicateSkipSpec() =>
         Query
             .Skip(1)
             .Skip(2);
-    }
 }

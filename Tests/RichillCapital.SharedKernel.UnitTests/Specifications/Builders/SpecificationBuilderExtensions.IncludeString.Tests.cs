@@ -8,7 +8,7 @@ namespace RichillCapital.SharedKernel.UnitTests.Specifications.Builders;
 public class SpecificationBuilderExtensionsIncludeStringTests
 {
     [Fact]
-    public void AddsNothingToList_GivenNoIncludeStringExpression()
+    public void Should_AddNothingToList_When_GivenNoIncludeStringExpression()
     {
         // Arrange
         var spec = new StoreEmptySpec();
@@ -18,7 +18,7 @@ public class SpecificationBuilderExtensionsIncludeStringTests
     }
 
     [Fact]
-    public void AddsNothingToList_GivenIncludeStringWithFalseCondition()
+    public void Should_AddNothingToList_When_GivenIncludeStringWithFalseCondition()
     {
         // Arrange
         var spec = new CompanyByIdWithFalseConditions(1);
@@ -28,7 +28,7 @@ public class SpecificationBuilderExtensionsIncludeStringTests
     }
 
     [Fact]
-    public void AddsIncludeStringToList_GivenString()
+    public void Should_AddIncludeStringToList_When_GivenString()
     {
         // Arrange
         var spec = new StoreIncludeCompanyThenCountryAsStringSpec();

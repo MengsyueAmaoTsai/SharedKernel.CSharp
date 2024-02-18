@@ -5,9 +5,7 @@ namespace RichillCapital.SharedKernel.UnitTests.Specifications.Common.Specs;
 
 public sealed class StoreByIdSpec : Specification<Store>
 {
-    public StoreByIdSpec(int id)
-    {
+    public StoreByIdSpec(int id) =>
         Query
             .Where(store => store.Id == id);
-    }
 }
