@@ -21,11 +21,33 @@ public static class ErrorOrExtensions
             errorOr.Error :
             map(errorOr.Value);
 
-    public static void ThrowIfError(this ErrorOr errorOr)
-    {
-        if (errorOr.IsError)
-        {
-            throw new InvalidOperationException(errorOr.Error.Message);
-        }
-    }
+    public static ErrorOr<TValue> ThrowIfError<TValue>(this ErrorOr<TValue> errorOr) =>
+        errorOr.IsError ?
+            throw new InvalidOperationException(errorOr.Error.Message) :
+            errorOr;
+
+    public static ErrorOr<TValue> ThrowIfError<TValue>(this ErrorOr<TValue> errorOr, string message) =>
+        errorOr.IsError ?
+            throw new InvalidOperationException(message) :
+            errorOr;
+
+    public static ErrorOr<TValue> ThrowIfError<TValue>(this ErrorOr<TValue> errorOr, Error error) =>
+        errorOr.IsError ?
+            throw new InvalidOperationException(error.Message) :
+            errorOr;
+
+    public static ErrorOr ThrowIfError(this ErrorOr errorOr) =>
+        errorOr.IsError ?
+            throw new InvalidOperationException(errorOr.Error.Message) :
+            errorOr;
+
+    public static ErrorOr ThrowIfError(this ErrorOr errorOr, string message) =>
+        errorOr.IsError ?
+            throw new InvalidOperationException(message) :
+            errorOr;
+
+    public static ErrorOr ThrowIfError(this ErrorOr errorOr, Error error) =>
+        errorOr.IsError ?
+            throw new InvalidOperationException(error.Message) :
+            errorOr;
 }

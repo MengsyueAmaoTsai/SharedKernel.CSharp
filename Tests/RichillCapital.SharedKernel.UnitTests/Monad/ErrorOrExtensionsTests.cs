@@ -128,4 +128,47 @@ public sealed class ErrorOrExtensionsTests
             .Throw<InvalidOperationException>()
             .WithMessage(errorMessage);
     }
+
+    [Fact]
+    public void ThrowIfError_Should_ReturnErrorOr_WhenErrorOrIsNoError()
+    {
+        // Arrange
+        var value = 1;
+        ErrorOr<int> errorOr = value;
+        ErrorOr errorOr2 = ErrorOr.NoError;
+
+        // Act
+
+        // Assert
+        errorOr
+            .ThrowIfError()
+            .Value
+            .Should().Be(value);
+
+        errorOr2
+            .ThrowIfError()
+            .Should().Be(ErrorOr.NoError);
+    }
+
+    [Fact]
+    public void ThrowIfError_Should_ThrowExceptionWithMessage_WhenErrorOrIsError()
+    {
+        // Arrange
+        var errorMessage = "error";
+        ErrorOr errorOr = Error.Invalid(errorMessage);
+        ErrorOr<string> errorOr2 = Error.Invalid(errorMessage);
+
+        // Act
+        Action action = () => errorOr.ThrowIfError(errorMessage);
+        Action action2 = () => errorOr2.ThrowIfError(errorMessage);
+
+        // Assert
+        action.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage(errorMessage);
+
+        action2.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage(errorMessage);
+    }
 }
