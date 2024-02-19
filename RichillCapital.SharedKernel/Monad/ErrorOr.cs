@@ -1,3 +1,4 @@
+
 namespace RichillCapital.SharedKernel.Monad;
 
 public record class ErrorOr<TValue> : ErrorOr
