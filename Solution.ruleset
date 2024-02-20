@@ -288,10 +288,10 @@
     <Rule Id="SA1619" Action="Warning" />
     <Rule Id="SA1620" Action="Warning" />
     <Rule Id="SA1621" Action="Warning" />
-    <Rule Id="SA1622" Action="Warning" />
+    <Rule Id="SA1622" Action="Info" />
     <Rule Id="SA1623" Action="Info" />
     <Rule Id="SA1624" Action="Warning" />
-    <Rule Id="SA1625" Action="Warning" />
+    <Rule Id="SA1625" Action="Info" />
     <Rule Id="SA1626" Action="Warning" />
     <Rule Id="SA1627" Action="Warning" />
     <Rule Id="SA1628" Action="Warning" />
