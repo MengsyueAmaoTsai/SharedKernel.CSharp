@@ -4,10 +4,7 @@ namespace RichillCapital.SharedKernel.UnitTests;
 
 public sealed class ValueObjectTests
 {
-    private sealed class TestValueObject(
-        string TestString,
-        int TestInt) :
-        ValueObject
+    private sealed class TestValueObject(string TestString, int TestInt) : ValueObject
     {
         protected override IEnumerable<object> GetAtomicValues()
         {
@@ -17,7 +14,7 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void EqualsOperator_Should_ReturnTrue_WhenValueObjectsAreEqual()
+    public void EqualsOperator_WithSameValues_ReturnsTrue()
     {
         // Arrange
         var valueObject1 = new TestValueObject("test", 1);
@@ -31,7 +28,7 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void EqualsOperator_Should_ReturnFalse_WhenValueObjectsAreNotEqual()
+    public void EqualsOperator_WithDifferentValues_ReturnsFalse()
     {
         // Arrange
         var valueObject1 = new TestValueObject("test", 1);
@@ -45,21 +42,7 @@ public sealed class ValueObjectTests
     }
 
     [Fact]
-    public void NotEqualsOperator_Should_ReturnTrue_WhenValueObjectsAreNotEqual()
-    {
-        // Arrange
-        var valueObject1 = new TestValueObject("test", 1);
-        var valueObject2 = new TestValueObject("test", 2);
-
-        // Act
-        var areNotEqual = valueObject1 != valueObject2;
-
-        // Assert
-        areNotEqual.Should().BeTrue();
-    }
-
-    [Fact]
-    public void NotEqualsOperator_Should_ReturnFalse_WhenValueObjectsAreEqual()
+    public void NotEqualsOperator_WithSameValues_ReturnsFalse()
     {
         // Arrange
         var valueObject1 = new TestValueObject("test", 1);
@@ -70,6 +53,20 @@ public sealed class ValueObjectTests
 
         // Assert
         areNotEqual.Should().BeFalse();
+    }
+
+    [Fact]
+    public void NotEqualsOperator_WithDifferentValues_ReturnsTrue()
+    {
+        // Arrange
+        var valueObject1 = new TestValueObject("test", 1);
+        var valueObject2 = new TestValueObject("test", 2);
+
+        // Act
+        var areNotEqual = valueObject1 != valueObject2;
+
+        // Assert
+        areNotEqual.Should().BeTrue();
     }
 
     [Fact]

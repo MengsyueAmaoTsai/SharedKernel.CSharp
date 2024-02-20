@@ -22,7 +22,7 @@ public sealed class EntityTests
     }
 
     [Fact]
-    public void EqualsOperator_ShouldReturnTrue_WhenComparingTwoEntitiesWithTheSameId()
+    public void EqualsOperator_WithSameValues_ReturnsTrue()
     {
         // Arrange
         var id = GenerateId();
@@ -30,42 +30,28 @@ public sealed class EntityTests
         var entity2 = new TestEntity(id);
 
         // Act
-        var result = entity1 == entity2;
+        var areEqual = entity1 == entity2;
 
         // Assert
-        result.Should().BeTrue();
+        areEqual.Should().BeTrue();
     }
 
     [Fact]
-    public void EqualsOperator_ShouldReturnFalse_WhenComparingTwoEntitiesWithDifferentIds()
+    public void EqualsOperator_WithDifferentValues_ReturnsFalse()
     {
         // Arrange
         var entity1 = new TestEntity(GenerateId());
         var entity2 = new TestEntity(GenerateId());
 
         // Act
-        var result = entity1 == entity2;
+        var areEqual = entity1 == entity2;
 
         // Assert
-        result.Should().BeFalse();
+        areEqual.Should().BeFalse();
     }
 
     [Fact]
-    public void NotEqualsOperator_ShouldReturnTrue_WhenComparingTwoEntitiesWithDifferentIds()
-    {
-        // Arrange
-        var entity1 = new TestEntity(GenerateId());
-        var entity2 = new TestEntity(GenerateId());
-
-        // Act
-        var result = entity1 != entity2;
-
-        // Assert
-        result.Should().BeTrue();
-    }
-
-    [Fact]
-    public void NotEqualsOperator_ShouldReturnFalse_WhenComparingTwoEntitiesWithTheSameId()
+    public void NotEqualsOperator_WithSameValues_ReturnsFalse()
     {
         // Arrange
         var id = GenerateId();
@@ -73,10 +59,24 @@ public sealed class EntityTests
         var entity2 = new TestEntity(id);
 
         // Act
-        var result = entity1 != entity2;
+        var areNotEqual = entity1 != entity2;
 
         // Assert
-        result.Should().BeFalse();
+        areNotEqual.Should().BeFalse();
+    }
+
+    [Fact]
+    public void NotEqualsOperator_WithDifferentValues_ReturnsTrue()
+    {
+        // Arrange
+        var entity1 = new TestEntity(GenerateId());
+        var entity2 = new TestEntity(GenerateId());
+
+        // Act
+        var areNotEqual = entity1 != entity2;
+
+        // Assert
+        areNotEqual.Should().BeTrue();
     }
 
     [Fact]

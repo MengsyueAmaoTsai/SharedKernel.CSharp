@@ -1,39 +1,67 @@
-
 namespace RichillCapital.SharedKernel.Monad;
 
-public record class ErrorOr<TValue> : ErrorOr
+public record class ErrorOr<TValue>
 {
-    private ErrorOr(bool isError, Error error, TValue value)
-        : base(isError, error) => Value = value;
+    private readonly TValue? _value = default;
+    private readonly List<Error>? _errors = null;
 
-    public TValue Value { get; private init; }
+    private ErrorOr(bool isError, IEnumerable<Error> errors, TValue value) =>
+        (IsError, _errors, _value) = (isError, isError ? errors.ToList() : null, value);
 
-    public static ErrorOr<TValue> From(TValue value) =>
-        new(false, Error.Null, value);
+    public bool IsError { get; private init; }
 
-    public static implicit operator ErrorOr<TValue>(Error error) =>
-        new(true, error, default);
+    public bool IsValue => !IsError;
+
+    public IReadOnlyList<Error> Errors =>
+        IsError ?
+        _errors! :
+        [Error.Null];
+
+    public TValue Value => IsError ?
+        throw new InvalidOperationException("Cannot access value for an error result.") :
+        _value!;
+
+    public static ErrorOr<TValue> Is(TValue value) =>
+        new(false, Enumerable.Empty<Error>(), value);
 
     public static implicit operator ErrorOr<TValue>(TValue value) =>
-        new(false, Error.Null, value);
+        Is(value);
+
+    public static ErrorOr<TValue> From(IEnumerable<Error> errors) =>
+        new(true, errors, default!);
+
+    public static implicit operator ErrorOr<TValue>(List<Error> errors) =>
+        From(errors);
+
+    public static ErrorOr<TValue> From(Error error) =>
+        new(true, [error], default!);
+
+    public static implicit operator ErrorOr<TValue>(Error error) =>
+        From(error);
+    public ErrorOr<TDestination> Map<TDestination>(Func<TValue, TDestination> map) =>
+        IsError ?
+            ErrorOr<TDestination>.From(Errors) :
+            ErrorOr<TDestination>.Is(map(Value));
+
+    public ErrorOr<TResult> Then<TResult>(Func<TValue, ErrorOr<TResult>> errorOrFunc) =>
+        IsError ?
+            ErrorOr<TResult>.From(Errors) :
+            errorOrFunc(Value);
+
+    public async Task<ErrorOr<TResult>> Then<TResult>(Func<TValue, Task<ErrorOr<TResult>>> errorOrTask) =>
+        IsError ?
+            ErrorOr<TResult>.From(Errors) :
+            await errorOrTask(Value);
 }
 
 public record class ErrorOr
 {
-    public static readonly ErrorOr NoError = new(false, Error.Null);
+    public static ErrorOr<TValue> Is<TValue>(TValue value) =>
+        ErrorOr<TValue>.Is(value);
 
-    internal protected ErrorOr(bool isError, Error error) =>
-        (IsError, Error) = (isError, error);
+    public static ErrorOr<TValue> From<TValue>(IEnumerable<Error> errors) =>
+        ErrorOr<TValue>.From(errors);
 
-    public bool IsError { get; private init; }
-
-    public bool IsNoError => !IsError;
-
-    public Error Error { get; private init; }
-
-    public static ErrorOr<TValue> From<TValue>(TValue value) =>
-        ErrorOr<TValue>.From(value);
-
-    public static implicit operator ErrorOr(Error error) =>
-        new(true, error);
+    public static ErrorOr<TValue> From<TValue>(Error error) =>
+        ErrorOr<TValue>.From(error);
 }

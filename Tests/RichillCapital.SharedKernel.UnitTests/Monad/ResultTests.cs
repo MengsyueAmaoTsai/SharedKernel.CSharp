@@ -1,83 +1,48 @@
 using FluentAssertions;
 
 using RichillCapital.SharedKernel.Monad;
+using RichillCapital.SharedKernel.UnitTests.Monad.Common;
+using RichillCapital.SharedKernel.UnitTests.Monad.Common.Assertions;
 
 namespace RichillCapital.SharedKernel.UnitTests.Monad;
 
-public sealed class ResultTests
+public sealed partial class ResultTests : MonadTests
 {
     [Fact]
-    public void Success_Should_CreateSuccessResult()
+    public void ImplicitCast_Should_CreateFailureResult_When_CastingErrorToResult()
     {
         // Arrange & Act
-        var result = Result.Success;
+        Result result = TestError;
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.ShouldBeFailureResultWithError(TestError);
     }
 
     [Fact]
-    public void From_Should_CreateSuccessResult()
+    public void Equal_Should_ReturnTrue_When_BothResultsAreSuccessAndValuesAreEqual()
     {
-        // Arrange & Act
-        Result result = Result.From(1);
+        // Arrange
+        Result result1 = Result.Success();
+        Result result2 = Result.Success();
+
+        // Act
+        bool areEqual = result1 == result2;
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        areEqual.Should().BeTrue();
     }
 
     [Fact]
-    public void From_Should_CreateSuccessResultWithValue()
+    public void Equal_Should_ReturnFalse_When_BothResultsAreFailureAndErrorAreNotEqual()
     {
-        // Arrange & Act
-        Result<int> result = Result<int>.From(1);
+        // Arrange
+        Result result1 = Result.Failure(Error.Invalid("error1"));
+        Result result2 = Result.Failure(Error.Invalid("error2"));
+
+        // Act
+        bool areEqual = result1 == result2;
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().Be(1);
-    }
-
-    [Fact]
-    public void ImplicitConversion_Should_CreateFailureResult()
-    {
-        // Arrange & Act
-        Result result = Error.Invalid("Error message");
-
-        // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Message.Should().Be("Error message");
-    }
-
-    [Fact]
-    public void ImplicitConversion_Should_CreateSuccessResult()
-    {
-        // Arrange & Act
-        Result<int> result = 1;
-
-        // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().Be(1);
-    }
-
-    [Fact]
-    public void ImplicitConversion_Should_CreateFailureResultWithValue()
-    {
-        // Arrange & Act
-        Result<int> result = Error.Invalid("Error message");
-
-        // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Message.Should().Be("Error message");
-    }
-
-    [Fact]
-    public void ImplicitConversion_Should_CreateSuccessResultWithValue()
-    {
-        // Arrange & Act
-        Result<int> result = 1;
-
-        // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().Be(1);
+        areEqual.Should().BeFalse();
     }
 }

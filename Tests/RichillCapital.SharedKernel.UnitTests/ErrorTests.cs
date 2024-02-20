@@ -2,75 +2,89 @@ using FluentAssertions;
 
 namespace RichillCapital.SharedKernel.UnitTests;
 
-public sealed class ErrorTests
+public sealed partial class ErrorTests
 {
     [Fact]
-    public void Should_Create_ValidationError()
+    public void Equal_Should_Return_True_When_Both_Instances_Are_Equal()
     {
         // Arrange
-        var message = "Invalid input.";
+        var error1 = Error.Invalid("Invalid input.");
+        var error2 = Error.Invalid("Invalid input.");
 
         // Act
-        var error = Error.Invalid(message);
+        var result = error1.Equals(error2);
 
         // Assert
-        error.Type.Should().Be(ErrorType.Validation);
-        error.Message.Should().Be(message);
+        result.Should().BeTrue();
     }
 
     [Fact]
-    public void Should_Create_UnauthorizedError()
+    public void Equal_Should_Return_False_When_Both_Instances_Are_Not_Equal()
     {
         // Arrange
-        var message = "Unauthorized access.";
+        var error1 = Error.Invalid("Invalid input.");
+        var error2 = Error.Unauthorized("Unauthorized access.");
 
         // Act
-        var error = Error.Unauthorized(message);
+        var result = error1.Equals(error2);
 
         // Assert
-        error.Type.Should().Be(ErrorType.Unauthorized);
-        error.Message.Should().Be(message);
+        result.Should().BeFalse();
     }
 
     [Fact]
-    public void Should_Create_ForbiddenError()
+    public void EqualsOperator_Should_Return_True_When_Both_Instances_Are_Equal()
     {
         // Arrange
-        var message = "Forbidden access.";
+        var error1 = Error.Invalid("Invalid input.");
+        var error2 = Error.Invalid("Invalid input.");
 
         // Act
-        var error = Error.Forbidden(message);
+        var result = error1 == error2;
 
         // Assert
-        error.Type.Should().Be(ErrorType.Forbidden);
-        error.Message.Should().Be(message);
+        result.Should().BeTrue();
     }
 
     [Fact]
-    public void Should_Create_NotFoundError()
+    public void EqualsOperator_Should_Return_False_When_Both_Instances_Are_Not_Equal()
     {
         // Arrange
-        var message = "Resource not found.";
+        var error1 = Error.Invalid("Invalid input.");
+        var error2 = Error.Unauthorized("Unauthorized access.");
 
         // Act
-        var error = Error.NotFound(message);
+        var result = error1 == error2;
 
         // Assert
-        error.Type.Should().Be(ErrorType.NotFound);
-        error.Message.Should().Be(message);
+        result.Should().BeFalse();
     }
 
     [Fact]
-    public void Should_Create_ConflictError()
+    public void NotEqualsOperator_Should_Return_True_When_Both_Instances_Are_Not_Equal()
     {
         // Arrange
-        var message = "Resource conflict.";
+        var error1 = Error.Invalid("Invalid input.");
+        var error2 = Error.Unauthorized("Unauthorized access.");
 
         // Act
-        var error = Error.Conflict(message);
+        var result = error1 != error2;
 
         // Assert
-        error.Type.Should().Be(ErrorType.Conflict);
-        error.Message.Should().Be(message);
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void NotEqualsOperator_Should_Return_False_When_Both_Instances_Are_Equal()
+    {
+        // Arrange
+        var error1 = Error.Invalid("Invalid input.");
+        var error2 = Error.Invalid("Invalid input.");
+
+        // Act
+        var result = error1 != error2;
+
+        // Assert
+        result.Should().BeFalse();
     }
 }

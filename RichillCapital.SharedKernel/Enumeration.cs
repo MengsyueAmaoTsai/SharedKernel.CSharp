@@ -18,9 +18,6 @@ public abstract class Enumeration<TEnum, TValue>
     where TEnum : Enumeration<TEnum, TValue>
     where TValue : notnull
 {
-    public static IReadOnlyCollection<TEnum> Members =>
-        _fromName.Value.Values.ToList().AsReadOnly();
-
     private static readonly Lazy<TEnum[]> _enumOptions =
         new(GetAllOptions, LazyThreadSafetyMode.ExecutionAndPublication);
 
@@ -51,6 +48,9 @@ public abstract class Enumeration<TEnum, TValue>
     protected Enumeration(string name, TValue value) =>
         (Name, Value) = (name, value);
 
+    public static IReadOnlyCollection<TEnum> Members =>
+        _fromName.Value.Values.ToList().AsReadOnly();
+
     public string Name { get; private init; }
 
     public TValue Value { get; private init; }
@@ -67,10 +67,11 @@ public abstract class Enumeration<TEnum, TValue>
             Maybe<TEnum>.Null;
 
     public static Maybe<TEnum> FromValue(TValue value) =>
-        value is not null &&
-        _fromValue.Value.TryGetValue(value, out var enumeration) ?
-            enumeration :
-            _enumOptions.Value.FirstOrDefault(x => x.Value is null) ?? Maybe<TEnum>.Null;
+        value is null ?
+            Maybe<TEnum>.Null :
+            _fromValue.Value.TryGetValue(value, out var enumeration) ?
+                enumeration :
+                Maybe<TEnum>.Null;
 
     public override string ToString() => Name;
 

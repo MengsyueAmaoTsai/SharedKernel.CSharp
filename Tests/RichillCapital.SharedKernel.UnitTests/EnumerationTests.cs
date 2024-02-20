@@ -17,6 +17,90 @@ public sealed class EnumerationTests
     }
 
     [Fact]
+    public void Equals_ShouldReturnTrue_WhenBothInstancesAreEqual()
+    {
+        // Arrange
+        var enumeration1 = TestEnumeration.One;
+        var enumeration2 = TestEnumeration.One;
+
+        // Act
+        var result = enumeration1.Equals(enumeration2);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Equals_ShouldReturnFalse_WhenBothInstancesAreNotEqual()
+    {
+        // Arrange
+        var enumeration1 = TestEnumeration.One;
+        var enumeration2 = TestEnumeration.Two;
+
+        // Act
+        var result = enumeration1.Equals(enumeration2);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void EqualsOperator_ShouldReturnTrue_WhenBothInstancesAreEqual()
+    {
+        // Arrange
+        var enumeration1 = TestEnumeration.One;
+        var enumeration2 = TestEnumeration.One;
+
+        // Act
+        var result = enumeration1 == enumeration2;
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void EqualsOperator_ShouldReturnFalse_WhenBothInstancesAreNotEqual()
+    {
+        // Arrange
+        var enumeration1 = TestEnumeration.One;
+        var enumeration2 = TestEnumeration.Two;
+
+        // Act
+        var result = enumeration1 == enumeration2;
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void NotEqualsOperator_ShouldReturnTrue_WhenBothInstancesAreNotEqual()
+    {
+        // Arrange
+        var enumeration1 = TestEnumeration.One;
+        var enumeration2 = TestEnumeration.Two;
+
+        // Act
+        var result = enumeration1 != enumeration2;
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void NotEqualsOperator_ShouldReturnFalse_WhenBothInstancesAreEqual()
+    {
+        // Arrange
+        var enumeration1 = TestEnumeration.One;
+        var enumeration2 = TestEnumeration.One;
+
+        // Act
+        var result = enumeration1 != enumeration2;
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
     public void GetHashCode_ShouldReturnTheSameHashCodeAsTheValue()
     {
         // Arrange
