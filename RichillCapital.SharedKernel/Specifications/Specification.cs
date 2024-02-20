@@ -7,7 +7,9 @@ using RichillCapital.SharedKernel.Specifications.Validators;
 
 namespace RichillCapital.SharedKernel.Specifications;
 
-public class Specification<T, TResult> : Specification<T>, ISpecification<T, TResult>
+public abstract class Specification<T, TResult> :
+    Specification<T>,
+    ISpecification<T, TResult>
 {
     protected Specification()
         : this(InMemorySpecificationEvaluator.Default)
@@ -32,7 +34,7 @@ public class Specification<T, TResult> : Specification<T>, ISpecification<T, TRe
     }
 }
 
-public class Specification<T> : ISpecification<T>
+public abstract class Specification<T> : ISpecification<T>
 {
     protected Specification()
         : this(InMemorySpecificationEvaluator.Default, SpecificationValidator.Default)
@@ -77,10 +79,6 @@ public class Specification<T> : ISpecification<T>
 
     public Func<IEnumerable<T>, IEnumerable<T>>? PostProcessingAction { get; internal set; } = null;
 
-    public string? CacheKey { get; internal set; }
-
-    public bool CacheEnabled { get; internal set; }
-
     public bool AsTracking { get; internal set; } = false;
 
     public bool AsNoTracking { get; internal set; } = false;
@@ -91,17 +89,12 @@ public class Specification<T> : ISpecification<T>
 
     public bool IgnoreQueryFilters { get; internal set; } = false;
 
-    protected IInMemorySpecificationEvaluator Evaluator { get; }
+    protected IInMemorySpecificationEvaluator Evaluator { get; private init; }
 
-    protected ISpecificationValidator Validator { get; }
+    protected ISpecificationValidator Validator { get; private init; }
 
-    public virtual IEnumerable<T> Evaluate(IEnumerable<T> entities)
-    {
-        return Evaluator.Evaluate(entities, this);
-    }
+    public virtual IEnumerable<T> Evaluate(IEnumerable<T> entities) =>
+        Evaluator.Evaluate(entities, this);
 
-    public virtual bool IsSatisfiedBy(T entity)
-    {
-        return Validator.IsValid(entity, this);
-    }
+    public virtual bool IsSatisfiedBy(T entity) => Validator.IsValid(entity, this);
 }

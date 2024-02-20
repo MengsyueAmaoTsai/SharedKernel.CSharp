@@ -40,10 +40,6 @@ public interface ISpecification<T>
 
     Func<IEnumerable<T>, IEnumerable<T>>? PostProcessingAction { get; }
 
-    bool CacheEnabled { get; }
-
-    string? CacheKey { get; }
-
     bool AsTracking { get; }
 
     bool AsNoTracking { get; }
