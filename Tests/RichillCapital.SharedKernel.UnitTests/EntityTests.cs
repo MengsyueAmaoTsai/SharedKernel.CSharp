@@ -22,6 +22,64 @@ public sealed class EntityTests
     }
 
     [Fact]
+    public void EqualsOperator_ShouldReturnTrue_WhenComparingTwoEntitiesWithTheSameId()
+    {
+        // Arrange
+        var id = GenerateId();
+        var entity1 = new TestEntity(id);
+        var entity2 = new TestEntity(id);
+
+        // Act
+        var result = entity1 == entity2;
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void EqualsOperator_ShouldReturnFalse_WhenComparingTwoEntitiesWithDifferentIds()
+    {
+        // Arrange
+        var entity1 = new TestEntity(GenerateId());
+        var entity2 = new TestEntity(GenerateId());
+
+        // Act
+        var result = entity1 == entity2;
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void NotEqualsOperator_ShouldReturnTrue_WhenComparingTwoEntitiesWithDifferentIds()
+    {
+        // Arrange
+        var entity1 = new TestEntity(GenerateId());
+        var entity2 = new TestEntity(GenerateId());
+
+        // Act
+        var result = entity1 != entity2;
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void NotEqualsOperator_ShouldReturnFalse_WhenComparingTwoEntitiesWithTheSameId()
+    {
+        // Arrange
+        var id = GenerateId();
+        var entity1 = new TestEntity(id);
+        var entity2 = new TestEntity(id);
+
+        // Act
+        var result = entity1 != entity2;
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
     public void Equals_ShouldReturnTrue_WhenComparingTwoEntitiesWithTheSameId()
     {
         // Arrange
