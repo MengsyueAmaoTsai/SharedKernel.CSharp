@@ -65,4 +65,12 @@ public record class ErrorOr
 
     public static ErrorOr<TValue> From<TValue>(Error error) =>
         ErrorOr<TValue>.From(error);
+
+    public static ErrorOr<TValue> Ensure<TValue>(
+        TValue value,
+        Func<TValue, bool> predicate,
+        Error error) =>
+        predicate(value) ?
+            ErrorOr<TValue>.Is(value) :
+            ErrorOr<TValue>.From(error);
 }
