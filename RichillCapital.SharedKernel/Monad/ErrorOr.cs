@@ -73,4 +73,13 @@ public record class ErrorOr
         predicate(value) ?
             ErrorOr<TValue>.Is(value) :
             ErrorOr<TValue>.From(error);
+
+    public static ErrorOr<TValue> Combine<TValue>(params ErrorOr<TValue>[] errorOrs) =>
+        errorOrs.Any(errorOr => errorOr.IsError) ?
+            ErrorOr<TValue>.From(errorOrs
+                .SelectMany(errorOr => errorOr.Errors)
+                .Where(error => error != Error.Null)
+                .Distinct()
+                .ToArray()) :
+            ErrorOr<TValue>.Is(errorOrs.First().Value);
 }
