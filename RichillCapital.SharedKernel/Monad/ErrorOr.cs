@@ -38,6 +38,7 @@ public record class ErrorOr<TValue>
 
     public static implicit operator ErrorOr<TValue>(Error error) =>
         From(error);
+
     public ErrorOr<TDestination> Map<TDestination>(Func<TValue, TDestination> map) =>
         IsError ?
             ErrorOr<TDestination>.From(Errors) :
