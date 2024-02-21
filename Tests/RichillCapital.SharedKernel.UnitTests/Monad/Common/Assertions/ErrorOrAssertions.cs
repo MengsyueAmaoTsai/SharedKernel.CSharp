@@ -29,8 +29,8 @@ public static class ErrorOrAssertions
         errorOr.IsError.Should().BeFalse();
         errorOr.IsValue.Should().BeTrue();
         errorOr.Value.Should().BeOfType<TValue>();
-        errorOr.Value.Should().Be(value);
+        errorOr.Value.Should().BeEquivalentTo(value);
         errorOr.Errors.Should().HaveCount(1);
-        errorOr.Errors.First().Should().Be(Error.Null);
+        errorOr.Errors.First().Should().BeEquivalentTo(Error.Null);
     }
 }
