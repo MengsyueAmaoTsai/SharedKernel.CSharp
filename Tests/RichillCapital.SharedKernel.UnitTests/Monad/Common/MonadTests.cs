@@ -9,4 +9,10 @@ public abstract class MonadTests
     protected static readonly DateTimeOffset DateTimeValue = DateTimeOffset.Now;
     protected static readonly TestObject TestObjectValue = new("Test Object");
     protected static readonly Error TestError = Error.Invalid("Test Error Message");
+
+    protected static readonly IEnumerable<TestObject> TestObjects =
+    [
+        new TestObject("Test 1"),
+        new TestObject("Test 2"),
+    ];
 }
