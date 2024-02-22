@@ -10,7 +10,7 @@ public class SelectorNotFoundExceptionTests
         "Ensure either Select() or SelectMany() is used in the specification!";
 
     [Fact]
-    public void Constructor_Should_ThrowSelectorNotFoundException()
+    public void Constructor_Should_ThrowsSelectorNotFoundException()
     {
         // Arrange
         Action action = () => throw new SelectorNotFoundException();
@@ -22,7 +22,7 @@ public class SelectorNotFoundExceptionTests
     }
 
     [Fact]
-    public void Should_ThrowSelectorNotFoundExceptionWithInnerException()
+    public void Should_ThrowsSelectorNotFoundExceptionWithInnerException()
     {
         // Arrange
         var errorMessage = "test";

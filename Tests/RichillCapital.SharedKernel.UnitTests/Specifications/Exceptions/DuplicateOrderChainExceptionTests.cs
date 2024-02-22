@@ -9,7 +9,7 @@ public sealed class DuplicateOrderChainExceptionTests
     private const string DefaultMessage = "The specification contains more than one Order chain!";
 
     [Fact]
-    public void DefaultConstructor_Should_Throw_DuplicateOrderChainException()
+    public void DefaultConstructor_Should_ThrowsDuplicateOrderChainException()
     {
         // Arrange
         Action action = () => throw new DuplicateOrderChainException();
@@ -20,7 +20,7 @@ public sealed class DuplicateOrderChainExceptionTests
     }
 
     [Fact]
-    public void Should_Throw_WithInnerException()
+    public void Should_ThrowsWithInnerException()
     {
         // Arrange
         var innerException = new Exception("Test");

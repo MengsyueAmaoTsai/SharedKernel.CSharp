@@ -9,7 +9,7 @@ public sealed class DuplicateSkipExceptionTests
     private const string DefaultMessage = "Duplicate skip detected. Only one skip is allowed per specification.";
 
     [Fact]
-    public void DefaultConstructor_Should_Throw_DuplicateSkipException()
+    public void DefaultConstructor_Should_ThrowsDuplicateSkipException()
     {
         // Arrange
         Action action = () => throw new DuplicateSkipException();
@@ -20,7 +20,7 @@ public sealed class DuplicateSkipExceptionTests
     }
 
     [Fact]
-    public void Should_Throw_WithInnerException()
+    public void Should_ThrowsWithInnerException()
     {
         // Arrange
         var innerException = new Exception("Test");
