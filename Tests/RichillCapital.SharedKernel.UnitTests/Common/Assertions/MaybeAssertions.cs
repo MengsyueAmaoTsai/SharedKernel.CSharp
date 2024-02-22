@@ -24,6 +24,6 @@ internal static class MaybeAssertions
         maybe.HasNoValue.Should().BeTrue();
         action.Should()
             .Throw<InvalidOperationException>()
-            .WithMessage("Maybe has no value.");
+            .WithMessage($"Maybe<{typeof(TValue)}> has no value.");
     }
 }
