@@ -2,7 +2,7 @@ using FluentAssertions;
 
 using RichillCapital.SharedKernel.Monad;
 
-namespace RichillCapital.SharedKernel.UnitTests.Monad.Common.Assertions;
+namespace RichillCapital.SharedKernel.UnitTests.Common.Assertions;
 
 public static class ResultAssertions
 {

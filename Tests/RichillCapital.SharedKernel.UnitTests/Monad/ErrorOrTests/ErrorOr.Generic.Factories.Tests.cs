@@ -1,7 +1,7 @@
 using RichillCapital.SharedKernel;
 using RichillCapital.SharedKernel.Monad;
+using RichillCapital.SharedKernel.UnitTests.Common.Assertions;
 using RichillCapital.SharedKernel.UnitTests.Monad.Common;
-using RichillCapital.SharedKernel.UnitTests.Monad.Common.Assertions;
 
 public sealed partial class GenericErrorOrTests : MonadTests
 {

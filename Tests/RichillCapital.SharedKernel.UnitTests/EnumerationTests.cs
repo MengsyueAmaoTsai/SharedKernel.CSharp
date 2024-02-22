@@ -1,21 +1,11 @@
 using FluentAssertions;
 
+using RichillCapital.SharedKernel.UnitTests.Common;
+
 namespace RichillCapital.SharedKernel.UnitTests;
 
 public sealed class EnumerationTests
 {
-    private sealed class TestEnumeration :
-        Enumeration<TestEnumeration>
-    {
-        public static readonly TestEnumeration One = new(nameof(One), 1);
-        public static readonly TestEnumeration Two = new(nameof(Two), 1);
-
-        private TestEnumeration(string name, int value)
-            : base(name, value)
-        {
-        }
-    }
-
     [Fact]
     public void Equals_ShouldReturnTrue_WhenBothInstancesAreEqual()
     {

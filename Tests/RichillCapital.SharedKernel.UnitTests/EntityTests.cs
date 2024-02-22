@@ -1,26 +1,11 @@
-
 using FluentAssertions;
+
+using RichillCapital.SharedKernel.UnitTests.Common;
 
 namespace RichillCapital.SharedKernel.UnitTests;
 
 public sealed class EntityTests
 {
-    private sealed class TestEntityId : SingleValueObject<string>
-    {
-        public TestEntityId(string value)
-            : base(value)
-        {
-        }
-    }
-
-    private sealed class TestEntity : Entity<TestEntityId>
-    {
-        public TestEntity(TestEntityId id)
-            : base(id)
-        {
-        }
-    }
-
     [Fact]
     public void EqualsOperator_WithSameValues_ReturnsTrue()
     {

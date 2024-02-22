@@ -1,8 +1,8 @@
 using FluentAssertions;
 
 using RichillCapital.SharedKernel.Monad;
+using RichillCapital.SharedKernel.UnitTests.Common.Assertions;
 using RichillCapital.SharedKernel.UnitTests.Monad.Common;
-using RichillCapital.SharedKernel.UnitTests.Monad.Common.Assertions;
 
 namespace RichillCapital.SharedKernel.UnitTests.Monad;
 
