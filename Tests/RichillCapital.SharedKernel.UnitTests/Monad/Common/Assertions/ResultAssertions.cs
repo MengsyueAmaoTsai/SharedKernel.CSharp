@@ -10,7 +10,7 @@ public static class ResultAssertions
     {
         result.IsSuccess.Should().BeTrue();
         result.IsFailure.Should().BeFalse();
-        result.Error.Should().Be(Error.Null);
+        result.Error.Should().BeEquivalentTo(Error.Null);
     }
 
     public static void ShouldBeSuccessResultWithValue<TValue>(
@@ -20,7 +20,7 @@ public static class ResultAssertions
         result.ShouldBeSuccessResult();
         result.Value.Should().NotBeNull();
         result.Value.Should().BeOfType<TValue>();
-        result.Value.Should().Be(value);
+        result.Value.Should().BeEquivalentTo(value);
     }
 
     public static void ShouldBeFailureResultWithError<TValue>(
@@ -30,7 +30,7 @@ public static class ResultAssertions
         result.IsFailure.Should().BeTrue();
         result.IsSuccess.Should().BeFalse();
         result.Error.Should().NotBeNull();
-        result.Error.Should().Be(error);
+        result.Error.Should().BeEquivalentTo(error);
 
         var action = () => result.Value;
 
@@ -46,6 +46,6 @@ public static class ResultAssertions
         result.IsFailure.Should().BeTrue();
         result.IsSuccess.Should().BeFalse();
         result.Error.Should().NotBeNull();
-        result.Error.Should().Be(error);
+        result.Error.Should().BeEquivalentTo(error);
     }
 }

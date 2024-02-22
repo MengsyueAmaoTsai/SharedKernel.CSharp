@@ -13,7 +13,7 @@ public static class MaybeAssertions
         maybe.HasValue.Should().BeTrue();
         maybe.HasNoValue.Should().BeFalse();
         maybe.Value.Should().NotBeNull();
-        maybe.Value.Should().Be(value);
+        maybe.Value.Should().BeEquivalentTo(value);
     }
 
     public static void ShouldBeMaybeHasNoValue<TValue>(this Maybe<TValue> maybe)

@@ -111,4 +111,102 @@ public sealed partial class ErrorOrTests : MonadTests
         dateTimeErrorOr.ShouldBeErrors([TestError]);
         objectErrorOr.ShouldBeErrors([TestError]);
     }
+
+    [Fact]
+    public void Combine_Should_CreateErrorOrWithValue()
+    {
+        // Arrange & Act
+        ErrorOr<int> intErrorOr = ErrorOr.Combine(
+            ErrorOr.Is(IntValue),
+            ErrorOr.Is(IntValue),
+            ErrorOr.Is(IntValue),
+            ErrorOr.Is(IntValue));
+
+        ErrorOr<string> stringErrorOr = ErrorOr.Combine(
+            ErrorOr.Is(StringValue),
+            ErrorOr.Is(StringValue),
+            ErrorOr.Is(StringValue),
+            ErrorOr.Is(StringValue));
+
+        ErrorOr<bool> boolErrorOr = ErrorOr.Combine(
+            ErrorOr.Is(BoolValue),
+            ErrorOr.Is(BoolValue),
+            ErrorOr.Is(BoolValue),
+            ErrorOr.Is(BoolValue));
+
+        ErrorOr<byte> byteErrorOr = ErrorOr.Combine(
+            ErrorOr.Is(ByteValue),
+            ErrorOr.Is(ByteValue),
+            ErrorOr.Is(ByteValue),
+            ErrorOr.Is(ByteValue));
+
+        ErrorOr<DateTimeOffset> dateTimeErrorOr = ErrorOr.Combine(
+            ErrorOr.Is(DateTimeValue),
+            ErrorOr.Is(DateTimeValue),
+            ErrorOr.Is(DateTimeValue),
+            ErrorOr.Is(DateTimeValue));
+
+        ErrorOr<TestObject> objectErrorOr = ErrorOr.Combine(
+            ErrorOr.Is(TestObjectValue),
+            ErrorOr.Is(TestObjectValue),
+            ErrorOr.Is(TestObjectValue),
+            ErrorOr.Is(TestObjectValue));
+
+        // Assert
+        intErrorOr.ShouldBeValue(IntValue);
+        stringErrorOr.ShouldBeValue(StringValue);
+        boolErrorOr.ShouldBeValue(BoolValue);
+        byteErrorOr.ShouldBeValue(ByteValue);
+        dateTimeErrorOr.ShouldBeValue(DateTimeValue);
+        objectErrorOr.ShouldBeValue(TestObjectValue);
+    }
+
+    [Fact]
+    public void Combine_Should_CreateErrorOrWithErrors()
+    {
+        // Arrange & Act
+        ErrorOr<int> intErrorOr = ErrorOr.Combine(
+            ErrorOr<int>.From(TestError),
+            ErrorOr<int>.From(TestError),
+            ErrorOr<int>.From(TestError),
+            ErrorOr<int>.From(TestError));
+
+        ErrorOr<string> stringErrorOr = ErrorOr.Combine(
+            ErrorOr<string>.From(TestError),
+            ErrorOr<string>.From(TestError),
+            ErrorOr<string>.From(TestError),
+            ErrorOr<string>.From(TestError));
+
+        ErrorOr<bool> boolErrorOr = ErrorOr.Combine(
+            ErrorOr<bool>.From(TestError),
+            ErrorOr<bool>.From(TestError),
+            ErrorOr<bool>.From(TestError),
+            ErrorOr<bool>.From(TestError));
+
+        ErrorOr<byte> byteErrorOr = ErrorOr.Combine(
+            ErrorOr<byte>.From(TestError),
+            ErrorOr<byte>.From(TestError),
+            ErrorOr<byte>.From(TestError),
+            ErrorOr<byte>.From(TestError));
+
+        ErrorOr<DateTimeOffset> dateTimeErrorOr = ErrorOr.Combine(
+            ErrorOr<DateTimeOffset>.From(TestError),
+            ErrorOr<DateTimeOffset>.From(TestError),
+            ErrorOr<DateTimeOffset>.From(TestError),
+            ErrorOr<DateTimeOffset>.From(TestError));
+
+        ErrorOr<TestObject> objectErrorOr = ErrorOr.Combine(
+            ErrorOr<TestObject>.From(TestError),
+            ErrorOr<TestObject>.From(TestError),
+            ErrorOr<TestObject>.From(TestError),
+            ErrorOr<TestObject>.From(TestError));
+
+        // Assert
+        intErrorOr.ShouldBeErrors([TestError]);
+        stringErrorOr.ShouldBeErrors([TestError]);
+        boolErrorOr.ShouldBeErrors([TestError]);
+        byteErrorOr.ShouldBeErrors([TestError]);
+        dateTimeErrorOr.ShouldBeErrors([TestError]);
+        objectErrorOr.ShouldBeErrors([TestError]);
+    }
 }
