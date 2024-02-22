@@ -1,10 +1,11 @@
 using FluentAssertions;
 
 using RichillCapital.SharedKernel.Monad;
+using RichillCapital.SharedKernel.UnitTests.Monad.Common;
 
 namespace RichillCapital.SharedKernel.UnitTests.Monad;
 
-public sealed partial class ResultTests
+public sealed partial class ResultTests : MonadTests
 {
     [Fact]
     public void Equals_WhenComparingDifferenceResults_ShouldReturnFalse()

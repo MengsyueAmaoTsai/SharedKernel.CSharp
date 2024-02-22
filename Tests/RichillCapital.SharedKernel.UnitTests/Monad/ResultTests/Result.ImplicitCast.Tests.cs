@@ -1,9 +1,10 @@
 using RichillCapital.SharedKernel.Monad;
 using RichillCapital.SharedKernel.UnitTests.Common.Assertions;
+using RichillCapital.SharedKernel.UnitTests.Monad.Common;
 
 namespace RichillCapital.SharedKernel.UnitTests.Monad;
 
-public sealed partial class ResultTests
+public sealed partial class ResultTests : MonadTests
 {
     [Fact]
     public void ImplicitCast_Should_ConvertErrorToFailureResult()

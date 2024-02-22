@@ -14,11 +14,15 @@ public partial record class Result<TValue> : Result
         throw new InvalidOperationException("Cannot access value for a failure result.") :
         _value!;
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> Success(TValue value) =>
         new(true, Error.Null, value);
 
     public static implicit operator Result<TValue>(TValue value) => Success(value);
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static new Result<TValue> Failure(Error error) =>
         new(false, error, default!);
 
