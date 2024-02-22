@@ -14,6 +14,11 @@ public partial record class Result<TValue> : Result
         throw new InvalidOperationException("Cannot access value for a failure result.") :
         _value!;
 
+    public TValue ValueOrDefault =>
+        IsFailure ?
+            default! :
+            _value!;
+
     public static implicit operator Result<TValue>(TValue value) =>
         Result<TValue>.Success(value);
 

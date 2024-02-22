@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace RichillCapital.SharedKernel.Monad;
 
-public sealed partial record class ErrorOr<TValue>
+public readonly partial record struct ErrorOr<TValue>
 {
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -21,7 +21,7 @@ public sealed partial record class ErrorOr<TValue>
         new(true, [error], default!);
 }
 
-public partial record class ErrorOr
+public readonly partial record struct ErrorOr
 {
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
