@@ -8,7 +8,7 @@ namespace RichillCapital.SharedKernel.UnitTests.Monad;
 public sealed partial class ResultTests : MonadTests
 {
     [Fact]
-    public void Equals_WhenComparingDifferenceResults_ShouldReturnFalse()
+    public void Equals_WhenComparingDifferenceResults_Should_ReturnFalse()
     {
         // Arrange
         var successResult = Result.Success();
@@ -19,7 +19,7 @@ public sealed partial class ResultTests : MonadTests
     }
 
     [Fact]
-    public void Equals_WhenComparingResultsWithSameValue_ShouldReturnTrue()
+    public void Equals_WhenComparingResultsWithSameValue_Should_ReturnTrue()
     {
         // Arrange
         var successResult = Result.Success();
@@ -33,7 +33,7 @@ public sealed partial class ResultTests : MonadTests
     }
 
     [Fact]
-    public void Equals_When_ComparingFailureResultWithDifferentError_ShouldReturnFalse()
+    public void Equals_When_ComparingFailureResultWithDifferentError_Should_ReturnFalse()
     {
         // Arrange
         var failureResult = Result.Failure(TestError);

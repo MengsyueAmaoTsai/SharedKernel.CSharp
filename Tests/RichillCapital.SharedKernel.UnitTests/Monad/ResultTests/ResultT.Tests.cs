@@ -8,7 +8,7 @@ using RichillCapital.SharedKernel.UnitTests.Monad.Common;
 public sealed partial class GenericResultTests : MonadTests
 {
     [Fact]
-    public void Value_When_ResultIsSuccess_ShouldReturnProvidedValue()
+    public void Value_When_ResultIsSuccess_Should_ReturnProvidedValue()
     {
         // Arrange
         var intResult = Result<int>.Success(IntValue);
@@ -28,7 +28,7 @@ public sealed partial class GenericResultTests : MonadTests
     }
 
     [Fact]
-    public void Value_When_ResultIsFailure_ShouldThrowInvalidOperationException()
+    public void Value_When_ResultIsFailure_Should_ThrowInvalidOperationException()
     {
         // Arrange
         var intResult = Result<int>.Failure(TestError);
