@@ -6,118 +6,79 @@ namespace RichillCapital.SharedKernel.UnitTests;
 
 public sealed class EntityTests
 {
+    private static readonly TestEntity Entity = new(new TestEntityId(1), "test");
+    private static readonly TestEntity EntityWithSameId = new(new TestEntityId(1), "test");
+    private static readonly TestEntity EntityWithDifferentId = new(new TestEntityId(2), "test");
+    private static readonly TestEntity2 EntityWithDifferentType = new(new TestEntityId2("1"), "test");
+
+    [Fact]
+    public void Equals_When_ComparingWithNull_Should_ReturnsFalse()
+    {
+        // Arrange & Act & Assert
+        Entity.Equals(null).Should().BeFalse();
+    }
+
+    [Fact]
+    public void Equals_When_ComparingWithDifferentType_Should_ReturnsFalse()
+    {
+        // Arrange & Act & Assert
+        Entity.Equals(new object()).Should().BeFalse();
+        Entity.Equals(EntityWithDifferentType).Should().BeFalse();
+    }
+
+    [Fact]
+    public void Equals_When_ComparingWithSameTypeAndSameId_Should_ReturnsTrue()
+    {
+        // Arrange & Act & Assert
+        Entity.Equals(EntityWithSameId).Should().BeTrue();
+    }
+
+    [Fact]
+    public void Equals_When_ComparingWithSameTypeAndDifferentId_Should_ReturnsFalse()
+    {
+        // Arrange & Act & Assert
+        Entity.Equals(EntityWithDifferentId).Should().BeFalse();
+    }
+
     [Fact]
     public void EqualsOperator_WithSameValues_ReturnsTrue()
     {
-        // Arrange
-        var id = GenerateId();
-        var entity1 = new TestEntity(id, "test1");
-        var entity2 = new TestEntity(id, "test2");
-
-        // Act
-        var areEqual = entity1 == entity2;
-
-        // Assert
-        areEqual.Should().BeTrue();
+        // Arrange & Act & Assert
+        (Entity == EntityWithSameId).Should().BeTrue();
     }
 
     [Fact]
     public void EqualsOperator_WithDifferentValues_ReturnsFalse()
     {
-        // Arrange
-        var entity1 = new TestEntity(GenerateId(), "test1");
-        var entity2 = new TestEntity(GenerateId(), "test2");
-
-        // Act
-        var areEqual = entity1 == entity2;
-
-        // Assert
-        areEqual.Should().BeFalse();
+        // Arrange & Act & Assert
+        (Entity == EntityWithDifferentId).Should().BeFalse();
     }
 
     [Fact]
     public void NotEqualsOperator_WithSameValues_ReturnsFalse()
     {
-        // Arrange
-        var id = GenerateId();
-        var entity1 = new TestEntity(id, "test1");
-        var entity2 = new TestEntity(id, "test2");
-
-        // Act
-        var areNotEqual = entity1 != entity2;
-
-        // Assert
-        areNotEqual.Should().BeFalse();
+        // Arrange & Act & Assert
+        (Entity != EntityWithSameId).Should().BeFalse();
     }
 
     [Fact]
     public void NotEqualsOperator_WithDifferentValues_ReturnsTrue()
     {
-        // Arrange
-        var entity1 = new TestEntity(GenerateId(), "test");
-        var entity2 = new TestEntity(GenerateId(), "test2");
-
-        // Act
-        var areNotEqual = entity1 != entity2;
-
-        // Assert
-        areNotEqual.Should().BeTrue();
+        // Arrange & Act & Assert
+        (Entity != EntityWithDifferentId).Should().BeTrue();
     }
 
     [Fact]
-    public void Equals_ShouldReturnTrue_WhenComparingTwoEntitiesWithTheSameId()
+    public void GetHashCode_WithSameValues_ReturnsTrue()
     {
-        // Arrange
-        var id = GenerateId();
-        var entity1 = new TestEntity(id, "test1");
-        var entity2 = new TestEntity(id, "test2");
-
-        // Act
-        var result = entity1.Equals(entity2);
-
-        // Assert
-        result.Should().BeTrue();
+        // Arrange & Act & Assert
+        Entity.GetHashCode().Should().Be(EntityWithSameId.GetHashCode());
     }
 
     [Fact]
-    public void Equals_ShouldReturnFalse_WhenComparingTwoEntitiesWithDifferentIds()
+    public void GetHashCode_WithDifferentValues_ReturnsFalse()
     {
-        // Arrange
-        var entity1 = new TestEntity(GenerateId(), "test1");
-        var entity2 = new TestEntity(GenerateId(), "test2");
-
-        // Act
-        var result = entity1.Equals(entity2);
-
-        // Assert
-        result.Should().BeFalse();
+        // Arrange & Act & Assert
+        Entity.GetHashCode().Should().NotBe(EntityWithDifferentId.GetHashCode());
     }
-
-    [Fact]
-    public void Equals_ShouldReturnFalse_WhenComparingEntityToNull()
-    {
-        // Arrange
-        var entity = new TestEntity(GenerateId(), "test");
-
-        // Act
-        var result = entity.Equals(null);
-
-        // Assert
-        result.Should().BeFalse();
-    }
-
-    [Fact]
-    public void Equals_ShouldReturnFalse_WhenComparingEntityToDifferentType()
-    {
-        // Arrange
-        var entity = new TestEntity(GenerateId(), "test");
-
-        // Act
-        var result = entity.Equals(new object());
-
-        // Assert
-        result.Should().BeFalse();
-    }
-
-    private static TestEntityId GenerateId() => new(Guid.NewGuid().ToString());
 }

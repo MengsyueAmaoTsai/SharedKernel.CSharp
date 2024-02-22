@@ -11,9 +11,9 @@ internal sealed class TestEntity : Entity<TestEntityId>
     public string Name { get; private set; }
 }
 
-internal sealed class TestEntity2 : Entity<TestEntityId>
+internal sealed class TestEntity2 : Entity<TestEntityId2>
 {
-    public TestEntity2(TestEntityId id, string name)
+    public TestEntity2(TestEntityId2 id, string name)
         : base(id)
     {
         Name = name;

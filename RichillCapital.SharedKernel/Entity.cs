@@ -30,9 +30,9 @@ public abstract class Entity<TEntityId> :
     public override bool Equals(object? obj) =>
         obj is not null &&
         (ReferenceEquals(this, obj) ||
-            (obj.GetType() == GetType() &&
-            obj is Entity<TEntityId> other &&
-            Id == other.Id));
+        (obj.GetType() == GetType() &&
+        obj is Entity<TEntityId> other &&
+        Id == other.Id));
 
     public bool Equals(Entity<TEntityId>? other)
     {
@@ -41,7 +41,7 @@ public abstract class Entity<TEntityId> :
             return false;
         }
 
-        return ReferenceEquals(this, other) || Id == other.Id;
+        return ReferenceEquals(this, other) || Id.Equals(other.Id);
     }
 
     public override int GetHashCode() => Id.GetHashCode() * 41;
