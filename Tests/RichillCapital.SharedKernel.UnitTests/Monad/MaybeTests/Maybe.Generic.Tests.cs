@@ -20,12 +20,12 @@ public sealed partial class GenericMaybeTests : MonadTests
         Maybe<TestObject> testObjectMaybe = TestObjectValue;
 
         // Assert
-        intMaybe.ShouldBeMaybeHasValue(IntValue);
-        stringMaybe.ShouldBeMaybeHasValue(StringValue);
-        boolMaybe.ShouldBeMaybeHasValue(BoolValue);
-        byteMaybe.ShouldBeMaybeHasValue(ByteValue);
-        dateTimeMaybe.ShouldBeMaybeHasValue(DateTimeValue);
-        testObjectMaybe.ShouldBeMaybeHasValue(TestObjectValue);
+        intMaybe.ShouldHasValue(IntValue);
+        stringMaybe.ShouldHasValue(StringValue);
+        boolMaybe.ShouldHasValue(BoolValue);
+        byteMaybe.ShouldHasValue(ByteValue);
+        dateTimeMaybe.ShouldHasValue(DateTimeValue);
+        testObjectMaybe.ShouldHasValue(TestObjectValue);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed partial class GenericMaybeTests : MonadTests
         Maybe<TestObject> testObjectMaybe = null!;
 
         // Assert
-        testObjectMaybe.ShouldBeMaybeHasNoValue();
+        testObjectMaybe.ShouldHasNoValue();
     }
 
     [Fact]

@@ -18,11 +18,11 @@ public sealed partial class MaybeTests : MonadTests
         Maybe<TestObject> testObjectMaybe = Maybe.With(TestObjectValue);
 
         // Assert
-        intMaybe.ShouldBeMaybeHasValue(IntValue);
-        stringMaybe.ShouldBeMaybeHasValue(StringValue);
-        boolMaybe.ShouldBeMaybeHasValue(BoolValue);
-        byteMaybe.ShouldBeMaybeHasValue(ByteValue);
-        dateTimeOffsetMaybe.ShouldBeMaybeHasValue(DateTimeValue);
-        testObjectMaybe.ShouldBeMaybeHasValue(TestObjectValue);
+        intMaybe.ShouldHasValue(IntValue);
+        stringMaybe.ShouldHasValue(StringValue);
+        boolMaybe.ShouldHasValue(BoolValue);
+        byteMaybe.ShouldHasValue(ByteValue);
+        dateTimeOffsetMaybe.ShouldHasValue(DateTimeValue);
+        testObjectMaybe.ShouldHasValue(TestObjectValue);
     }
 }

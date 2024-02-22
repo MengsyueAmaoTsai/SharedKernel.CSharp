@@ -18,12 +18,12 @@ public sealed partial class GenericMaybeTests : MonadTests
         Maybe<TestObject> testObjectMaybe = Maybe<TestObject>.Null;
 
         // Assert
-        intMaybe.ShouldBeMaybeHasNoValue();
-        stringMaybe.ShouldBeMaybeHasNoValue();
-        boolMaybe.ShouldBeMaybeHasNoValue();
-        byteMaybe.ShouldBeMaybeHasNoValue();
-        dateTimeMaybe.ShouldBeMaybeHasNoValue();
-        testObjectMaybe.ShouldBeMaybeHasNoValue();
+        intMaybe.ShouldHasNoValue();
+        stringMaybe.ShouldHasNoValue();
+        boolMaybe.ShouldHasNoValue();
+        byteMaybe.ShouldHasNoValue();
+        dateTimeMaybe.ShouldHasNoValue();
+        testObjectMaybe.ShouldHasNoValue();
     }
 
     [Fact]
@@ -38,12 +38,12 @@ public sealed partial class GenericMaybeTests : MonadTests
         Maybe<TestObject> testObjectMaybe = Maybe<TestObject>.With(TestObjectValue);
 
         // Assert
-        intMaybe.ShouldBeMaybeHasValue(IntValue);
-        stringMaybe.ShouldBeMaybeHasValue(StringValue);
-        boolMaybe.ShouldBeMaybeHasValue(BoolValue);
-        byteMaybe.ShouldBeMaybeHasValue(ByteValue);
-        dateTimeMaybe.ShouldBeMaybeHasValue(DateTimeValue);
-        testObjectMaybe.ShouldBeMaybeHasValue(TestObjectValue);
+        intMaybe.ShouldHasValue(IntValue);
+        stringMaybe.ShouldHasValue(StringValue);
+        boolMaybe.ShouldHasValue(BoolValue);
+        byteMaybe.ShouldHasValue(ByteValue);
+        dateTimeMaybe.ShouldHasValue(DateTimeValue);
+        testObjectMaybe.ShouldHasValue(TestObjectValue);
     }
 }
 

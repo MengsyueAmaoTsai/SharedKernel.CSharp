@@ -35,12 +35,12 @@ public sealed partial class GenericMaybeTests : MonadTests
             .OrElse(new TestObject("Default"));
 
         // Act & Assert
-        intMaybe.ShouldBeMaybeHasValue(IntValue);
-        stringMaybe.ShouldBeMaybeHasValue(StringValue);
-        boolMaybe.ShouldBeMaybeHasValue(BoolValue);
-        byteMaybe.ShouldBeMaybeHasValue(ByteValue);
-        dateTimeMaybe.ShouldBeMaybeHasValue(DateTimeValue);
-        testObjectMaybe.ShouldBeMaybeHasValue(TestObjectValue);
+        intMaybe.ShouldHasValue(IntValue);
+        stringMaybe.ShouldHasValue(StringValue);
+        boolMaybe.ShouldHasValue(BoolValue);
+        byteMaybe.ShouldHasValue(ByteValue);
+        dateTimeMaybe.ShouldHasValue(DateTimeValue);
+        testObjectMaybe.ShouldHasValue(TestObjectValue);
     }
 
     [Fact]
@@ -78,12 +78,12 @@ public sealed partial class GenericMaybeTests : MonadTests
             .OrElse(defaultObject);
 
         // Act & Assert
-        intMaybe.ShouldBeMaybeHasValue(expectedIntValue);
-        stringMaybe.ShouldBeMaybeHasValue(expectedStringValue);
-        boolMaybe.ShouldBeMaybeHasValue(expectedBoolValue);
-        byteMaybe.ShouldBeMaybeHasValue(expectedByteValue);
-        dateTimeMaybe.ShouldBeMaybeHasValue(now);
-        testObjectMaybe.ShouldBeMaybeHasValue(defaultObject);
+        intMaybe.ShouldHasValue(expectedIntValue);
+        stringMaybe.ShouldHasValue(expectedStringValue);
+        boolMaybe.ShouldHasValue(expectedBoolValue);
+        byteMaybe.ShouldHasValue(expectedByteValue);
+        dateTimeMaybe.ShouldHasValue(now);
+        testObjectMaybe.ShouldHasValue(defaultObject);
     }
 }
 

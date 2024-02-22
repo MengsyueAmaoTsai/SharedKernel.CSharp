@@ -6,7 +6,7 @@ namespace RichillCapital.SharedKernel.UnitTests.Common.Assertions;
 
 internal static class MaybeAssertions
 {
-    public static void ShouldBeMaybeHasValue<TValue>(
+    public static void ShouldHasValue<TValue>(
         this Maybe<TValue> maybe,
         TValue value)
     {
@@ -16,7 +16,7 @@ internal static class MaybeAssertions
         maybe.Value.Should().BeEquivalentTo(value);
     }
 
-    public static void ShouldBeMaybeHasNoValue<TValue>(this Maybe<TValue> maybe)
+    public static void ShouldHasNoValue<TValue>(this Maybe<TValue> maybe)
     {
         Action action = () => _ = maybe.Value;
 

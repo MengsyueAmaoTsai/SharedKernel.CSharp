@@ -75,7 +75,7 @@ public abstract class Enumeration<TEnum, TValue>
 
     public override string ToString() => Name;
 
-    public override int GetHashCode() => Value.GetHashCode();
+    public override int GetHashCode() => HashCode.Combine(Name, Value);
 
     private static TEnum[] GetAllOptions()
     {

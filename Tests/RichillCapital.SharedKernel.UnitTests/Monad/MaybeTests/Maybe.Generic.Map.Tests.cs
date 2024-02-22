@@ -26,12 +26,12 @@ public sealed partial class GenericMaybeTests : MonadTests
         Maybe<TestObject> mappedTestObjectMaybe = testObjectMaybe.Map(value => new TestObject(value.Name.ToUpper()));
 
         // Assert
-        mappedIntMaybe.ShouldBeMaybeHasValue(IntValue * 2);
-        mappedStringMaybe.ShouldBeMaybeHasValue(StringValue.ToUpper());
-        mappedBoolMaybe.ShouldBeMaybeHasValue(!BoolValue);
-        mappedByteMaybe.ShouldBeMaybeHasValue((byte)(ByteValue * 2));
-        mappedDateTimeMaybe.ShouldBeMaybeHasValue(DateTimeValue.AddDays(1));
-        mappedTestObjectMaybe.ShouldBeMaybeHasValue(new TestObject(TestObjectValue.Name.ToUpper()));
+        mappedIntMaybe.ShouldHasValue(IntValue * 2);
+        mappedStringMaybe.ShouldHasValue(StringValue.ToUpper());
+        mappedBoolMaybe.ShouldHasValue(!BoolValue);
+        mappedByteMaybe.ShouldHasValue((byte)(ByteValue * 2));
+        mappedDateTimeMaybe.ShouldHasValue(DateTimeValue.AddDays(1));
+        mappedTestObjectMaybe.ShouldHasValue(new TestObject(TestObjectValue.Name.ToUpper()));
     }
 
     [Fact]
@@ -54,12 +54,12 @@ public sealed partial class GenericMaybeTests : MonadTests
         Maybe<TestObject> mappedTestObjectMaybe = testObjectMaybe.Map(value => new TestObject(value.Name.ToUpper()));
 
         // Assert
-        mappedIntMaybe.ShouldBeMaybeHasNoValue();
-        mappedStringMaybe.ShouldBeMaybeHasNoValue();
-        mappedBoolMaybe.ShouldBeMaybeHasNoValue();
-        mappedByteMaybe.ShouldBeMaybeHasNoValue();
-        mappedDateTimeMaybe.ShouldBeMaybeHasNoValue();
-        mappedTestObjectMaybe.ShouldBeMaybeHasNoValue();
+        mappedIntMaybe.ShouldHasNoValue();
+        mappedStringMaybe.ShouldHasNoValue();
+        mappedBoolMaybe.ShouldHasNoValue();
+        mappedByteMaybe.ShouldHasNoValue();
+        mappedDateTimeMaybe.ShouldHasNoValue();
+        mappedTestObjectMaybe.ShouldHasNoValue();
     }
 }
 

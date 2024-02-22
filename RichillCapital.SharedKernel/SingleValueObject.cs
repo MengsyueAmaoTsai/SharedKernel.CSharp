@@ -7,6 +7,8 @@ public abstract class SingleValueObject<TValue> : ValueObject
 
     public TValue Value { get; private init; }
 
+    public override string ToString() => Value.ToString()!;
+
     protected override IEnumerable<object> GetAtomicValues()
     {
         yield return Value;
