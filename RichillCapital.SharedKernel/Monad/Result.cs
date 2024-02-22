@@ -14,29 +14,11 @@ public partial record class Result<TValue> : Result
         throw new InvalidOperationException("Cannot access value for a failure result.") :
         _value!;
 
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> Success(TValue value) =>
-        new(true, Error.Null, value);
+    public static implicit operator Result<TValue>(TValue value) =>
+        Result<TValue>.Success(value);
 
-    public static implicit operator Result<TValue>(TValue value) => Success(value);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static new Result<TValue> Failure(Error error) =>
-        new(false, error, default!);
-
-    public static implicit operator Result<TValue>(Error error) => Failure(error);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> Ensure(
-        TValue value,
-        Func<TValue, bool> predicate,
-        Error error) =>
-        predicate(value) ?
-            Success(value) :
-            Failure(error);
+    public static implicit operator Result<TValue>(Error error) =>
+        Result<TValue>.Failure(error);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -54,26 +36,4 @@ public partial record class Result
     public bool IsFailure => !IsSuccess;
 
     public Error Error { get; private init; }
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result Success() => new(true, Error.Null);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result Failure(Error error) => new(false, error);
-
-    public static implicit operator Result(Error error) => Failure(error);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> Success<TValue>(TValue value) => Result<TValue>.Success(value);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> Ensure<TValue>(
-        TValue value,
-        Func<TValue, bool> predicate,
-        Error error) =>
-        Result<TValue>.Ensure(value, predicate, error);
 }

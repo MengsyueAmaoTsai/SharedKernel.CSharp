@@ -1,4 +1,5 @@
 using RichillCapital.SharedKernel.Monad;
+using RichillCapital.SharedKernel.UnitTests.Common;
 using RichillCapital.SharedKernel.UnitTests.Common.Assertions;
 using RichillCapital.SharedKernel.UnitTests.Monad.Common;
 
@@ -76,6 +77,46 @@ public sealed partial class ResultTests : MonadTests
         var byteResult = Result.Ensure(ByteValue, _ => false, TestError);
         var dateTimeResult = Result.Ensure(DateTimeValue, _ => false, TestError);
         var testEntityResult = Result.Ensure(TestEntity, _ => false, TestError);
+
+        // Assert
+        intResult.ShouldBeFailureResultWithError(TestError);
+        stringValueResult.ShouldBeFailureResultWithError(TestError);
+        boolResult.ShouldBeFailureResultWithError(TestError);
+        byteResult.ShouldBeFailureResultWithError(TestError);
+        dateTimeResult.ShouldBeFailureResultWithError(TestError);
+        testEntityResult.ShouldBeFailureResultWithError(TestError);
+    }
+
+    [Fact]
+    public void Ensure_When_MaybeHasValue_Should_CreateSuccessResultWithProvidedValue()
+    {
+        // Arrange & Act
+        var intResult = Result<int>.Ensure(Maybe.With(IntValue), TestError);
+        var stringValueResult = Result<string>.Ensure(Maybe.With(StringValue), TestError);
+        var boolResult = Result<bool>.Ensure(Maybe.With(BoolValue), TestError);
+        var byteResult = Result<byte>.Ensure(Maybe.With(ByteValue), TestError);
+        var dateTimeResult = Result<DateTimeOffset>.Ensure(Maybe.With(DateTimeValue), TestError);
+        var testEntityResult = Result<TestEntity>.Ensure(Maybe.With(TestEntity), TestError);
+
+        // Assert
+        intResult.ShouldBeSuccessResultWithValue(IntValue);
+        stringValueResult.ShouldBeSuccessResultWithValue(StringValue);
+        boolResult.ShouldBeSuccessResultWithValue(BoolValue);
+        byteResult.ShouldBeSuccessResultWithValue(ByteValue);
+        dateTimeResult.ShouldBeSuccessResultWithValue(DateTimeValue);
+        testEntityResult.ShouldBeSuccessResultWithValue(TestEntity);
+    }
+
+    [Fact]
+    public void Ensure_When_MaybeHasNoValue_Should_CreateFailureResultWithProvidedError()
+    {
+        // Arrange & Act
+        var intResult = Result<int>.Ensure(Maybe<int>.Null, TestError);
+        var stringValueResult = Result<string>.Ensure(Maybe<string>.Null, TestError);
+        var boolResult = Result<bool>.Ensure(Maybe<bool>.Null, TestError);
+        var byteResult = Result<byte>.Ensure(Maybe<byte>.Null, TestError);
+        var dateTimeResult = Result<DateTimeOffset>.Ensure(Maybe<DateTimeOffset>.Null, TestError);
+        var testEntityResult = Result<TestEntity>.Ensure(Maybe<TestEntity>.Null, TestError);
 
         // Assert
         intResult.ShouldBeFailureResultWithError(TestError);
