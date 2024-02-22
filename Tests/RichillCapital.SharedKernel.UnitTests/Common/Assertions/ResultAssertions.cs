@@ -4,7 +4,7 @@ using RichillCapital.SharedKernel.Monad;
 
 namespace RichillCapital.SharedKernel.UnitTests.Common.Assertions;
 
-public static class ResultAssertions
+internal static class ResultAssertions
 {
     public static void ShouldBeSuccessResult(this Result result)
     {

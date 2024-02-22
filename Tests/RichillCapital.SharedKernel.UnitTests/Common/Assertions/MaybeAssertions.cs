@@ -4,7 +4,7 @@ using RichillCapital.SharedKernel.Monad;
 
 namespace RichillCapital.SharedKernel.UnitTests.Common.Assertions;
 
-public static class MaybeAssertions
+internal static class MaybeAssertions
 {
     public static void ShouldBeMaybeHasValue<TValue>(
         this Maybe<TValue> maybe,
