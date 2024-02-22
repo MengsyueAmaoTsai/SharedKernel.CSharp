@@ -1,6 +1,6 @@
 namespace RichillCapital.SharedKernel.Monad;
 
-public record class ErrorOr<TValue>
+public sealed partial record class ErrorOr<TValue>
 {
     private readonly TValue? _value = default;
     private readonly List<Error>? _errors = null;
@@ -55,7 +55,7 @@ public record class ErrorOr<TValue>
             await errorOrTask(Value);
 }
 
-public record class ErrorOr
+public partial record class ErrorOr
 {
     public static ErrorOr<TValue> Is<TValue>(TValue value) =>
         ErrorOr<TValue>.Is(value);

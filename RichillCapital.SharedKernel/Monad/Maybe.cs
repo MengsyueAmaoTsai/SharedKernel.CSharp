@@ -1,6 +1,6 @@
 namespace RichillCapital.SharedKernel.Monad;
 
-public readonly record struct Maybe<TValue>
+public readonly partial record struct Maybe<TValue>
 {
     private readonly TValue? _value;
 
@@ -35,7 +35,7 @@ public readonly record struct Maybe<TValue>
             Maybe<TDestination>.Null;
 }
 
-public readonly record struct Maybe
+public readonly partial record struct Maybe
 {
     public static Maybe<TValue> With<TValue>(TValue value) =>
         Maybe<TValue>.With(value);

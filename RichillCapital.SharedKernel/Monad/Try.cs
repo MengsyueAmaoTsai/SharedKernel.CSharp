@@ -1,5 +1,5 @@
 namespace RichillCapital.SharedKernel.Monad;
 
-public readonly record struct Try<TValue>
+public readonly partial record struct Try<TValue>
 {
 }

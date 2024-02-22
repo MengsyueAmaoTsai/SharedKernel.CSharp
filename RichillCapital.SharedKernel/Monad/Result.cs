@@ -1,6 +1,6 @@
 namespace RichillCapital.SharedKernel.Monad;
 
-public record class Result<TValue> : Result
+public partial record class Result<TValue> : Result
 {
     private readonly TValue? _value;
 
@@ -27,7 +27,7 @@ public record class Result<TValue> : Result
             Result<TDestination>.Failure(Error);
 }
 
-public record class Result
+public partial record class Result
 {
     internal protected Result(bool isSuccess, Error error) =>
         (IsSuccess, Error) = (isSuccess, error);
