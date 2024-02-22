@@ -27,6 +27,16 @@ public partial record class Result<TValue> : Result
         new(false, error, default!);
 
     public static implicit operator Result<TValue>(Error error) => Failure(error);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TValue> Ensure(
+        TValue value,
+        Func<TValue, bool> predicate,
+        Error error) =>
+        predicate(value) ?
+            Success(value) :
+            Failure(error);
 }
 
 public partial record class Result
@@ -53,4 +63,12 @@ public partial record class Result
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> Success<TValue>(TValue value) => Result<TValue>.Success(value);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TValue> Ensure<TValue>(
+        TValue value,
+        Func<TValue, bool> predicate,
+        Error error) =>
+        Result<TValue>.Ensure(value, predicate, error);
 }
