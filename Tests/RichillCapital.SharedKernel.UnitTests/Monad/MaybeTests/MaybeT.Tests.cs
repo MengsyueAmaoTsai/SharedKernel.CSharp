@@ -29,7 +29,6 @@ public sealed partial class GenericMaybeTests : MonadTests
         testEntityMaybe.ShouldHasNoValue();
     }
 
-
     [Fact]
     public void Value_When_MaybeHasValue_Should_ReturnValue()
     {
@@ -85,5 +84,45 @@ public sealed partial class GenericMaybeTests : MonadTests
         testEntityMaybe.Invoking(maybe => maybe.Value)
             .Should().Throw<InvalidOperationException>()
             .WithMessage($"Maybe<{typeof(TestEntity)}> has no value.");
+    }
+
+    [Fact]
+    public void ValueOrDefault_When_MaybeHasValue_Should_ReturnValue()
+    {
+        // Arrange
+        Maybe<int> intMaybe = Maybe<int>.With(IntValue);
+        Maybe<string> stringMaybe = Maybe<string>.With(StringValue);
+        Maybe<bool> boolMaybe = Maybe<bool>.With(BoolValue);
+        Maybe<byte> byteMaybe = Maybe<byte>.With(ByteValue);
+        Maybe<DateTimeOffset> dateTimeMaybe = Maybe<DateTimeOffset>.With(DateTimeValue);
+        Maybe<TestEntity> testEntityMaybe = Maybe<TestEntity>.With(TestEntity);
+
+        // Assert
+        intMaybe.ValueOrDefault.Should().Be(IntValue);
+        stringMaybe.ValueOrDefault.Should().Be(StringValue);
+        boolMaybe.ValueOrDefault.Should().Be(BoolValue);
+        byteMaybe.ValueOrDefault.Should().Be(ByteValue);
+        dateTimeMaybe.ValueOrDefault.Should().Be(DateTimeValue);
+        testEntityMaybe.ValueOrDefault.Should().Be(TestEntity);
+    }
+
+    [Fact]
+    public void ValueOrDefault_When_MaybeHasNoValue_Should_ReturnDefaultValue()
+    {
+        // Arrange
+        Maybe<int> intMaybe = Maybe<int>.Null;
+        Maybe<string> stringMaybe = Maybe<string>.Null;
+        Maybe<bool> boolMaybe = Maybe<bool>.Null;
+        Maybe<byte> byteMaybe = Maybe<byte>.Null;
+        Maybe<DateTimeOffset> dateTimeMaybe = Maybe<DateTimeOffset>.Null;
+        Maybe<TestEntity> testEntityMaybe = Maybe<TestEntity>.Null;
+
+        // Assert
+        intMaybe.ValueOrDefault.Should().Be(0);
+        stringMaybe.ValueOrDefault.Should().Be(null);
+        boolMaybe.ValueOrDefault.Should().Be(false);
+        byteMaybe.ValueOrDefault.Should().Be(0);
+        dateTimeMaybe.ValueOrDefault.Should().Be(DateTimeOffset.MinValue);
+        testEntityMaybe.ValueOrDefault.Should().Be(null);
     }
 }

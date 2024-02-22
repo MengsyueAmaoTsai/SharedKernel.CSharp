@@ -17,6 +17,8 @@ public readonly partial record struct Maybe<TValue>
         throw new InvalidOperationException($"Maybe<{typeof(TValue)}> has no value.") :
         _value!;
 
+    public TValue ValueOrDefault => HasNoValue ? default! : _value!;
+
     public static Maybe<TValue> With(TValue? value) => new(true, value!);
 
     public static implicit operator Maybe<TValue>(TValue value) =>
