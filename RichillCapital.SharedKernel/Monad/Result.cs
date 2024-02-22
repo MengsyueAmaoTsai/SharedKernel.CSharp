@@ -1,3 +1,6 @@
+using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
+
 namespace RichillCapital.SharedKernel.Monad;
 
 public partial record class Result<TValue> : Result
@@ -20,11 +23,6 @@ public partial record class Result<TValue> : Result
         new(false, error, default!);
 
     public static implicit operator Result<TValue>(Error error) => Failure(error);
-
-    public Result<TDestination> Map<TDestination>(Func<TValue, TDestination> map) =>
-         IsSuccess ?
-            Result<TDestination>.Success(map(Value)) :
-            Result<TDestination>.Failure(Error);
 }
 
 public partial record class Result
@@ -38,11 +36,17 @@ public partial record class Result
 
     public Error Error { get; private init; }
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result Success() => new(true, Error.Null);
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result Failure(Error error) => new(false, error);
 
     public static implicit operator Result(Error error) => Failure(error);
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> Success<TValue>(TValue value) => Result<TValue>.Success(value);
 }
