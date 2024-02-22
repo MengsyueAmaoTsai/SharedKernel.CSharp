@@ -10,6 +10,100 @@ namespace RichillCapital.SharedKernel.UnitTests.Monad;
 public sealed partial class GenericMaybeTests : MonadTests
 {
     [Fact]
+    public void Equals_WhenComparingMaybeWithNull_ShouldReturnFalse()
+    {
+        // Arrange
+        Maybe<int> maybeInt = Maybe<int>.With(IntValue);
+        Maybe<string> maybeString = Maybe<string>.With(StringValue);
+        Maybe<bool> maybeBool = Maybe<bool>.With(BoolValue);
+        Maybe<byte> maybeByte = Maybe<byte>.With(ByteValue);
+        Maybe<DateTimeOffset> maybeDateTime = Maybe<DateTimeOffset>.With(DateTimeValue);
+        Maybe<TestEntity> maybeTestEntity = Maybe<TestEntity>.With(TestEntity);
+
+        // Act & Assert
+        maybeInt.Equals(null).Should().BeFalse();
+        maybeString.Equals(null!).Should().BeFalse();
+        maybeBool.Equals(null).Should().BeFalse();
+        maybeByte.Equals(null).Should().BeFalse();
+        maybeDateTime.Equals(null).Should().BeFalse();
+        maybeTestEntity.Equals(null!).Should().BeFalse();
+    }
+
+    [Fact]
+    public void Equals_WhenComparingMaybeWithSameValue_ShouldReturnTrue()
+    {
+        // Arrange
+        Maybe<int> maybeInt = Maybe<int>.With(IntValue);
+        Maybe<string> maybeString = Maybe<string>.With(StringValue);
+        Maybe<bool> maybeBool = Maybe<bool>.With(BoolValue);
+        Maybe<byte> maybeByte = Maybe<byte>.With(ByteValue);
+        Maybe<DateTimeOffset> maybeDateTime = Maybe<DateTimeOffset>.With(DateTimeValue);
+        Maybe<TestEntity> maybeTestEntity = Maybe<TestEntity>.With(TestEntity);
+
+        var otherMaybeInt = Maybe<int>.With(IntValue);
+        var otherMaybeString = Maybe<string>.With(StringValue);
+        var otherMaybeBool = Maybe<bool>.With(BoolValue);
+        var otherMaybeByte = Maybe<byte>.With(ByteValue);
+        var otherMaybeDateTime = Maybe<DateTimeOffset>.With(DateTimeValue);
+        var otherMaybeTestEntity = Maybe<TestEntity>.With(TestEntity);
+
+        // Act & Assert
+        maybeInt.Equals(otherMaybeInt).Should().BeTrue();
+        maybeString.Equals(otherMaybeString).Should().BeTrue();
+        maybeBool.Equals(otherMaybeBool).Should().BeTrue();
+        maybeByte.Equals(otherMaybeByte).Should().BeTrue();
+        maybeDateTime.Equals(otherMaybeDateTime).Should().BeTrue();
+        maybeTestEntity.Equals(otherMaybeTestEntity).Should().BeTrue();
+    }
+
+    [Fact]
+    public void Equals_WhenComparingMaybeWithDifferentType_ShouldReturnFalse()
+    {
+        // Arrange
+        Maybe<int> maybeInt = Maybe<int>.With(IntValue);
+
+        var otherMaybeString = Maybe<string>.With(StringValue);
+        var otherMaybeBool = Maybe<bool>.With(BoolValue);
+        var otherMaybeByte = Maybe<byte>.With(ByteValue);
+        var otherMaybeDateTime = Maybe<DateTimeOffset>.With(DateTimeValue);
+        var otherMaybeTestEntity = Maybe<TestEntity>.With(new TestEntity(new TestEntityId(1), "1"));
+
+        // Act & Assert
+        maybeInt.Equals(otherMaybeString).Should().BeFalse();
+        maybeInt.Equals(otherMaybeBool).Should().BeFalse();
+        maybeInt.Equals(otherMaybeByte).Should().BeFalse();
+        maybeInt.Equals(otherMaybeDateTime).Should().BeFalse();
+        maybeInt.Equals(otherMaybeTestEntity).Should().BeFalse();
+    }
+
+    [Fact]
+    public void Equals_WhenComparingMaybeWithDifferentValue_ShouldReturnFalse()
+    {
+        // Arrange
+        Maybe<int> maybeInt = Maybe<int>.With(IntValue);
+        Maybe<string> maybeString = Maybe<string>.With(StringValue);
+        Maybe<bool> maybeBool = Maybe<bool>.With(BoolValue);
+        Maybe<byte> maybeByte = Maybe<byte>.With(ByteValue);
+        Maybe<DateTimeOffset> maybeDateTime = Maybe<DateTimeOffset>.With(DateTimeValue);
+        Maybe<TestEntity> maybeTestEntity = Maybe<TestEntity>.With(TestEntity);
+
+        Maybe<int> otherMaybeInt = Maybe<int>.With(100);
+        Maybe<string> otherMaybeString = Maybe<string>.With("Different value");
+        Maybe<bool> otherMaybeBool = Maybe<bool>.With(false);
+        Maybe<byte> otherMaybeByte = Maybe<byte>.With(100);
+        Maybe<DateTimeOffset> otherMaybeDateTime = Maybe<DateTimeOffset>.With(DateTimeOffset.MinValue);
+        Maybe<TestEntity> otherMaybeTestEntity = Maybe<TestEntity>.With(new TestEntity(new TestEntityId(2), "1"));
+
+        // Act & Assert
+        maybeInt.Equals(otherMaybeInt).Should().BeFalse();
+        maybeString.Equals(otherMaybeString).Should().BeFalse();
+        maybeBool.Equals(otherMaybeBool).Should().BeFalse();
+        maybeByte.Equals(otherMaybeByte).Should().BeFalse();
+        maybeDateTime.Equals(otherMaybeDateTime).Should().BeFalse();
+        maybeTestEntity.Equals(otherMaybeTestEntity).Should().BeFalse();
+    }
+
+    [Fact]
     public void Null_Should_ReturnMaybeWithNoValue()
     {
         // Arrange & Act
