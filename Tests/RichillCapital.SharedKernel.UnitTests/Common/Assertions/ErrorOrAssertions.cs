@@ -2,9 +2,9 @@ using FluentAssertions;
 
 using RichillCapital.SharedKernel.Monad;
 
-namespace RichillCapital.SharedKernel.UnitTests.Monad.Common.Assertions;
+namespace RichillCapital.SharedKernel.UnitTests.Common.Assertions;
 
-public static class ErrorOrAssertions
+internal static class ErrorOrAssertions
 {
     public static void ShouldBeErrors<TValue>(
         this ErrorOr<TValue> errorOr,

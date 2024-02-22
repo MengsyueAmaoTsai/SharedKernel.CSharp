@@ -11,3 +11,9 @@ dotnet add package RichillCapital.SharedKernel
 ```
 
 ## License
+
+## Todo
+
+- Throw
+- Ensure
+- Guard Clauses

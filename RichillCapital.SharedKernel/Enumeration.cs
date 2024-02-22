@@ -1,4 +1,6 @@
+using System.Diagnostics.Contracts;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 using RichillCapital.SharedKernel.Monad;
 
@@ -55,6 +57,8 @@ public abstract class Enumeration<TEnum, TValue>
 
     public TValue Value { get; private init; }
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Maybe<TEnum> FromName(
         string name,
         bool ignoreCase = false) =>
@@ -66,6 +70,8 @@ public abstract class Enumeration<TEnum, TValue>
             enumeration :
             Maybe<TEnum>.Null;
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Maybe<TEnum> FromValue(TValue value) =>
         value is null ?
             Maybe<TEnum>.Null :
@@ -75,7 +81,7 @@ public abstract class Enumeration<TEnum, TValue>
 
     public override string ToString() => Name;
 
-    public override int GetHashCode() => Value.GetHashCode();
+    public override int GetHashCode() => HashCode.Combine(Name, Value);
 
     private static TEnum[] GetAllOptions()
     {

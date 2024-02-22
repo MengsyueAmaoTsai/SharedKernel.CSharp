@@ -2,11 +2,11 @@ using FluentAssertions;
 
 using RichillCapital.SharedKernel.Monad;
 
-namespace RichillCapital.SharedKernel.UnitTests.Monad.Common.Assertions;
+namespace RichillCapital.SharedKernel.UnitTests.Common.Assertions;
 
-public static class MaybeAssertions
+internal static class MaybeAssertions
 {
-    public static void ShouldBeMaybeHasValue<TValue>(
+    public static void ShouldHasValue<TValue>(
         this Maybe<TValue> maybe,
         TValue value)
     {
@@ -16,7 +16,7 @@ public static class MaybeAssertions
         maybe.Value.Should().BeEquivalentTo(value);
     }
 
-    public static void ShouldBeMaybeHasNoValue<TValue>(this Maybe<TValue> maybe)
+    public static void ShouldHasNoValue<TValue>(this Maybe<TValue> maybe)
     {
         Action action = () => _ = maybe.Value;
 
@@ -24,6 +24,6 @@ public static class MaybeAssertions
         maybe.HasNoValue.Should().BeTrue();
         action.Should()
             .Throw<InvalidOperationException>()
-            .WithMessage("Maybe has no value.");
+            .WithMessage($"Maybe<{typeof(TValue)}> has no value.");
     }
 }

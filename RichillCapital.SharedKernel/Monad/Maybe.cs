@@ -1,6 +1,6 @@
 namespace RichillCapital.SharedKernel.Monad;
 
-public readonly record struct Maybe<TValue>
+public readonly partial record struct Maybe<TValue>
 {
     private readonly TValue? _value;
 
@@ -14,10 +14,10 @@ public readonly record struct Maybe<TValue>
     public bool HasNoValue => !HasValue;
 
     public TValue Value => HasNoValue ?
-        throw new InvalidOperationException("Maybe has no value.") :
+        throw new InvalidOperationException($"Maybe<{typeof(TValue)}> has no value.") :
         _value!;
 
-    public static Maybe<TValue> With(TValue value) => new(true, value);
+    public TValue ValueOrDefault => HasNoValue ? default! : _value!;
 
     public static implicit operator Maybe<TValue>(TValue value) =>
         value is null ?
@@ -25,18 +25,8 @@ public readonly record struct Maybe<TValue>
             With(value);
 
     public static implicit operator TValue(Maybe<TValue> maybe) => maybe.Value;
-
-    public Maybe<TValue> OrElse(Maybe<TValue> other) =>
-        HasValue ? this : other;
-
-    public Maybe<TDestination> Map<TDestination>(Func<TValue, TDestination> map) =>
-         HasValue ?
-            Maybe<TDestination>.With(map(Value)) :
-            Maybe<TDestination>.Null;
 }
 
-public readonly record struct Maybe
+public readonly partial record struct Maybe
 {
-    public static Maybe<TValue> With<TValue>(TValue value) =>
-        Maybe<TValue>.With(value);
 }

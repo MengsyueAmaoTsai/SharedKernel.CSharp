@@ -15,7 +15,7 @@ public sealed class IncludeExpressionTests
         _expression = company => company.Country!;
 
     [Fact]
-    public void Should_ThrowArgumentNullException_WhenExpressionIsNull()
+    public void When_ExpressionIsNull_Should_ThrowArgumentNullException()
     {
         // Arrange 
         Action action = () => new IncludeExpression(
@@ -29,7 +29,7 @@ public sealed class IncludeExpressionTests
 
 
     [Fact]
-    public void Should_ThrowsArgumentNullException_WhenEntityTypeIsNull()
+    public void When_EntityTypeIsNull_Should_ThrowsArgumentNullException()
     {
         // Arrange
         Action action = () => new IncludeExpression(
@@ -43,7 +43,7 @@ public sealed class IncludeExpressionTests
     }
 
     [Fact]
-    public void ThrowsArgumentNullException_GivenNullForPropertyType()
+    public void When_GivenNullForPropertyType_Should_ThrowsArgumentNullException()
     {
         // Arrange
         Action action = () => new IncludeExpression(
@@ -57,7 +57,7 @@ public sealed class IncludeExpressionTests
     }
 
     [Fact]
-    public void ThrowsArgumentNullException_GivenNullForPreviousPropertyType()
+    public void When_GivenNullForPreviousPropertyType_Should_ThrowsArgumentNullException()
     {
         // Arrange
         Action action = () => new IncludeExpression(

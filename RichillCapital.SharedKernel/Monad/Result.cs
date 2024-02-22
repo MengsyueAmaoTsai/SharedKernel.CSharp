@@ -1,6 +1,9 @@
+using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
+
 namespace RichillCapital.SharedKernel.Monad;
 
-public record class Result<TValue> : Result
+public partial record class Result<TValue> : Result
 {
     private readonly TValue? _value;
 
@@ -11,23 +14,24 @@ public record class Result<TValue> : Result
         throw new InvalidOperationException("Cannot access value for a failure result.") :
         _value!;
 
-    public static Result<TValue> Success(TValue value) =>
-        new(true, Error.Null, value);
+    public TValue ValueOrDefault =>
+        IsFailure ?
+            default! :
+            _value!;
 
-    public static implicit operator Result<TValue>(TValue value) => Success(value);
+    public static implicit operator Result<TValue>(TValue value) =>
+        Result<TValue>.Success(value);
 
-    public static new Result<TValue> Failure(Error error) =>
-        new(false, error, default!);
+    public static implicit operator Result<TValue>(Error error) =>
+        Result<TValue>.Failure(error);
 
-    public static implicit operator Result<TValue>(Error error) => Failure(error);
-
-    public Result<TDestination> Map<TDestination>(Func<TValue, TDestination> map) =>
-         IsSuccess ?
-            Result<TDestination>.Success(map(Value)) :
-            Result<TDestination>.Failure(Error);
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Result<TValue> Ensure(Func<TValue, bool> predicate, Error error) =>
+        Result<TValue>.Ensure(Value, predicate, error);
 }
 
-public record class Result
+public partial record class Result
 {
     internal protected Result(bool isSuccess, Error error) =>
         (IsSuccess, Error) = (isSuccess, error);
@@ -37,12 +41,4 @@ public record class Result
     public bool IsFailure => !IsSuccess;
 
     public Error Error { get; private init; }
-
-    public static Result Success() => new(true, Error.Null);
-
-    public static Result Failure(Error error) => new(false, error);
-
-    public static implicit operator Result(Error error) => Failure(error);
-
-    public static Result<TValue> Success<TValue>(TValue value) => Result<TValue>.Success(value);
 }

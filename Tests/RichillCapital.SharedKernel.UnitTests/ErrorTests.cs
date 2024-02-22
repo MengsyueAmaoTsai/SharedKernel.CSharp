@@ -5,86 +5,118 @@ namespace RichillCapital.SharedKernel.UnitTests;
 public sealed partial class ErrorTests
 {
     [Fact]
-    public void Equal_Should_Return_True_When_Both_Instances_Are_Equal()
+    public void Equals_When_ComparingWithNull_Should_ReturnsFalse()
     {
-        // Arrange
-        var error1 = Error.Invalid("Invalid input.");
-        var error2 = Error.Invalid("Invalid input.");
+        var error = Error.Invalid("test");
 
-        // Act
-        var result = error1.Equals(error2);
-
-        // Assert
-        result.Should().BeTrue();
+        // Arrange & Act & Assert
+        error.Equals(null).Should().BeFalse();
     }
 
     [Fact]
-    public void Equal_Should_Return_False_When_Both_Instances_Are_Not_Equal()
+    public void Equals_When_ComparingWithDifferentType_Should_ReturnsFalse()
     {
-        // Arrange
-        var error1 = Error.Invalid("Invalid input.");
-        var error2 = Error.Unauthorized("Unauthorized access.");
+        var error = Error.Invalid("test");
 
-        // Act
-        var result = error1.Equals(error2);
-
-        // Assert
-        result.Should().BeFalse();
+        // Arrange & Act & Assert
+        error.Equals(new object()).Should().BeFalse();
     }
 
     [Fact]
-    public void EqualsOperator_Should_Return_True_When_Both_Instances_Are_Equal()
+    public void Equals_When_ComparingWithDifferentTypeOfErrorAndSameMessage_Should_ReturnsFalse()
     {
         // Arrange
-        var error1 = Error.Invalid("Invalid input.");
-        var error2 = Error.Invalid("Invalid input.");
+        var message = "Error message";
+        var invalidError = Error.Invalid(message);
+        var notFoundError = Error.NotFound(message);
 
-        // Act
-        var result = error1 == error2;
-
-        // Assert
-        result.Should().BeTrue();
+        // Act & Assert
+        invalidError.Equals(notFoundError).Should().BeFalse();
     }
 
     [Fact]
-    public void EqualsOperator_Should_Return_False_When_Both_Instances_Are_Not_Equal()
+    public void Equals_When_ComparingWithDifferentTypeOfErrorAndDifferentMessage_Should_ReturnsFalse()
     {
         // Arrange
-        var error1 = Error.Invalid("Invalid input.");
-        var error2 = Error.Unauthorized("Unauthorized access.");
+        var invalidError = Error.Invalid("Invalid error message");
+        var notFoundError = Error.NotFound("Not found error message");
 
-        // Act
-        var result = error1 == error2;
-
-        // Assert
-        result.Should().BeFalse();
+        // Act & Assert
+        invalidError.Equals(notFoundError).Should().BeFalse();
     }
 
     [Fact]
-    public void NotEqualsOperator_Should_Return_True_When_Both_Instances_Are_Not_Equal()
+    public void Equals_When_ComparingWithSameMember_Should_ReturnsTrue()
     {
         // Arrange
-        var error1 = Error.Invalid("Invalid input.");
-        var error2 = Error.Unauthorized("Unauthorized access.");
+        var message = "Error message";
+        var invalidError = Error.Invalid(message);
+        var invalidError2 = Error.Invalid(message);
 
-        // Act
-        var result = error1 != error2;
-
-        // Assert
-        result.Should().BeTrue();
+        // Arrange & Act & Assert
+        invalidError.Equals(invalidError2).Should().BeTrue();
     }
 
     [Fact]
-    public void NotEqualsOperator_Should_Return_False_When_Both_Instances_Are_Equal()
+    public void EqualsOperator_When_ComparingWithSameMember_Should_ReturnsTrue()
     {
         // Arrange
-        var error1 = Error.Invalid("Invalid input.");
-        var error2 = Error.Invalid("Invalid input.");
+        var error = Error.Invalid("test");
 
-        // Act
-        var result = error1 != error2;
+        // Act & Assert
+        (error == Error.Invalid("test")).Should().BeTrue();
+    }
 
-        // Assert
-        result.Should().BeFalse();
+    [Fact]
+    public void NotEqualsOperator_When_ComparingWithSameMember_Should_ReturnsFalse()
+    {
+        // Arrange
+        var error = Error.Invalid("test");
+
+        // Act & Assert
+        (error != Error.Invalid("test")).Should().BeFalse();
+    }
+
+    [Fact]
+    public void GetHashCode_When_ComparingWithSameMember_Should_ReturnsTrue()
+    {
+        // Arrange
+        var error = Error.Invalid("test");
+
+        // Act & Assert
+        error.GetHashCode().Should().Be(Error.Invalid("test").GetHashCode());
+    }
+
+    [Fact]
+    public void GetHashCode_When_ComparingWithDifferentMember_Should_ReturnsFalse()
+    {
+        // Arrange
+        var error = Error.Invalid("test");
+
+        // Act & Assert
+        error.GetHashCode().Should().NotBe(Error.Invalid("test2").GetHashCode());
+    }
+
+    [Fact]
+    public void GetHashCode_When_ComparingWithDifferentTypeOfErrorAndSameMessage_Should_ReturnsFalse()
+    {
+        // Arrange
+        var message = "Error message";
+        var invalidError = Error.Invalid(message);
+        var notFoundError = Error.NotFound(message);
+
+        // Act & Assert
+        invalidError.GetHashCode().Should().NotBe(notFoundError.GetHashCode());
+    }
+
+    [Fact]
+    public void GetHashCode_When_ComparingWithDifferentTypeOfErrorAndDifferentMessage_Should_ReturnsFalse()
+    {
+        // Arrange
+        var invalidError = Error.Invalid("Invalid error message");
+        var notFoundError = Error.NotFound("Not found error message");
+
+        // Act & Assert
+        invalidError.GetHashCode().Should().NotBe(notFoundError.GetHashCode());
     }
 }

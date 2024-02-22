@@ -10,7 +10,7 @@ public sealed class DuplicateTakeExceptionTests
         "Duplicate take clause detected. Only one take clause is allowed per specification.";
 
     [Fact]
-    public void DefaultConstructor_Should_Throw_DuplicateTakeException()
+    public void DefaultConstructor_Should_ThrowsDuplicateTakeException()
     {
         // Arrange
         Action action = () => throw new DuplicateTakeException();
@@ -21,7 +21,7 @@ public sealed class DuplicateTakeExceptionTests
     }
 
     [Fact]
-    public void Should_Throw_WithInnerException()
+    public void Should_ThrowsWithInnerException()
     {
         // Arrange
         var innerException = new Exception("Test");

@@ -10,7 +10,7 @@ public sealed class ConcurrentSelectorsExceptionTests
         "Ensure only one of the Select() or SelectMany() transforms is used in the same specification!";
 
     [Fact]
-    public void DefaultConstructor_Should_Throw_ConcurrentSelectorsException()
+    public void DefaultConstructor_Should_ThrowsConcurrentSelectorsException()
     {
         // Arrange
         Action action = () => throw new ConcurrentSelectorsException();
@@ -22,7 +22,7 @@ public sealed class ConcurrentSelectorsExceptionTests
     }
 
     [Fact]
-    public void Should_Throw_WithInnerException()
+    public void Should_ThrowsWithInnerException()
     {
         // Arrange
         var errorMessage = "Test";
