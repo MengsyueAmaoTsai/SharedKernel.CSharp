@@ -11,8 +11,8 @@ public sealed class EntityTests
     {
         // Arrange
         var id = GenerateId();
-        var entity1 = new TestEntity(id);
-        var entity2 = new TestEntity(id);
+        var entity1 = new TestEntity(id, "test1");
+        var entity2 = new TestEntity(id, "test2");
 
         // Act
         var areEqual = entity1 == entity2;
@@ -25,8 +25,8 @@ public sealed class EntityTests
     public void EqualsOperator_WithDifferentValues_ReturnsFalse()
     {
         // Arrange
-        var entity1 = new TestEntity(GenerateId());
-        var entity2 = new TestEntity(GenerateId());
+        var entity1 = new TestEntity(GenerateId(), "test1");
+        var entity2 = new TestEntity(GenerateId(), "test2");
 
         // Act
         var areEqual = entity1 == entity2;
@@ -40,8 +40,8 @@ public sealed class EntityTests
     {
         // Arrange
         var id = GenerateId();
-        var entity1 = new TestEntity(id);
-        var entity2 = new TestEntity(id);
+        var entity1 = new TestEntity(id, "test1");
+        var entity2 = new TestEntity(id, "test2");
 
         // Act
         var areNotEqual = entity1 != entity2;
@@ -54,8 +54,8 @@ public sealed class EntityTests
     public void NotEqualsOperator_WithDifferentValues_ReturnsTrue()
     {
         // Arrange
-        var entity1 = new TestEntity(GenerateId());
-        var entity2 = new TestEntity(GenerateId());
+        var entity1 = new TestEntity(GenerateId(), "test");
+        var entity2 = new TestEntity(GenerateId(), "test2");
 
         // Act
         var areNotEqual = entity1 != entity2;
@@ -69,8 +69,8 @@ public sealed class EntityTests
     {
         // Arrange
         var id = GenerateId();
-        var entity1 = new TestEntity(id);
-        var entity2 = new TestEntity(id);
+        var entity1 = new TestEntity(id, "test1");
+        var entity2 = new TestEntity(id, "test2");
 
         // Act
         var result = entity1.Equals(entity2);
@@ -83,8 +83,8 @@ public sealed class EntityTests
     public void Equals_ShouldReturnFalse_WhenComparingTwoEntitiesWithDifferentIds()
     {
         // Arrange
-        var entity1 = new TestEntity(GenerateId());
-        var entity2 = new TestEntity(GenerateId());
+        var entity1 = new TestEntity(GenerateId(), "test1");
+        var entity2 = new TestEntity(GenerateId(), "test2");
 
         // Act
         var result = entity1.Equals(entity2);
@@ -97,7 +97,7 @@ public sealed class EntityTests
     public void Equals_ShouldReturnFalse_WhenComparingEntityToNull()
     {
         // Arrange
-        var entity = new TestEntity(GenerateId());
+        var entity = new TestEntity(GenerateId(), "test");
 
         // Act
         var result = entity.Equals(null);
@@ -110,7 +110,7 @@ public sealed class EntityTests
     public void Equals_ShouldReturnFalse_WhenComparingEntityToDifferentType()
     {
         // Arrange
-        var entity = new TestEntity(GenerateId());
+        var entity = new TestEntity(GenerateId(), "test");
 
         // Act
         var result = entity.Equals(new object());

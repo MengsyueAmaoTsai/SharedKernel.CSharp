@@ -1,18 +1,11 @@
 using FluentAssertions;
 
+using RichillCapital.SharedKernel.UnitTests.Common;
+
 namespace RichillCapital.SharedKernel.UnitTests;
 
 public sealed class ValueObjectTests
 {
-    private sealed class TestValueObject(string TestString, int TestInt) : ValueObject
-    {
-        protected override IEnumerable<object> GetAtomicValues()
-        {
-            yield return TestString;
-            yield return TestInt;
-        }
-    }
-
     [Fact]
     public void EqualsOperator_WithSameValues_ReturnsTrue()
     {
