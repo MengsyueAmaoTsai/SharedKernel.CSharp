@@ -37,6 +37,11 @@ public partial record class Result<TValue> : Result
         predicate(value) ?
             Success(value) :
             Failure(error);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Result<TValue> Ensure(Func<TValue, bool> predicate, Error error) =>
+        Result<TValue>.Ensure(Value, predicate, error);
 }
 
 public partial record class Result
