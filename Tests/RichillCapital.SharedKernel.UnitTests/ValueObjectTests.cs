@@ -6,117 +6,85 @@ namespace RichillCapital.SharedKernel.UnitTests;
 
 public sealed class ValueObjectTests
 {
+    private static readonly TestValueObject ValueObject = new("1", 1);
+    private static readonly TestValueObject ValueObjectWithSameValues = new("1", 1);
+    private static readonly TestValueObject ValueObjectWithDifferentString = new("2", 1);
+    private static readonly TestValueObject ValueObjectWithDifferentInt = new("1", 2);
+
     [Fact]
-    public void EqualsOperator_WithSameValues_ReturnsTrue()
+    public void Equals_When_HasSameValues_Should_ReturnsTrue()
     {
-        // Arrange
-        var valueObject1 = new TestValueObject("test", 1);
-        var valueObject2 = new TestValueObject("test", 1);
-
-        // Act
-        var areEqual = valueObject1 == valueObject2;
-
-        // Assert
-        areEqual.Should().BeTrue();
+        // Arrange & Act & Assert
+        ValueObject.Equals(ValueObjectWithSameValues).Should().BeTrue();
     }
 
     [Fact]
-    public void EqualsOperator_WithDifferentValues_ReturnsFalse()
+    public void Equals_When_HasAnyDifferentValue_Should_ReturnsFalse()
     {
-        // Arrange
-        var valueObject1 = new TestValueObject("test", 1);
-        var valueObject2 = new TestValueObject("test", 2);
-
-        // Act
-        var areEqual = valueObject1 == valueObject2;
-
-        // Assert
-        areEqual.Should().BeFalse();
+        // Arrange & Act & Assert
+        ValueObject.Equals(ValueObjectWithDifferentString).Should().BeFalse();
+        ValueObject.Equals(ValueObjectWithDifferentInt).Should().BeFalse();
     }
 
     [Fact]
-    public void NotEqualsOperator_WithSameValues_ReturnsFalse()
+    public void Equals_When_ComparingWithNull_Should_ReturnsFalse()
     {
-        // Arrange
-        var valueObject1 = new TestValueObject("test", 1);
-        var valueObject2 = new TestValueObject("test", 1);
-
-        // Act
-        var areNotEqual = valueObject1 != valueObject2;
-
-        // Assert
-        areNotEqual.Should().BeFalse();
+        // Arrange & Act & Assert
+        ValueObject.Equals(null).Should().BeFalse();
     }
 
     [Fact]
-    public void NotEqualsOperator_WithDifferentValues_ReturnsTrue()
+    public void Equals_When_ComparingWithDifferentType_Should_ReturnsFalse()
     {
-        // Arrange
-        var valueObject1 = new TestValueObject("test", 1);
-        var valueObject2 = new TestValueObject("test", 2);
-
-        // Act
-        var areNotEqual = valueObject1 != valueObject2;
-
-        // Assert
-        areNotEqual.Should().BeTrue();
+        // Arrange & Act & Assert
+        ValueObject.Equals(new object()).Should().BeFalse();
     }
 
     [Fact]
-    public void ValueObjects_WithSameValues_AreEqual()
+    public void GetHashCode_When_HasSameValues_Should_ReturnsSameHashCode()
     {
-        // Arrange
-        var valueObject1 = new TestValueObject("test", 1);
-        var valueObject2 = new TestValueObject("test", 1);
-
-        // Act
-        var areEqual = valueObject1.Equals(valueObject2);
-
-        // Assert
-        areEqual.Should().BeTrue();
+        // Arrange & Act & Assert
+        ValueObject.GetHashCode()
+            .Should().Be(ValueObjectWithSameValues.GetHashCode());
     }
 
     [Fact]
-    public void ValueObjects_WithDifferentValues_AreNotEqual()
+    public void GetHashCode_When_HasDifferentValues_Should_ReturnsDifferentHashCode()
     {
-        // Arrange
-        var valueObject1 = new TestValueObject("test", 1);
-        var valueObject2 = new TestValueObject("test", 2);
-
-        // Act
-        var areEqual = valueObject1.Equals(valueObject2);
-
-        // Assert
-        areEqual.Should().BeFalse();
+        // Arrange & Act & Assert
+        ValueObject.GetHashCode()
+            .Should().NotBe(ValueObjectWithDifferentString.GetHashCode());
+        ValueObject.GetHashCode()
+            .Should().NotBe(ValueObjectWithDifferentInt.GetHashCode());
     }
 
     [Fact]
-    public void ValueObjects_WithSameValues_HaveSameHashCode()
+    public void EqualsOperator_When_HasSameValues_Should_ReturnsTrue()
     {
-        // Arrange
-        var valueObject1 = new TestValueObject("test", 1);
-        var valueObject2 = new TestValueObject("test", 1);
-
-        // Act
-        var hashCode1 = valueObject1.GetHashCode();
-        var hashCode2 = valueObject2.GetHashCode();
-
-        // Assert
-        hashCode1.Should().Be(hashCode2);
+        // Arrange & Act & Assert
+        (ValueObject == ValueObjectWithSameValues).Should().BeTrue();
     }
 
     [Fact]
-    public void ValueObjects_WithDifferentValues_HaveDifferentHashCode()
+    public void EqualsOperator_When_HasAnyDifferentValue_Should_ReturnsFalse()
     {
-        // Arrange
-        var valueObject1 = new TestValueObject("test", 1);
-        var valueObject2 = new TestValueObject("test", 2);
+        // Arrange & Act & Assert
+        (ValueObject == ValueObjectWithDifferentString).Should().BeFalse();
+        (ValueObject == ValueObjectWithDifferentInt).Should().BeFalse();
+    }
 
-        // Act
-        var hashCode1 = valueObject1.GetHashCode();
-        var hashCode2 = valueObject2.GetHashCode();
+    [Fact]
+    public void NotEqualsOperator_When_HasSameValues_Should_ReturnsFalse()
+    {
+        // Arrange & Act & Assert
+        (ValueObject != ValueObjectWithSameValues).Should().BeFalse();
+    }
 
-        // Assert
-        hashCode1.Should().NotBe(hashCode2);
+    [Fact]
+    public void NotEqualsOperator_When_HasAnyDifferentValue_Should_ReturnsTrue()
+    {
+        // Arrange & Act & Assert
+        (ValueObject != ValueObjectWithDifferentString).Should().BeTrue();
+        (ValueObject != ValueObjectWithDifferentInt).Should().BeTrue();
     }
 }
