@@ -8,5 +8,5 @@ public enum ErrorType
     Forbidden = 403,
     NotFound = 404,
     Conflict = 409,
-    Failure = 500,
+    Unexpected = 500,
 }

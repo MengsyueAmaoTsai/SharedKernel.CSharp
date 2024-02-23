@@ -5,118 +5,91 @@ namespace RichillCapital.SharedKernel.UnitTests;
 public sealed partial class ErrorTests
 {
     [Fact]
-    public void Equals_When_ComparingWithNull_Should_ReturnsFalse()
-    {
-        var error = Error.Invalid("test");
-
-        // Arrange & Act & Assert
-        error.Equals(null).Should().BeFalse();
-    }
-
-    [Fact]
-    public void Equals_When_ComparingWithDifferentType_Should_ReturnsFalse()
-    {
-        var error = Error.Invalid("test");
-
-        // Arrange & Act & Assert
-        error.Equals(new object()).Should().BeFalse();
-    }
-
-    [Fact]
-    public void Equals_When_ComparingWithDifferentTypeOfErrorAndSameMessage_Should_ReturnsFalse()
+    public void Null_Should_ReturnNullError()
     {
         // Arrange
-        var message = "Error message";
-        var invalidError = Error.Invalid(message);
-        var notFoundError = Error.NotFound(message);
+        var error = Error.Null;
 
         // Act & Assert
-        invalidError.Equals(notFoundError).Should().BeFalse();
+        error.Type.Should().Be(ErrorType.Null);
+        error.Message.Should().BeEmpty();
     }
 
     [Fact]
-    public void Equals_When_ComparingWithDifferentTypeOfErrorAndDifferentMessage_Should_ReturnsFalse()
+    public void Invalid_Should_ReturnValidationError()
     {
         // Arrange
-        var invalidError = Error.Invalid("Invalid error message");
-        var notFoundError = Error.NotFound("Not found error message");
+        var message = "Invalid";
+        var error = Error.Invalid(message);
 
         // Act & Assert
-        invalidError.Equals(notFoundError).Should().BeFalse();
+        error.Should().BeOfType<Error>();
+        error.Type.Should().Be(ErrorType.Validation);
+        error.Message.Should().Be(message);
     }
 
     [Fact]
-    public void Equals_When_ComparingWithSameMember_Should_ReturnsTrue()
+    public void Unauthorized_Should_ReturnUnauthorizedError()
     {
         // Arrange
-        var message = "Error message";
-        var invalidError = Error.Invalid(message);
-        var invalidError2 = Error.Invalid(message);
-
-        // Arrange & Act & Assert
-        invalidError.Equals(invalidError2).Should().BeTrue();
-    }
-
-    [Fact]
-    public void EqualsOperator_When_ComparingWithSameMember_Should_ReturnsTrue()
-    {
-        // Arrange
-        var error = Error.Invalid("test");
+        var message = "Unauthorized";
+        var error = Error.Unauthorized(message);
 
         // Act & Assert
-        (error == Error.Invalid("test")).Should().BeTrue();
+        error.Should().BeOfType<Error>();
+        error.Type.Should().Be(ErrorType.Unauthorized);
+        error.Message.Should().Be(message);
     }
 
     [Fact]
-    public void NotEqualsOperator_When_ComparingWithSameMember_Should_ReturnsFalse()
+    public void Forbidden_Should_ReturnForbiddenError()
     {
         // Arrange
-        var error = Error.Invalid("test");
+        var message = "Forbidden";
+        var error = Error.Forbidden(message);
 
         // Act & Assert
-        (error != Error.Invalid("test")).Should().BeFalse();
+        error.Should().BeOfType<Error>();
+        error.Type.Should().Be(ErrorType.Forbidden);
+        error.Message.Should().Be(message);
     }
 
     [Fact]
-    public void GetHashCode_When_ComparingWithSameMember_Should_ReturnsTrue()
+    public void NotFound_Should_ReturnNotFoundError()
     {
         // Arrange
-        var error = Error.Invalid("test");
+        var message = "Not Found";
+        var error = Error.NotFound(message);
 
         // Act & Assert
-        error.GetHashCode().Should().Be(Error.Invalid("test").GetHashCode());
+        error.Should().BeOfType<Error>();
+        error.Type.Should().Be(ErrorType.NotFound);
+        error.Message.Should().Be(message);
     }
 
     [Fact]
-    public void GetHashCode_When_ComparingWithDifferentMember_Should_ReturnsFalse()
+    public void Conflict_Should_ReturnConflictError()
     {
         // Arrange
-        var error = Error.Invalid("test");
+        var message = "Conflict";
+        var error = Error.Conflict(message);
 
         // Act & Assert
-        error.GetHashCode().Should().NotBe(Error.Invalid("test2").GetHashCode());
+        error.Should().BeOfType<Error>();
+        error.Type.Should().Be(ErrorType.Conflict);
+        error.Message.Should().Be(message);
     }
 
     [Fact]
-    public void GetHashCode_When_ComparingWithDifferentTypeOfErrorAndSameMessage_Should_ReturnsFalse()
+    public void Unexpected_Should_ReturnUnexpectedError()
     {
         // Arrange
-        var message = "Error message";
-        var invalidError = Error.Invalid(message);
-        var notFoundError = Error.NotFound(message);
+        var message = "Unexpected";
+        var error = Error.Unexpected(message);
 
         // Act & Assert
-        invalidError.GetHashCode().Should().NotBe(notFoundError.GetHashCode());
-    }
-
-    [Fact]
-    public void GetHashCode_When_ComparingWithDifferentTypeOfErrorAndDifferentMessage_Should_ReturnsFalse()
-    {
-        // Arrange
-        var invalidError = Error.Invalid("Invalid error message");
-        var notFoundError = Error.NotFound("Not found error message");
-
-        // Act & Assert
-        invalidError.GetHashCode().Should().NotBe(notFoundError.GetHashCode());
+        error.Should().BeOfType<Error>();
+        error.Type.Should().Be(ErrorType.Unexpected);
+        error.Message.Should().Be(message);
     }
 }
