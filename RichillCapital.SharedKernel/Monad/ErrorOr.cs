@@ -34,8 +34,12 @@ public readonly partial record struct ErrorOr<TValue>
     public static implicit operator ErrorOr<TValue>(List<Error> errors) =>
         ErrorOr<TValue>.From(errors);
 
+    public static implicit operator ErrorOr<TValue>(Error[] errors) =>
+        ErrorOr<TValue>.From(errors);
+
     public static implicit operator ErrorOr<TValue>(Error error) =>
         ErrorOr<TValue>.From(error);
+
 }
 
 public readonly partial record struct ErrorOr

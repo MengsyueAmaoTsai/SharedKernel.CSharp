@@ -68,4 +68,27 @@ public sealed partial class GenericErrorOrTests : MonadTests
         errorOrDateTime.ShouldBeErrors(errors);
         errorOrEntity.ShouldBeErrors(errors);
     }
+
+    [Fact]
+    public void ImplicitCast_When_GivenErrorsArray_Should_ConvertToErrorOrWithErrors()
+    {
+        // Arrange
+        var errors = new[] { TestError, TestError, TestError };
+
+        // Act
+        ErrorOr<int> errorOrInt = errors;
+        ErrorOr<string> errorOrString = errors;
+        ErrorOr<bool> errorOrBool = errors;
+        ErrorOr<byte> errorOrByte = errors;
+        ErrorOr<DateTimeOffset> errorOrDateTime = errors;
+        ErrorOr<TestEntity> errorOrEntity = errors;
+
+        // Assert
+        errorOrInt.ShouldBeErrors(errors);
+        errorOrString.ShouldBeErrors(errors);
+        errorOrBool.ShouldBeErrors(errors);
+        errorOrByte.ShouldBeErrors(errors);
+        errorOrDateTime.ShouldBeErrors(errors);
+        errorOrEntity.ShouldBeErrors(errors);
+    }
 }
