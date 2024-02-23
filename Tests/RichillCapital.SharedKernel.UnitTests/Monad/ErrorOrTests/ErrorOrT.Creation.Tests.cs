@@ -68,4 +68,60 @@ public sealed partial class GenericErrorOrTests : MonadTests
         errorOrDateTime.ShouldBeErrors([TestError]);
         errorOrEntity.ShouldBeErrors([TestError]);
     }
+
+    [Fact]
+    public void Ensure_When_PredicateIsTrue_Should_ReturnErrorOrWithValue()
+    {
+        // Arrange
+        Func<int, bool> intPredicate = value => value > 0;
+        Func<string, bool> stringPredicate = value => value.Length > 0;
+        Func<bool, bool> boolPredicate = value => value;
+        Func<byte, bool> bytePredicate = value => value > 0;
+        Func<DateTimeOffset, bool> dateTimePredicate = value => value > DateTimeOffset.MinValue;
+        Func<TestEntity, bool> entityPredicate = value => value != null;
+
+        // Act
+        ErrorOr<int> errorOrInt = ErrorOr<int>.Ensure(IntValue, intPredicate, TestError);
+        ErrorOr<string> errorOrString = ErrorOr<string>.Ensure(StringValue, stringPredicate, TestError);
+        ErrorOr<bool> errorOrBool = ErrorOr<bool>.Ensure(BoolValue, boolPredicate, TestError);
+        ErrorOr<byte> errorOrByte = ErrorOr<byte>.Ensure(ByteValue, bytePredicate, TestError);
+        ErrorOr<DateTimeOffset> errorOrDateTime = ErrorOr<DateTimeOffset>.Ensure(DateTimeValue, dateTimePredicate, TestError);
+        ErrorOr<TestEntity> errorOrEntity = ErrorOr<TestEntity>.Ensure(TestEntity, entityPredicate, TestError);
+
+        // Assert
+        errorOrInt.ShouldBeValue(IntValue);
+        errorOrString.ShouldBeValue(StringValue);
+        errorOrBool.ShouldBeValue(BoolValue);
+        errorOrByte.ShouldBeValue(ByteValue);
+        errorOrDateTime.ShouldBeValue(DateTimeValue);
+        errorOrEntity.ShouldBeValue(TestEntity);
+    }
+
+    [Fact]
+    public void Ensure_When_PredicateIsFalse_Should_ReturnErrorOrWithErrors()
+    {
+        // Arrange
+        Func<int, bool> intPredicate = value => value < 0;
+        Func<string, bool> stringPredicate = value => value.Length == 0;
+        Func<bool, bool> boolPredicate = value => !value;
+        Func<byte, bool> bytePredicate = value => value < 0;
+        Func<DateTimeOffset, bool> dateTimePredicate = value => value == DateTimeOffset.MinValue;
+        Func<TestEntity, bool> entityPredicate = value => value == null;
+
+        // Act
+        ErrorOr<int> errorOrInt = ErrorOr<int>.Ensure(IntValue, intPredicate, TestError);
+        ErrorOr<string> errorOrString = ErrorOr<string>.Ensure(StringValue, stringPredicate, TestError);
+        ErrorOr<bool> errorOrBool = ErrorOr<bool>.Ensure(BoolValue, boolPredicate, TestError);
+        ErrorOr<byte> errorOrByte = ErrorOr<byte>.Ensure(ByteValue, bytePredicate, TestError);
+        ErrorOr<DateTimeOffset> errorOrDateTime = ErrorOr<DateTimeOffset>.Ensure(DateTimeValue, dateTimePredicate, TestError);
+        ErrorOr<TestEntity> errorOrEntity = ErrorOr<TestEntity>.Ensure(TestEntity, entityPredicate, TestError);
+
+        // Assert
+        errorOrInt.ShouldBeErrors([TestError]);
+        errorOrString.ShouldBeErrors([TestError]);
+        errorOrBool.ShouldBeErrors([TestError]);
+        errorOrByte.ShouldBeErrors([TestError]);
+        errorOrDateTime.ShouldBeErrors([TestError]);
+        errorOrEntity.ShouldBeErrors([TestError]);
+    }
 }

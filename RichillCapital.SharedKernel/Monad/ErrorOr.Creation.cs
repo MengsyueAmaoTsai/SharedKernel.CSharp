@@ -19,6 +19,13 @@ public readonly partial record struct ErrorOr<TValue>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ErrorOr<TValue> From(Error error) =>
         new(true, [error], default!);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> Ensure(TValue value, Func<TValue, bool> predicate, Error error) =>
+        predicate(value) ?
+            ErrorOr<TValue>.Is(value) :
+            ErrorOr<TValue>.From(error);
 }
 
 public readonly partial record struct ErrorOr
