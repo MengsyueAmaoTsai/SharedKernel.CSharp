@@ -26,6 +26,14 @@ public readonly partial record struct ErrorOr<TValue>
         predicate(value) ?
             ErrorOr<TValue>.Is(value) :
             ErrorOr<TValue>.From(error);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> Ensure(params ErrorOr<TValue>[] errorOrs) =>
+        errorOrs.Any(x => x.IsError) ?
+            ErrorOr<TValue>.From(errorOrs
+                .SelectMany(errorOr => errorOr.Errors)) :
+            ErrorOr<TValue>.Is(errorOrs.First().Value);
 }
 
 public readonly partial record struct ErrorOr
@@ -49,4 +57,9 @@ public readonly partial record struct ErrorOr
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ErrorOr<TValue> Ensure<TValue>(TValue value, Func<TValue, bool> predicate, Error error) =>
         ErrorOr<TValue>.Ensure(value, predicate, error);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> Ensure<TValue>(params ErrorOr<TValue>[] errorOrs) =>
+        ErrorOr<TValue>.Ensure(errorOrs);
 }

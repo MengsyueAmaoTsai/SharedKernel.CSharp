@@ -124,4 +124,60 @@ public sealed partial class GenericErrorOrTests : MonadTests
         errorOrDateTime.ShouldBeErrors([TestError]);
         errorOrEntity.ShouldBeErrors([TestError]);
     }
+
+    [Fact]
+    public void Ensure_When_MultipleErrorOrsWithValuesAreProvided_Should_ReturnErrorOrWithFirstValue()
+    {
+        // Arrange
+        var price = 100;
+        var quantity = 0;
+
+        // Act
+        var errorOr = ErrorOr<int>.Ensure(
+            ErrorOr.Ensure(price, value => value > 0, Error.Invalid("Price is invalid")),
+            ErrorOr.Ensure(quantity, value => value >= 0, Error.Invalid("Quantity is invalid")));
+
+        // Assert
+        errorOr.ShouldBeValue(price);
+    }
+
+    [Fact]
+    public void Ensure_When_MultipleErrorOrsWithErrorsAreProvided_Should_ReturnErrorOrWithErrors()
+    {
+        // Arrange
+        var price = -100;
+        var quantity = -1;
+
+        var priceError = Error.Invalid("Price is invalid");
+        var quantityError = Error.Invalid("Quantity is invalid");
+
+        // Act
+        var errorOr = ErrorOr<int>.Ensure(
+            ErrorOr.Ensure(price, value => value > 0, priceError),
+            ErrorOr.Ensure(quantity, value => value >= 0, quantityError));
+
+        // Assert
+        errorOr.ShouldBeErrors([
+            priceError,
+            quantityError,
+        ]);
+    }
+
+    [Fact]
+    public void Ensure_When_MultipleErrorOrsWithValuesAndErrorsAreProvided_Should_ReturnErrorOrWithErrors()
+    {
+        // Arrange
+        var price = -100;
+        var quantity = 100;
+
+        var priceError = Error.Invalid("Price is invalid");
+
+        // Act
+        var errorOr = ErrorOr<int>.Ensure(
+            ErrorOr.Ensure(price, value => value > 0, priceError),
+            ErrorOr.Ensure(quantity, value => value >= 0, Error.Invalid("Quantity is invalid")));
+
+        // Assert
+        errorOr.ShouldBeErrors([priceError, Error.Null]);
+    }
 }
