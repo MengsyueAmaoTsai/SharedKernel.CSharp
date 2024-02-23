@@ -4,7 +4,7 @@ using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.SharedKernel.UnitTests.Monads;
 
-public sealed partial class ErrorOrTests
+public sealed partial class GenericErrorOrTests
 {
     [Fact]
     public void Errors_When_ErrorOrIsError_Should_ReturnErrors()

@@ -4,13 +4,24 @@ using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.SharedKernel.UnitTests.Monads;
 
-public sealed partial class ErrorOrTests
+public sealed partial class GenericErrorOrTests
 {
+    private static readonly int IntValue = 10;
+    private static readonly Error NotFoundError = Error.NotFound("Not found");
+    private static readonly Error[] ValidationErrors =
+    [
+        Error.Invalid("Invalid"),
+        Error.Invalid("Invalid 2"),
+        Error.Invalid("Invalid 3"),
+        Error.Invalid("Invalid 4"),
+        Error.Invalid("Invalid 5"),
+    ];
+
     [Fact]
-    public void Is_When_GivenPrimitiveValue_Should_CreateErrorOrWithValue()
+    public void ImplicitCast_When_GivenPrimitiveValue_Should_ReturnErrorOrWithValue()
     {
         // Arrange & Act
-        var errorOrInt = ErrorOr<int>.Is(IntValue);
+        ErrorOr<int> errorOrInt = IntValue;
 
         // Assert
         errorOrInt.IsError.Should().BeFalse();
@@ -19,27 +30,25 @@ public sealed partial class ErrorOrTests
     }
 
     [Fact]
-    public void From_When_GivenError_Should_CreateErrorOrWithError()
+    public void ImplicitCast_When_GivenError_Should_ReturnErrorOrWithError()
     {
         // Arrange & Act
-        var errorOrInt = ErrorOr<int>.From(NotFoundError);
+        ErrorOr<int> errorOrInt = NotFoundError;
 
         // Assert
         errorOrInt.IsError.Should().BeTrue();
         errorOrInt.IsValue.Should().BeFalse();
         errorOrInt.Errors
             .Should().HaveCount(1)
-            .And.BeEquivalentTo(new[] { NotFoundError });
+            .And.BeEquivalentTo([NotFoundError]);
     }
 
     [Fact]
-    public void From_When_GivenErrorList_Should_CreateErrorOrWithErrors()
+    public void ImplicitCast_When_GivenErrorList_Should_ReturnErrorOrWithErrors()
     {
-        // Arrange
+        // Arrange & Act
         var errorList = ValidationErrors.ToList();
-
-        // Act
-        var errorOrInt = ErrorOr<int>.From(errorList);
+        ErrorOr<int> errorOrInt = errorList;
 
         // Assert
         errorOrInt.IsError.Should().BeTrue();
@@ -50,10 +59,10 @@ public sealed partial class ErrorOrTests
     }
 
     [Fact]
-    public void From_When_GivenErrorArray_Should_CreateErrorOrWithErrors()
+    public void ImplicitCast_When_GivenErrorArray_Should_ReturnErrorOrWithErrors()
     {
         // Arrange & Act
-        var errorOrInt = ErrorOr<int>.From(ValidationErrors);
+        ErrorOr<int> errorOrInt = ValidationErrors;
 
         // Assert
         errorOrInt.IsError.Should().BeTrue();
