@@ -9,3 +9,10 @@ public readonly partial record struct Maybe<TValue>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Maybe<TValue> With(TValue value) => new(value);
 }
+
+public static partial class Maybe
+{
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Maybe<TValue> With<TValue>(TValue value) => Maybe<TValue>.With(value);
+}
