@@ -4,7 +4,7 @@ using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.SharedKernel.UnitTests.Monads;
 
-public sealed partial class GenericErrorOrTests
+public sealed partial class GenericErrorOrTests : MonadTests
 {
     [Fact]
     public void Is_When_GivenPrimitiveValue_Should_CreateErrorOrWithValue()

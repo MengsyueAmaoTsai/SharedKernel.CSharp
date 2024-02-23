@@ -4,7 +4,7 @@ using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.SharedKernel.UnitTests.Monads;
 
-public sealed partial class GenericErrorOrTests
+public sealed partial class GenericErrorOrTests : MonadTests
 {
     [Fact]
     public void Errors_When_ErrorOrIsError_Should_ReturnErrors()
@@ -45,7 +45,8 @@ public sealed partial class GenericErrorOrTests
         Action act = () => _ = errorOrInt.Value;
 
         // Assert
-        act.Should().Throw<InvalidOperationException>();
+        act.Should().Throw<InvalidOperationException>()
+            .WithMessage($"ErrorOr<{typeof(int)}> is not value");
     }
 
     [Fact]
