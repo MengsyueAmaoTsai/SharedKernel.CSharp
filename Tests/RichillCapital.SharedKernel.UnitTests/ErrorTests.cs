@@ -92,4 +92,17 @@ public sealed partial class ErrorTests
         error.Type.Should().Be(ErrorType.Unexpected);
         error.Message.Should().Be(message);
     }
+
+    [Fact]
+    public void Unavailable_Should_ReturnUnavailableError()
+    {
+        // Arrange
+        var message = "Unavailable";
+        var error = Error.Unavailable(message);
+
+        // Act & Assert
+        error.Should().BeOfType<Error>();
+        error.Type.Should().Be(ErrorType.Unavailable);
+        error.Message.Should().Be(message);
+    }
 }

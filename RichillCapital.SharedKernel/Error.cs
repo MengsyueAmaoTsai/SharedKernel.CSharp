@@ -17,4 +17,5 @@ public readonly record struct Error
     public static Error NotFound(string message) => new(ErrorType.NotFound, message);
     public static Error Conflict(string message) => new(ErrorType.Conflict, message);
     public static Error Unexpected(string message) => new(ErrorType.Unexpected, message);
+    public static Error Unavailable(string message) => new(ErrorType.Unavailable, message);
 }

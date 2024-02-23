@@ -9,4 +9,5 @@ public enum ErrorType
     NotFound = 404,
     Conflict = 409,
     Unexpected = 500,
+    Unavailable = 503,
 }
