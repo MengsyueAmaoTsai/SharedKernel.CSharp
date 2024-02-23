@@ -35,3 +35,23 @@ public readonly partial record struct Result<TValue>
     public static implicit operator Result<TValue>(Error error) =>
         Failure(error);
 }
+
+public readonly partial record struct Result
+{
+    private Result(Error error)
+        : this(false, error)
+    {
+    }
+
+    private Result(bool isSuccess, Error error) =>
+        (IsSuccess, Error) = (isSuccess, error);
+
+    public bool IsSuccess { get; private init; }
+
+    public bool IsFailure => !IsSuccess;
+
+    public Error Error { get; private init; }
+
+    public static implicit operator Result(Error error) =>
+        Failure(error);
+}
