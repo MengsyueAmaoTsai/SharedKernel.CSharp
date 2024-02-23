@@ -44,4 +44,9 @@ public readonly partial record struct ErrorOr
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ErrorOr<TValue> From<TValue>(Error error) =>
         ErrorOr<TValue>.From(error);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> Ensure<TValue>(TValue value, Func<TValue, bool> predicate, Error error) =>
+        ErrorOr<TValue>.Ensure(value, predicate, error);
 }

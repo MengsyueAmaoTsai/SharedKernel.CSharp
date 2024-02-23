@@ -68,4 +68,32 @@ public sealed partial class ErrorOrTests : MonadTests
         errorOrDateTime.ShouldBeErrors([TestError]);
         errorOrEntity.ShouldBeErrors([TestError]);
     }
+
+    [Fact]
+    public void Ensure_When_PredicateIsTrue_Should_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        ErrorOr<int> errorOrInt = ErrorOr.Ensure(IntValue, value => value > 0, TestError);
+        ErrorOr<TestEntity> errorOrEntity = ErrorOr.Ensure(
+            TestEntity,
+            entity => entity is not null,
+            TestError);
+
+        // Assert
+        errorOrInt.ShouldBeValue(IntValue);
+        errorOrEntity.ShouldBeValue(TestEntity);
+    }
+
+    [Fact]
+    public void Ensure_When_PredicateIsFalse_Should_ReturnErrorOrWithErrors()
+    {
+        // Arrange & Act
+        ErrorOr<TestEntity> errorOrEntity = ErrorOr.Ensure(
+            TestEntity,
+            entity => entity is null,
+            TestError);
+
+        // Assert
+        errorOrEntity.ShouldBeErrors([TestError]);
+    }
 }
