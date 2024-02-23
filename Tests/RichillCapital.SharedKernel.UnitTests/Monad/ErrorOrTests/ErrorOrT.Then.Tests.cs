@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using RichillCapital.SharedKernel.Monad;
 using RichillCapital.SharedKernel.UnitTests.Common.Assertions;
 using RichillCapital.SharedKernel.UnitTests.Monad.Common;
@@ -54,5 +56,33 @@ public sealed partial class GenericErrorOrTests : MonadTests
 
         // Assert
         result.ShouldBeValue("1");
+    }
+
+    [Fact]
+    public void Then_When_ProvidedActionAndIsValue_Should_InvokeAction()
+    {
+        // Arrange
+        var errorOr = ErrorOr<int>.Is(1);
+        var actionInvoked = false;
+
+        // Act
+        errorOr.Then(value => actionInvoked = true);
+
+        // Assert
+        actionInvoked.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Then_When_ProvidedActionAndIsError_Should_NotInvokeAction()
+    {
+        // Arrange
+        var errorOr = ErrorOr<int>.From(TestError);
+        var actionInvoked = false;
+
+        // Act
+        errorOr.Then(value => actionInvoked = true);
+
+        // Assert
+        actionInvoked.Should().BeFalse();
     }
 }

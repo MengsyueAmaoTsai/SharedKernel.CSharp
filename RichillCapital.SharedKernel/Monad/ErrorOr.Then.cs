@@ -12,6 +12,16 @@ public readonly partial record struct ErrorOr<TValue>
         IsError ?
             ErrorOr<TResult>.From(Errors) :
             ErrorOr<TResult>.Is(func());
+
+    public ErrorOr<TValue> Then(Action<TValue> action)
+    {
+        if (IsValue)
+        {
+            action(Value);
+        }
+
+        return this;
+    }
 }
 
 public readonly partial record struct ErrorOr
