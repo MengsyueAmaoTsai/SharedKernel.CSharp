@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace RichillCapital.SharedKernel.Monads;
 
-public readonly record struct ErrorOr<TValue>
+public readonly partial record struct ErrorOr<TValue>
 {
     private static readonly Error IsNotError = Error.Unexpected($"ErrorOr<{typeof(TValue)}> is not error");
 
@@ -52,15 +52,7 @@ public readonly record struct ErrorOr<TValue>
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> From(Error[] errors) => new([.. errors]);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator ErrorOr<TValue>(Error[] errors) => From(errors);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> From(List<Error> errors) => new(errors);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -68,15 +60,7 @@ public readonly record struct ErrorOr<TValue>
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> From(Error error) => new(error);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator ErrorOr<TValue>(Error error) => From(error);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> Is(TValue value) => new(value);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

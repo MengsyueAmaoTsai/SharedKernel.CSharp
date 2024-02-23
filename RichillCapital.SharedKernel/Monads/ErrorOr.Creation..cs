@@ -1,0 +1,23 @@
+using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
+
+namespace RichillCapital.SharedKernel.Monads;
+
+public readonly partial record struct ErrorOr<TValue>
+{
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> From(Error[] errors) => new([.. errors]);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> From(List<Error> errors) => new(errors);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> From(Error error) => new(error);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> Is(TValue value) => new(value);
+}
