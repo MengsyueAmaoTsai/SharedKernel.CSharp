@@ -6,6 +6,12 @@ public readonly partial record struct ErrorOr<TValue>
         IsError ?
             ErrorOr<TResult>.From(Errors) :
             await func(Value);
+
+    public ErrorOr<TResult> Then<TResult>(
+        Func<TResult> func) =>
+        IsError ?
+            ErrorOr<TResult>.From(Errors) :
+            ErrorOr<TResult>.Is(func());
 }
 
 public readonly partial record struct ErrorOr
