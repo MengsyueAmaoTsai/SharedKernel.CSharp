@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace RichillCapital.SharedKernel.Monads;
 
-public readonly partial record struct Result<TValue>
+public sealed partial record class Result<TValue> : Result
 {
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -11,10 +11,10 @@ public readonly partial record struct Result<TValue>
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> Failure(Error error) => new(error);
+    public static new Result<TValue> Failure(Error error) => new(error);
 }
 
-public readonly partial record struct Result
+public partial record class Result
 {
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
