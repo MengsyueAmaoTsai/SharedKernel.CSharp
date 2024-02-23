@@ -1,6 +1,6 @@
 namespace RichillCapital.SharedKernel;
 
-public readonly record struct Error
+public readonly record struct Error : IError
 {
     public static readonly Error Null = new(ErrorType.Null, string.Empty);
 
@@ -11,11 +11,11 @@ public readonly record struct Error
 
     public string Message { get; private init; }
 
-    public static Error Invalid(string message) => new(ErrorType.Validation, message);
-    public static Error Unauthorized(string message) => new(ErrorType.Unauthorized, message);
-    public static Error Forbidden(string message) => new(ErrorType.Forbidden, message);
-    public static Error NotFound(string message) => new(ErrorType.NotFound, message);
-    public static Error Conflict(string message) => new(ErrorType.Conflict, message);
-    public static Error Unexpected(string message) => new(ErrorType.Unexpected, message);
-    public static Error Unavailable(string message) => new(ErrorType.Unavailable, message);
+    public static IError Invalid(string message) => new Error(ErrorType.Validation, message);
+    public static IError Unauthorized(string message) => new Error(ErrorType.Unauthorized, message);
+    public static IError Forbidden(string message) => new Error(ErrorType.Forbidden, message);
+    public static IError NotFound(string message) => new Error(ErrorType.NotFound, message);
+    public static IError Conflict(string message) => new Error(ErrorType.Conflict, message);
+    public static IError Unexpected(string message) => new Error(ErrorType.Unexpected, message);
+    public static IError Unavailable(string message) => new Error(ErrorType.Unavailable, message);
 }
