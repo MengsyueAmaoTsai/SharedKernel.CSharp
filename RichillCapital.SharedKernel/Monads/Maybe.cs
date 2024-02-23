@@ -29,9 +29,5 @@ public readonly partial record struct Maybe<TValue>
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Maybe<TValue> With(TValue value) => new(value);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Maybe<TValue>(TValue value) => With(value);
 }
