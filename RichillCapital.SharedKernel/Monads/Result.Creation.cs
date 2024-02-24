@@ -14,6 +14,7 @@ public sealed partial record class Result<TValue> : Result
     public static new Result<TValue> Failure(Error error) => new(error);
 
     [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> Ensure(
         TValue value,
         Func<TValue, bool> predicate,
@@ -40,4 +41,14 @@ public partial record class Result
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> Failure<TValue>(Error error) =>
         Result<TValue>.Failure(error);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result Ensure<TValue>(
+        TValue value,
+        Func<TValue, bool> predicate,
+        Error error) =>
+        predicate(value) ?
+            Success() :
+            Failure(error);
 }
