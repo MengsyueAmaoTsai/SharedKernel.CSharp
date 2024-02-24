@@ -65,4 +65,11 @@ public readonly partial record struct ErrorOr<TValue>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator ErrorOr<TValue>(TValue value) => Is(value);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator ErrorOr<TValue>(Result<TValue> result) =>
+        result.IsFailure ?
+            ErrorOr<TValue>.From(result.Error) :
+            ErrorOr<TValue>.Is(result.Value);
 }

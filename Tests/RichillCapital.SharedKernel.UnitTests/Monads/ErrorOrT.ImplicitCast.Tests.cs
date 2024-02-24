@@ -60,4 +60,32 @@ public sealed partial class GenericErrorOrTests : MonadTests
             .Should().HaveCount(ValidationErrors.Length)
             .And.BeEquivalentTo(ValidationErrors);
     }
+
+    [Fact]
+    public void ImplicitCast_When_GivenSuccessResultWithValue_Should_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        Result<int> result = Result.Success(IntValue);
+        ErrorOr<int> errorOrInt = result;
+
+        // Assert
+        errorOrInt.IsError.Should().BeFalse();
+        errorOrInt.IsValue.Should().BeTrue();
+        errorOrInt.Value.Should().Be(IntValue);
+    }
+
+    [Fact]
+    public void ImplicitCast_When_GivenFailureResult_Should_ReturnErrorOrWithError()
+    {
+        // Arrange & Act
+        Result<int> result = Result.Failure<int>(NotFoundError);
+        ErrorOr<int> errorOrInt = result;
+
+        // Assert
+        errorOrInt.IsError.Should().BeTrue();
+        errorOrInt.IsValue.Should().BeFalse();
+        errorOrInt.Errors
+            .Should().HaveCount(1)
+            .And.BeEquivalentTo([NotFoundError]);
+    }
 }
