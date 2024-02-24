@@ -28,6 +28,27 @@ public readonly partial record struct ErrorOr<TValue>
         Func<TValue, bool> predicate,
         Error error) =>
         predicate(value) ? Is(value) : From(error);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> Combine(params ErrorOr<TValue>[] errorOrs)
+    {
+        var errors = new List<Error>();
+
+        foreach (var errorOr in errorOrs)
+        {
+            if (errorOr.IsError)
+            {
+                errors.AddRange(errorOr.Errors);
+            }
+        }
+
+        return errors.Count == 0 ?
+            ErrorOr<TValue>.Is(errorOrs.First().Value) :
+            errors.Any(error => error.Type != ErrorType.Validation) ?
+                ErrorOr<TValue>.From(errors.First()) :
+                ErrorOr<TValue>.From(errors);
+    }
 }
 
 public static partial class ErrorOr
@@ -55,4 +76,9 @@ public static partial class ErrorOr
         Func<TValue, bool> predicate,
         Error error) =>
         ErrorOr<TValue>.Ensure(value, predicate, error);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> Combine<TValue>(params ErrorOr<TValue>[] errorOrs) =>
+        ErrorOr<TValue>.Combine(errorOrs);
 }

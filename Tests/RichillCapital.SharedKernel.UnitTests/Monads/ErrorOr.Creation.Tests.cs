@@ -88,4 +88,67 @@ public sealed partial class ErrorOrTests : MonadTests
             .Should().HaveCount(1)
             .And.BeEquivalentTo(new[] { NotFoundError });
     }
+
+
+    [Fact]
+    public void Combine_When_GivenErrorOrsWithNoErrors_Should_CreateErrorOrWithValue()
+    {
+        // Arrange
+        var errorOrs = new[]
+        {
+            ErrorOr<int>.Is(10),
+            ErrorOr<int>.Is(5),
+        };
+
+        // Act
+        var combinedErrorOr = ErrorOr.Combine(errorOrs);
+
+        // Assert
+        combinedErrorOr.IsError.Should().BeFalse();
+        combinedErrorOr.IsValue.Should().BeTrue();
+        combinedErrorOr.Value.Should().Be(IntValue);
+    }
+
+    [Fact]
+    public void Combine_When_GivenErrorsAndContainsAnyNonValidationErrors_Should_CreateErrorOrWithFirstError()
+    {
+        // Arrange
+        var errorOrs = new[]
+        {
+            ErrorOr<int>.Is(IntValue),
+            ErrorOr<int>.From(NotFoundError),
+            ErrorOr<int>.From(ValidationErrors),
+        };
+
+        // Act
+        var combinedErrorOr = ErrorOr.Combine(errorOrs);
+
+        // Assert
+        combinedErrorOr.IsError.Should().BeTrue();
+        combinedErrorOr.IsValue.Should().BeFalse();
+        combinedErrorOr.Errors
+            .Should().HaveCount(1)
+            .And.BeEquivalentTo(new[] { NotFoundError });
+    }
+
+    [Fact]
+    public void Combine_When_GivenErrorsAndContainsOnlyValidationErrors_Should_CreateErrorOrWithErrors()
+    {
+        // Arrange
+        var errorOrs = new[]
+        {
+            ErrorOr<int>.From(ValidationErrors),
+            ErrorOr<int>.From(ValidationErrors),
+        };
+
+        // Act
+        var combinedErrorOr = ErrorOr.Combine(errorOrs);
+
+        // Assert
+        combinedErrorOr.IsError.Should().BeTrue();
+        combinedErrorOr.IsValue.Should().BeFalse();
+        combinedErrorOr.Errors
+            .Should().HaveCount(ValidationErrors.Length * 2)
+            .And.BeEquivalentTo(ValidationErrors.Concat(ValidationErrors));
+    }
 }
