@@ -1,9 +1,9 @@
 namespace RichillCapital.SharedKernel.Monads;
 
-public sealed partial record class Result<TValue> : Result
+public readonly partial record struct Result<TValue>
 {
 }
 
-public partial record class Result
+public readonly partial record struct Result
 {
 }

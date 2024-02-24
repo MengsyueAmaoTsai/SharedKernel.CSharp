@@ -1,16 +1,28 @@
 namespace RichillCapital.SharedKernel.Monads;
 
-public sealed partial record class Result<TValue> : Result
+public readonly partial record struct Result<TValue>
 {
     private readonly TValue _value;
+    private readonly Error _error;
 
     private Result(Error error)
-        : base(error) =>
-        _value = default!;
+        : this(false, error, default!)
+    {
+    }
 
     private Result(TValue value)
-        : base(true, Error.Null) =>
-        _value = value;
+        : this(true, Error.Null, value)
+    {
+    }
+
+    private Result(bool isSuccess, Error error, TValue value) =>
+        (IsSuccess, _error, _value) = (isSuccess, error, value);
+
+    public bool IsSuccess { get; private init; }
+
+    public bool IsFailure => !IsSuccess;
+
+    public Error Error => IsSuccess ? Error.Null : _error;
 
     public TValue Value => IsFailure ?
         throw new InvalidOperationException("Cannot access the value of a failed result.") :
@@ -19,20 +31,20 @@ public sealed partial record class Result<TValue> : Result
     public TValue ValueOrDefault => IsFailure ? default! : _value;
 
     public static implicit operator Result<TValue>(TValue value) =>
-        Success(value);
+        Result<TValue>.Success(value);
 
     public static implicit operator Result<TValue>(Error error) =>
-        Failure(error);
+        Result<TValue>.Failure(error);
 }
 
-public partial record class Result
+public readonly partial record struct Result
 {
     private Result(Error error)
         : this(false, error)
     {
     }
 
-    internal protected Result(bool isSuccess, Error error) =>
+    private Result(bool isSuccess, Error error) =>
         (IsSuccess, Error) = (isSuccess, error);
 
     public bool IsSuccess { get; private init; }
