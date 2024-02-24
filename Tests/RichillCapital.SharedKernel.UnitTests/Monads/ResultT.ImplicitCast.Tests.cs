@@ -30,5 +30,17 @@ public sealed partial class GenericResultTests : MonadTests
         resultInt.Error
             .Should().Be(NotFoundError);
     }
+
+    [Fact]
+    public void ImplicitCast_When_GivenGenericResult_Should_ReturnSuccessResult()
+    {
+        // Arrange & Act
+        Result<int> resultInt = Result.Success(IntValue);
+        Result result = resultInt;
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        result.IsFailure.Should().BeFalse();
+    }
 }
 

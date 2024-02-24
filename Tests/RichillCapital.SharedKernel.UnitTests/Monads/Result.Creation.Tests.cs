@@ -48,7 +48,7 @@ public sealed partial class ResultTests
     public void Ensure_When_PredicateIsTrue_Should_ReturnSuccessResult()
     {
         // Arrange & Act
-        Result result = Result.Ensure(IntValue, value => value > 0, NotFoundError);
+        var result = Result.Ensure(IntValue, value => value > 0, NotFoundError);
         Result<int> resultT = Result<int>.Ensure(IntValue, value => value > 0, NotFoundError);
 
         // Assert
@@ -64,7 +64,7 @@ public sealed partial class ResultTests
     public void Ensure_When_PredicateIsFalse_Should_ReturnFailureResult()
     {
         // Arrange & Act
-        Result result = Result.Ensure(IntValue, value => value < 0, NotFoundError);
+        var result = Result.Ensure(IntValue, value => value < 0, NotFoundError);
         Result<int> resultT = Result<int>.Ensure(IntValue, value => value < 0, NotFoundError);
 
         // Assert

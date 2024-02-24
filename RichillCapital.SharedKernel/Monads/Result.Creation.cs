@@ -11,7 +11,7 @@ public readonly partial record struct Result<TValue>
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static new Result<TValue> Failure(Error error) => new(error);
+    public static Result<TValue> Failure(Error error) => new(error);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -19,7 +19,17 @@ public readonly partial record struct Result<TValue>
         TValue value,
         Func<TValue, bool> predicate,
         Error error) =>
-        predicate(value) ? Success(value) : Failure(error);
+        predicate(value) ?
+            Result<TValue>.Success(value) :
+            Result<TValue>.Failure(error);
+
+    // Un tests
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TResult> Ensure<TResult>(TResult result, Func<TResult, bool> predicate, Error error) =>
+        predicate(result) ?
+            Result<TResult>.Success(result) :
+            Result<TResult>.Failure(error);
 }
 
 public readonly partial record struct Result
@@ -44,11 +54,11 @@ public readonly partial record struct Result
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result Ensure<TValue>(
+    public static Result<TValue> Ensure<TValue>(
         TValue value,
         Func<TValue, bool> predicate,
         Error error) =>
         predicate(value) ?
-            Success() :
-            Failure(error);
+            Result<TValue>.Success(value) :
+            Result<TValue>.Failure(error);
 }

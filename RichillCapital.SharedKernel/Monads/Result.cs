@@ -35,6 +35,11 @@ public readonly partial record struct Result<TValue>
 
     public static implicit operator Result<TValue>(Error error) =>
         Result<TValue>.Failure(error);
+
+    public static implicit operator Result(Result<TValue> result) =>
+        result.IsSuccess ?
+            Result.Success() :
+            Result.Failure(result.Error);
 }
 
 public readonly partial record struct Result

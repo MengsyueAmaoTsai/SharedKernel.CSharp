@@ -2,7 +2,7 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Result<TValue>
 {
-    public new Result<TValue> Then(Action action)
+    public Result<TValue> Then(Action action)
     {
         if (IsFailure)
         {
@@ -12,6 +12,17 @@ public readonly partial record struct Result<TValue>
         action();
 
         return Result<TValue>.Success(Value);
+    }
+
+    // Un test
+    public Result<TResult> Then<TResult>(Func<TResult> func)
+    {
+        if (IsFailure)
+        {
+            return Result<TResult>.Failure(Error);
+        }
+
+        return Result<TResult>.Success(func());
     }
 }
 
@@ -27,5 +38,15 @@ public readonly partial record struct Result
         action();
 
         return Success();
+    }
+
+    public Result<TResult> Then<TResult>(Func<TResult> func)
+    {
+        if (IsFailure)
+        {
+            return Result<TResult>.Failure(Error);
+        }
+
+        return Result<TResult>.Success(func());
     }
 }
