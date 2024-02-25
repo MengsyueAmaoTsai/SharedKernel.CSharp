@@ -23,4 +23,9 @@ public readonly partial record struct Maybe<TValue>
         _value!;
 
     public TValue ValueOrDefault => HasNoValue ? default! : _value!;
+
+    public static Maybe<TValue> Have(TValue value) =>
+        value is null ?
+            Null :
+            new(value);
 }
