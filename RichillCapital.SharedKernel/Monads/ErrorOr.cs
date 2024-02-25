@@ -18,6 +18,11 @@ public readonly partial record struct ErrorOr<TValue>
     {
     }
 
+    private ErrorOr(Error[] errors)
+        : this(true, [.. errors], default!)
+    {
+    }
+
     private ErrorOr(TValue value)
         : this(false, [], value)
     {
@@ -48,17 +53,8 @@ public readonly partial record struct ErrorOr<TValue>
         default! :
         _value;
 
-    public TResult Match<TResult>(
-        Func<IEnumerable<Error>, TResult> onIsError,
-        Func<TValue, TResult> onIsValue) =>
-        IsError ?
-            onIsError(Errors) :
-            onIsValue(Value);
-
-    public async Task<TResult> Match<TResult>(
-        Func<IEnumerable<Error>, Task<TResult>> onIsError,
-        Func<TValue, Task<TResult>> onIsValue) =>
-        IsError ?
-            await onIsError(Errors) :
-            await onIsValue(Value);
+    public static ErrorOr<TValue> Is(TValue value) => new(value);
+    public static ErrorOr<TValue> Is(Error error) => new(error);
+    public static ErrorOr<TValue> Is(List<Error> errors) => new(errors);
+    public static ErrorOr<TValue> Is(Error[] errors) => new(errors);
 }

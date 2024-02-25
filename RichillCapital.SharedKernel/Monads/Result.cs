@@ -29,20 +29,6 @@ public readonly partial record struct Result<TValue>
         _value;
 
     public TValue ValueOrDefault => IsFailure ? default! : _value;
-
-    public TResult Match<TResult>(
-        Func<TValue, TResult> onSuccess,
-        Func<Error, TResult> onFailure) =>
-        IsFailure ?
-            onFailure(Error) :
-            onSuccess(Value);
-
-    public async Task<TResult> MatchAsync<TResult>(
-        Func<TValue, Task<TResult>> onSuccess,
-        Func<Error, Task<TResult>> onFailure) =>
-        IsFailure ?
-            await onFailure(Error) :
-            await onSuccess(Value);
 }
 
 public readonly partial record struct Result
