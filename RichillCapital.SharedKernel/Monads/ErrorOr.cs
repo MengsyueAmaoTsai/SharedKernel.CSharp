@@ -5,7 +5,8 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct ErrorOr<TValue>
 {
-    private static readonly Error IsNotError = Error.Unexpected($"ErrorOr<{typeof(TValue)}> is not error");
+    private static readonly Error IsNotError = Error
+        .Unexpected($"ErrorOr<{typeof(TValue)}> is not error");
 
     private readonly TValue _value;
     private readonly List<Error> _errors;
@@ -49,27 +50,4 @@ public readonly partial record struct ErrorOr<TValue>
     public TValue ValueOrDefault => IsError ?
         default! :
         _value;
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator ErrorOr<TValue>(Error[] errors) => From(errors);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator ErrorOr<TValue>(List<Error> errors) => From(errors);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator ErrorOr<TValue>(Error error) => From(error);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator ErrorOr<TValue>(TValue value) => Is(value);
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator ErrorOr<TValue>(Result<TValue> result) =>
-        result.IsFailure ?
-            ErrorOr<TValue>.From(result.Error) :
-            ErrorOr<TValue>.Is(result.Value);
 }

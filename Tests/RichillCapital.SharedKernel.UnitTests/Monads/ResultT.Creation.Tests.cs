@@ -30,27 +30,5 @@ public sealed partial class GenericResultTests : MonadTests
         resultInt.Error
             .Should().Be(NotFoundError);
     }
-
-    [Fact]
-    public void Ensure_When_GivenPredicateThatReturnsTrue_Should_ReturnSuccessResult()
-    {
-        // Arrange & Act
-        var ensuredResult = Result<int>.Ensure(IntValue, value => value != 0, NotFoundError);
-
-        // Assert
-        ensuredResult.IsSuccess.Should().BeTrue();
-        ensuredResult.Error.Should().Be(Error.Null);
-    }
-
-    [Fact]
-    public void Ensure_When_GivenPredicateThatReturnsFalse_Should_ReturnFailureResult()
-    {
-        // Arrange & Act
-        var ensuredResult = Result<int>.Ensure(IntValue, value => value == 0, NotFoundError);
-
-        // Assert
-        ensuredResult.IsFailure.Should().BeTrue();
-        ensuredResult.Error.Should().Be(NotFoundError);
-    }
 }
 
