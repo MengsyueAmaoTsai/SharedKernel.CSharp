@@ -1,3 +1,6 @@
+using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
+
 namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Result<TValue>
@@ -29,6 +32,14 @@ public readonly partial record struct Result<TValue>
         _value;
 
     public TValue ValueOrDefault => IsFailure ? default! : _value;
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TValue> Success(TValue value) => new(value);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TValue> Failure(Error error) => new(error);
 }
 
 public readonly partial record struct Result
@@ -46,4 +57,12 @@ public readonly partial record struct Result
     public bool IsFailure => !IsSuccess;
 
     public Error Error { get; private init; }
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result Success() => new(true, Error.Null);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result Failure(Error error) => new(error);
 }
