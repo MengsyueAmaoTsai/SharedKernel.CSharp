@@ -1,4 +1,4 @@
-namespace RichillCapital.SharedKernel.UnitTests.Monads;
+namespace RichillCapital.SharedKernel.UnitTests.Monads.Common;
 
 public abstract class MonadTests
 {

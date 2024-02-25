@@ -30,16 +30,19 @@ public readonly partial record struct Result<TValue>
 
     public TValue ValueOrDefault => IsFailure ? default! : _value;
 
-    public static implicit operator Result<TValue>(TValue value) =>
-        Result<TValue>.Success(value);
+    public TResult Match<TResult>(
+        Func<TValue, TResult> onSuccess,
+        Func<Error, TResult> onFailure) =>
+        IsFailure ?
+            onFailure(Error) :
+            onSuccess(Value);
 
-    public static implicit operator Result<TValue>(Error error) =>
-        Result<TValue>.Failure(error);
-
-    public static implicit operator Result(Result<TValue> result) =>
-        result.IsSuccess ?
-            Result.Success() :
-            Result.Failure(result.Error);
+    public async Task<TResult> MatchAsync<TResult>(
+        Func<TValue, Task<TResult>> onSuccess,
+        Func<Error, Task<TResult>> onFailure) =>
+        IsFailure ?
+            await onFailure(Error) :
+            await onSuccess(Value);
 }
 
 public readonly partial record struct Result
@@ -57,7 +60,4 @@ public readonly partial record struct Result
     public bool IsFailure => !IsSuccess;
 
     public Error Error { get; private init; }
-
-    public static implicit operator Result(Error error) =>
-        Failure(error);
 }

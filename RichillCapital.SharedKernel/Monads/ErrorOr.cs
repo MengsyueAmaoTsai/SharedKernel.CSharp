@@ -1,6 +1,3 @@
-using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
-
 namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct ErrorOr<TValue>
@@ -50,4 +47,18 @@ public readonly partial record struct ErrorOr<TValue>
     public TValue ValueOrDefault => IsError ?
         default! :
         _value;
+
+    public TResult Match<TResult>(
+        Func<IEnumerable<Error>, TResult> onIsError,
+        Func<TValue, TResult> onIsValue) =>
+        IsError ?
+            onIsError(Errors) :
+            onIsValue(Value);
+
+    public async Task<TResult> Match<TResult>(
+        Func<IEnumerable<Error>, Task<TResult>> onIsError,
+        Func<TValue, Task<TResult>> onIsValue) =>
+        IsError ?
+            await onIsError(Errors) :
+            await onIsValue(Value);
 }

@@ -1,6 +1,3 @@
-using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
-
 namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Maybe<TValue>
@@ -26,8 +23,4 @@ public readonly partial record struct Maybe<TValue>
         _value!;
 
     public TValue ValueOrDefault => HasNoValue ? default! : _value!;
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator Maybe<TValue>(TValue value) => With(value);
 }
