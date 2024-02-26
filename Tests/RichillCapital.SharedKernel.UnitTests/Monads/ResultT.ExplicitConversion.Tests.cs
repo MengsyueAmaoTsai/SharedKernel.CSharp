@@ -21,4 +21,26 @@ public sealed partial class GenericResultTests : MonadTests
         resultFromError.IsFailure.Should().BeTrue();
         resultFromError.Error.Should().Be(NotFoundError);
     }
+
+    [Fact]
+    public void ToResult_Should_ConvertErrorToResult()
+    {
+        // Arrange & Act
+        var resultFromError = NotFoundError.ToResult();
+
+        // Assert
+        resultFromError.IsFailure.Should().BeTrue();
+        resultFromError.Error.Should().Be(NotFoundError);
+    }
+
+    [Fact]
+    public void ToResult_Should_ConvertErrorToResult_WithoutType()
+    {
+        // Arrange & Act
+        var resultFromError = NotFoundError.ToResult();
+
+        // Assert
+        resultFromError.IsFailure.Should().BeTrue();
+        resultFromError.Error.Should().Be(NotFoundError);
+    }
 }
