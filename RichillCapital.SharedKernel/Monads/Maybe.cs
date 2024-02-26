@@ -40,7 +40,7 @@ public readonly partial record struct Maybe<TValue>
         TValue value,
         Func<TValue, bool> ensure) =>
         !ensure(value) ?
-            Maybe<TValue>.Null :
+            Null :
             Maybe<TValue>.Have(value);
 
     public TResult Match<TResult>(
@@ -60,13 +60,19 @@ public readonly partial record struct Maybe<TValue>
     public Maybe<TValue> Ensure(
         Func<TValue, bool> ensure) =>
         HasNoValue ?
-            Maybe<TValue>.Null :
+            Null :
             ensure(_value) ?
                 Maybe<TValue>.Have(_value) :
-                Maybe<TValue>.Null;
+                Null;
 
     public Maybe<TValue> OrElse(TValue value) =>
         HasNoValue ?
             Maybe<TValue>.Have(value) :
             Maybe<TValue>.Have(_value);
+
+    public Maybe<TResult> Map<TResult>(
+        Func<TValue, TResult> map) =>
+        HasNoValue ?
+            Maybe<TResult>.Null :
+            Maybe<TResult>.Have(map(_value));
 }

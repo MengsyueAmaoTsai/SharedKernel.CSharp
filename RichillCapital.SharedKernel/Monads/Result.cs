@@ -78,6 +78,12 @@ public readonly partial record struct Result<TValue>
         IsFailure ?
             Result<TValue>.Success(value) :
             Result<TValue>.Success(_value);
+
+    public Result<TResult> Map<TResult>(
+        Func<TValue, TResult> map) =>
+        IsFailure ?
+            Result<TResult>.Failure(_error) :
+            Result<TResult>.Success(map(_value));
 }
 
 public readonly partial record struct Result

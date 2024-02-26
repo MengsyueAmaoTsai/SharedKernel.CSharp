@@ -109,4 +109,9 @@ public readonly partial record struct ErrorOr<TValue>
         IsError ?
             ErrorOr<TValue>.Is(value) :
             ErrorOr<TValue>.Is(_value);
+
+    public ErrorOr<TResult> Map<TResult>(Func<TValue, TResult> map) =>
+        IsError ?
+            ErrorOr<TResult>.Is(_errors) :
+            ErrorOr<TResult>.Is(map(_value));
 }
