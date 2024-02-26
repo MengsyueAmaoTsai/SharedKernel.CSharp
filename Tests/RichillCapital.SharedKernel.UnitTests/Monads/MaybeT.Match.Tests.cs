@@ -54,4 +54,28 @@ public sealed partial class GenericMaybeTests : MonadTests
         // Assert
         intValue.Should().Be(IntValue + 10);
     }
+
+    [Fact]
+    public async Task MatchAsync_When_MaybeTaskWithNoValue_Should_InvokeOnNoValue()
+    {
+        // Arrange & Act
+        var intValue = await Task.FromResult(Maybe<int>
+            .Null)
+            .Match(OnHasValue, OnNoValue);
+
+        // Assert
+        intValue.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task MatchAsync_When_MaybeTaskWithValue_Should_InvokeOnHasValue()
+    {
+        // Arrange & Act
+        var intValue = await Task.FromResult(Maybe<int>
+            .Have(IntValue))
+            .Match(OnHasValue, OnNoValue);
+
+        // Assert
+        intValue.Should().Be(IntValue + 10);
+    }
 }
