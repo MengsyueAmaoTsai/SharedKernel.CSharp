@@ -129,4 +129,9 @@ public readonly partial record struct ErrorOr<TValue>
 
         return ErrorOr<TResult>.Is(errorOrResult.Value);
     }
+
+    public ErrorOr<TResult> Then<TResult>(Func<TResult> factory) =>
+        IsError ?
+            ErrorOr<TResult>.Is(_errors) :
+            ErrorOr<TResult>.Is(factory());
 }

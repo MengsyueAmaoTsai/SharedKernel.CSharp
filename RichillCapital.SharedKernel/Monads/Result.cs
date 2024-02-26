@@ -99,6 +99,11 @@ public readonly partial record struct Result<TValue>
 
         return Result<TResult>.Success(result.Value);
     }
+
+    public Result<TResult> Then<TResult>(Func<TResult> factory) =>
+        IsFailure ?
+            Result<TResult>.Failure(_error) :
+            Result<TResult>.Success(factory());
 }
 
 public readonly partial record struct Result

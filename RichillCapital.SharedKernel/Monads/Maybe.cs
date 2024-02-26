@@ -87,4 +87,9 @@ public readonly partial record struct Maybe<TValue>
 
         return Maybe<TResult>.Have(maybeResult.Value);
     }
+
+    public Maybe<TResult> Then<TResult>(Func<TResult> factory) =>
+        HasNoValue ?
+            Maybe<TResult>.Null :
+            Maybe<TResult>.Have(factory());
 }
