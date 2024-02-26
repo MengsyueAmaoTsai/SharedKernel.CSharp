@@ -34,6 +34,8 @@ public readonly partial record struct Maybe<TValue>
             Null :
             new(value);
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Maybe<TValue> Ensure(
         TValue value,
         Func<TValue, bool> ensure) =>
