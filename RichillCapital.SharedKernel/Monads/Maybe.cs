@@ -35,16 +35,16 @@ public readonly partial record struct Maybe<TValue>
             new(value);
 
     public TResult Match<TResult>(
-        Func<TValue, TResult> onValue,
+        Func<TValue, TResult> onHasValue,
         Func<TResult> onNoValue) =>
         HasNoValue ?
             onNoValue() :
-            onValue(Value);
+            onHasValue(Value);
 
     public async Task<TResult> Match<TResult>(
-        Func<TValue, Task<TResult>> onValue,
+        Func<TValue, Task<TResult>> onHasValue,
         Func<Task<TResult>> onNoValue) =>
         HasNoValue ?
             await onNoValue() :
-            await onValue(Value);
+            await onHasValue(Value);
 }
