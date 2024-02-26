@@ -32,4 +32,26 @@ public sealed partial class GenericResultTests : MonadTests
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().Be(IntValue);
     }
+
+    [Fact]
+    public void EnsureFactory_When_PredicateIsTrue_Should_ReturnSuccessResult()
+    {
+        // Arrange 
+        var result = Result<int>
+            .Ensure(IntValue, value => value >= 10, Error.Invalid("Value is invalid"));
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+    }
+
+    [Fact]
+    public void EnsureFactory_When_PredicateIsFalse_Should_ReturnFailureResult()
+    {
+        // Arrange 
+        var result = Result<int>
+            .Ensure(IntValue, value => value < 10, Error.Invalid("Value is invalid"));
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+    }
 }

@@ -41,6 +41,14 @@ public readonly partial record struct Result<TValue>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> Failure(Error error) => new(error);
 
+    public static Result<TValue> Ensure(
+        TValue value,
+        Func<TValue, bool> ensure,
+        Error error) =>
+        !ensure(value) ?
+            Result<TValue>.Failure(error) :
+            Result<TValue>.Success(value);
+
     public TResult Match<TResult>(
         Func<TValue, TResult> onSuccess,
         Func<Error, TResult> onFailure) =>

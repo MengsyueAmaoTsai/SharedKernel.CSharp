@@ -10,7 +10,7 @@ public sealed partial class GenericErrorOrTests : MonadTests
     [Fact]
     public void Ensure_When_PredicateIsFalse_Should_ReturnErrorOrWithErrors()
     {
-        // Arrange
+        // Arrange & Act
         ErrorOr<int> errorOrInt = ErrorOr<int>
             .Is(IntValue)
             .Ensure(value => value < 10, NotFoundError);
@@ -25,7 +25,7 @@ public sealed partial class GenericErrorOrTests : MonadTests
     [Fact]
     public void Ensure_When_PredicateIsTrue_Should_ReturnErrorOrWithValue()
     {
-        // Arrange
+        // Arrange & Act
         ErrorOr<int> errorOrInt = ErrorOr<int>
             .Is(IntValue)
             .Ensure(value => value >= 10, NotFoundError);
@@ -35,5 +35,27 @@ public sealed partial class GenericErrorOrTests : MonadTests
         errorOrInt.Value.Should().Be(IntValue);
         errorOrInt.Errors.Should().HaveCount(1);
         errorOrInt.ErrorsOrEmpty.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void EnsureFactory_When_PredicateIsTrue_Should_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = ErrorOr<int>
+            .Ensure(IntValue, value => value >= 10, Error.Invalid("Value is invalid"));
+
+        // Assert
+        errorOr.IsError.Should().BeFalse();
+    }
+
+    [Fact]
+    public void EnsureFactory_When_PredicateIsFalse_Should_ReturnErrorOrWithErrors()
+    {
+        // Arrange & Act
+        var errorOr = ErrorOr<int>
+            .Ensure(IntValue, value => value < 10, Error.Invalid("Value is invalid"));
+
+        // Assert
+        errorOr.IsError.Should().BeTrue();
     }
 }

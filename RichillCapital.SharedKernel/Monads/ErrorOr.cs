@@ -72,6 +72,14 @@ public readonly partial record struct ErrorOr<TValue>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ErrorOr<TValue> Is(Error[] errors) => new(errors);
 
+    public static ErrorOr<TValue> Ensure(
+        TValue value,
+        Func<TValue, bool> ensure,
+        Error error) =>
+        !ensure(value) ?
+            ErrorOr<TValue>.Is(error) :
+            ErrorOr<TValue>.Is(value);
+
     public TResult Match<TResult>(
         Func<IEnumerable<Error>, TResult> onError,
         Func<TValue, TResult> onValue) =>
