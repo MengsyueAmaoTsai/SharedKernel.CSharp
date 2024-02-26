@@ -7,7 +7,7 @@ public readonly partial record struct Maybe<TValue>
 {
     public static readonly Maybe<TValue> Null = new(false, default!);
 
-    private readonly TValue? _value;
+    private readonly TValue _value;
 
     private Maybe(TValue value)
         : this(true, value)
@@ -47,4 +47,12 @@ public readonly partial record struct Maybe<TValue>
         HasNoValue ?
             await onNoValue() :
             await onHasValue(Value);
+
+    public Maybe<TValue> Ensure(
+        Func<TValue, bool> ensure) =>
+        HasNoValue ?
+            Maybe<TValue>.Null :
+            ensure(_value) ?
+                Maybe<TValue>.Have(_value) :
+                Maybe<TValue>.Null;
 }

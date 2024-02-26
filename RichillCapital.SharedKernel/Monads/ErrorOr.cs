@@ -85,4 +85,13 @@ public readonly partial record struct ErrorOr<TValue>
         IsError ?
             await onError(_errors) :
             await onValue(_value);
+
+    public ErrorOr<TValue> Ensure(
+        Func<TValue, bool> ensure,
+        Error error) =>
+        IsError ?
+            ErrorOr<TValue>.Is(_errors) :
+            ensure(_value) ?
+                ErrorOr<TValue>.Is(_value) :
+                ErrorOr<TValue>.Is(error);
 }

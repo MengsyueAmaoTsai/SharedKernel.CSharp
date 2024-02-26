@@ -54,6 +54,15 @@ public readonly partial record struct Result<TValue>
         IsSuccess ?
             await onSuccess(_value) :
             await onFailure(_error);
+
+    public Result<TValue> Ensure(
+        Func<TValue, bool> ensure,
+        Error error) =>
+        IsFailure ?
+            Result<TValue>.Failure(_error) :
+            ensure(_value) ?
+                Result<TValue>.Success(_value) :
+                Result<TValue>.Failure(error);
 }
 
 public readonly partial record struct Result
