@@ -75,4 +75,16 @@ public readonly partial record struct Maybe<TValue>
         HasNoValue ?
             Maybe<TResult>.Null :
             Maybe<TResult>.Have(map(_value));
+
+    public async Task<Maybe<TResult>> Then<TResult>(Func<TValue, Task<Maybe<TResult>>> maybeTask)
+    {
+        if (HasNoValue)
+        {
+            return Maybe<TResult>.Null;
+        }
+
+        var maybeResult = await maybeTask(Value);
+
+        return Maybe<TResult>.Have(maybeResult.Value);
+    }
 }

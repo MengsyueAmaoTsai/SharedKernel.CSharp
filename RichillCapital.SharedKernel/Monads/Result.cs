@@ -87,6 +87,18 @@ public readonly partial record struct Result<TValue>
         IsFailure ?
             Result<TResult>.Failure(_error) :
             Result<TResult>.Success(map(_value));
+
+    public async Task<Result<TResult>> Then<TResult>(Func<TValue, Task<Result<TResult>>> resultTask)
+    {
+        if (IsFailure)
+        {
+            return Result<TResult>.Failure(_error);
+        }
+
+        var result = await resultTask(Value);
+
+        return Result<TResult>.Success(result.Value);
+    }
 }
 
 public readonly partial record struct Result

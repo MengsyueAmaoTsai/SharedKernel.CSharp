@@ -117,4 +117,16 @@ public readonly partial record struct ErrorOr<TValue>
         IsError ?
             ErrorOr<TResult>.Is(_errors) :
             ErrorOr<TResult>.Is(map(_value));
+
+    public async Task<ErrorOr<TResult>> Then<TResult>(Func<TValue, Task<ErrorOr<TResult>>> errorOrTask)
+    {
+        if (IsError)
+        {
+            return ErrorOr<TResult>.Is(_errors.ToArray());
+        }
+
+        var errorOrResult = await errorOrTask(Value);
+
+        return ErrorOr<TResult>.Is(errorOrResult.Value);
+    }
 }
