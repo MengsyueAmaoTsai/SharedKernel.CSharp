@@ -74,6 +74,9 @@ public readonly partial record struct Result<TValue>
                 Result<TValue>.Success(_value) :
                 Result<TValue>.Failure(error);
 
+    public Result<TValue> Ensure((Func<TValue, bool> predicate, Error error) ensure) =>
+        Ensure(ensure.predicate, ensure.error);
+
     public Result<TValue> OrElse(TValue value) =>
         IsFailure ?
             Result<TValue>.Success(value) :

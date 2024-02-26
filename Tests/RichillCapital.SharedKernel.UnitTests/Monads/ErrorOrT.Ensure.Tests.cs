@@ -58,4 +58,34 @@ public sealed partial class GenericErrorOrTests : MonadTests
         // Assert
         errorOr.IsError.Should().BeTrue();
     }
+
+    [Fact]
+    public void Ensure_When_PredicateInTupleIsFalse_Should_ReturnErrorOrWithErrors()
+    {
+        // Arrange & Act
+        ErrorOr<int> errorOrInt = ErrorOr<int>
+            .Is(IntValue)
+            .Ensure(value => value < 10, NotFoundError);
+
+        // Assert
+        errorOrInt.IsError.Should().BeTrue();
+        errorOrInt.Errors.Should().Contain(NotFoundError);
+        errorOrInt.ErrorsOrEmpty.Should().Contain(NotFoundError);
+        errorOrInt.ErrorsOrEmpty.Should().HaveCount(1);
+    }
+
+    [Fact]
+    public void Ensure_When_PredicateInTupleIsTrue_Should_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        ErrorOr<int> errorOrInt = ErrorOr<int>
+            .Is(IntValue)
+            .Ensure(value => value >= 10, NotFoundError);
+
+        // Assert
+        errorOrInt.IsValue.Should().BeTrue();
+        errorOrInt.Value.Should().Be(IntValue);
+        errorOrInt.Errors.Should().HaveCount(1);
+        errorOrInt.ErrorsOrEmpty.Should().BeEmpty();
+    }
 }

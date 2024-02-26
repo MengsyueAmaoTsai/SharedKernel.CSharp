@@ -54,4 +54,31 @@ public sealed partial class GenericResultTests : MonadTests
         // Assert
         result.IsFailure.Should().BeTrue();
     }
+
+    [Fact]
+    public void Ensure_When_PredicateInTupleIsFalse_Should_ReturnFailureResult()
+    {
+        // Arrange 
+        var expectedError = Error.Invalid("Value is invalid");
+
+        var result = Result<int>
+            .Success(IntValue)
+            .Ensure((value => value < 10, expectedError));
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be(expectedError);
+    }
+
+    [Fact]
+    public void Ensure_When_PredicateInTupleIsTrue_Should_ReturnSuccessResult()
+    {
+        // Arrange 
+        var result = Result<int>
+            .Success(IntValue)
+            .Ensure((value => value >= 10, Error.Invalid("Value is invalid")));
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+    }
 }
