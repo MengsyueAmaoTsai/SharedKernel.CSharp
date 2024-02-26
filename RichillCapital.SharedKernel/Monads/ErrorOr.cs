@@ -105,7 +105,7 @@ public readonly partial record struct ErrorOr<TValue>
                 ErrorOr<TValue>.Is(_value) :
                 ErrorOr<TValue>.Is(error);
 
-    public ErrorOr<TValue> Else(TValue value) =>
+    public ErrorOr<TValue> OrElse(TValue value) =>
         IsError ?
             ErrorOr<TValue>.Is(value) :
             ErrorOr<TValue>.Is(_value);
