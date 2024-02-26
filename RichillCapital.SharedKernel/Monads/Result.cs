@@ -101,4 +101,12 @@ public readonly partial record struct Result
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result Failure(Error error) => new(error);
+
+    public static Result Ensure<TValue>(
+        TValue value,
+        Func<TValue, bool> ensure,
+        Error error) =>
+        !ensure(value) ?
+            Failure(error) :
+            Success();
 }

@@ -34,6 +34,13 @@ public readonly partial record struct Maybe<TValue>
             Null :
             new(value);
 
+    public static Maybe<TValue> Ensure(
+        TValue value,
+        Func<TValue, bool> ensure) =>
+        !ensure(value) ?
+            Maybe<TValue>.Null :
+            Maybe<TValue>.Have(value);
+
     public TResult Match<TResult>(
         Func<TValue, TResult> onHasValue,
         Func<TResult> onNoValue) =>
