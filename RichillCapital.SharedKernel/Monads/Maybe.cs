@@ -55,4 +55,9 @@ public readonly partial record struct Maybe<TValue>
             ensure(_value) ?
                 Maybe<TValue>.Have(_value) :
                 Maybe<TValue>.Null;
+
+    public Maybe<TValue> OrElse(TValue value) =>
+        HasNoValue ?
+            Maybe<TValue>.Have(value) :
+            Maybe<TValue>.Have(_value);
 }

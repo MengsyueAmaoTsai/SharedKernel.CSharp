@@ -94,4 +94,9 @@ public readonly partial record struct ErrorOr<TValue>
             ensure(_value) ?
                 ErrorOr<TValue>.Is(_value) :
                 ErrorOr<TValue>.Is(error);
+
+    public ErrorOr<TValue> Else(TValue value) =>
+        IsError ?
+            ErrorOr<TValue>.Is(value) :
+            ErrorOr<TValue>.Is(_value);
 }

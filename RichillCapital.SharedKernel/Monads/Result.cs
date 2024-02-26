@@ -63,6 +63,11 @@ public readonly partial record struct Result<TValue>
             ensure(_value) ?
                 Result<TValue>.Success(_value) :
                 Result<TValue>.Failure(error);
+
+    public Result<TValue> OrElse(TValue value) =>
+        IsFailure ?
+            Result<TValue>.Success(value) :
+            Result<TValue>.Success(_value);
 }
 
 public readonly partial record struct Result

@@ -2,7 +2,7 @@ using FluentAssertions;
 
 namespace RichillCapital.SharedKernel.UnitTests;
 
-public sealed class EnumerationTests
+public sealed partial class EnumerationTests
 {
     private sealed class TestEnumeration : Enumeration<TestEnumeration>
     {
