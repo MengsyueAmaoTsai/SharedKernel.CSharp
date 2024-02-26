@@ -33,4 +33,18 @@ public readonly partial record struct Maybe<TValue>
         value is null ?
             Null :
             new(value);
+
+    public TResult Match<TResult>(
+        Func<TValue, TResult> onValue,
+        Func<TResult> onNoValue) =>
+        HasNoValue ?
+            onNoValue() :
+            onValue(Value);
+
+    public async Task<TResult> Match<TResult>(
+        Func<TValue, Task<TResult>> onValue,
+        Func<Task<TResult>> onNoValue) =>
+        HasNoValue ?
+            await onNoValue() :
+            await onValue(Value);
 }
