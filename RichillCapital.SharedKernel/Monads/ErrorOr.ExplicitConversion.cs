@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace RichillCapital.SharedKernel.Monads;
 
-public static partial class MaybeExtensions
+public static partial class ErrorOrExtensions
 {
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
