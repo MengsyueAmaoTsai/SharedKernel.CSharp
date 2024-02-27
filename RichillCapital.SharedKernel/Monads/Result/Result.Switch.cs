@@ -9,11 +9,23 @@ public readonly partial record struct Result<TValue>
         if (IsFailure)
         {
             onFailure(Error);
+            return;
         }
-        else
+
+        onSuccess(Value);
+    }
+
+    public async Task Switch(
+        Func<TValue, Task> onSuccess,
+        Func<Error, Task> onFailure)
+    {
+        if (IsFailure)
         {
-            onSuccess(Value);
+            await onFailure(Error);
+            return;
         }
+
+        await onSuccess(Value);
     }
 }
 

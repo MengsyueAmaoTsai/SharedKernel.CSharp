@@ -3,17 +3,28 @@ namespace RichillCapital.SharedKernel.Monads;
 public readonly partial record struct Maybe<TValue>
 {
     public void Switch(
-        Action<TValue> onHasValue,
-        Action onHasNoValue)
+           Action<TValue> onValue,
+           Action onNoValue)
     {
-        if (HasValue)
+        if (HasNoValue)
         {
-            onHasValue(Value);
+            onNoValue();
+            return;
         }
-        else
-        {
-            onHasNoValue();
-        }
+
+        onValue(Value);
     }
 
+    public async Task Switch(
+        Func<TValue, Task> onValue,
+        Func<Task> onNoValue)
+    {
+        if (HasNoValue)
+        {
+            await onNoValue();
+            return;
+        }
+
+        await onValue(Value);
+    }
 }
