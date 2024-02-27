@@ -82,6 +82,13 @@ public readonly partial record struct ErrorOr<TValue>
             ErrorOr<TValue>.Is(error) :
             ErrorOr<TValue>.Is(value);
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> Combine(params ErrorOr<TValue>[] errorOrs) =>
+        errorOrs.Any(errorOr => errorOr.IsError) ?
+            ErrorOr<TValue>.Is(errorOrs.SelectMany(errorOr => errorOr.ErrorsOrEmpty).Distinct().ToArray()) :
+            ErrorOr<TValue>.Is(errorOrs.First().Value);
+
     public TResult Match<TResult>(
         Func<IEnumerable<Error>, TResult> onError,
         Func<TValue, TResult> onValue) =>

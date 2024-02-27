@@ -51,6 +51,13 @@ public readonly partial record struct Result<TValue>
             Result<TValue>.Failure(error) :
             Result<TValue>.Success(value);
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TValue> Combine(params Result<TValue>[] results) =>
+        results.Any(result => result.IsFailure) ?
+            Result<TValue>.Failure(results.First(result => result.IsFailure).Error) :
+            Result<TValue>.Success(results.First().Value);
+
     public TResult Match<TResult>(
         Func<TValue, TResult> onSuccess,
         Func<Error, TResult> onFailure) =>

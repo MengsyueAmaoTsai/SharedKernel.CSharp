@@ -43,6 +43,13 @@ public readonly partial record struct Maybe<TValue>
             Null :
             Maybe<TValue>.Have(value);
 
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Maybe<TValue> Combine(params Maybe<TValue>[] maybes) =>
+        maybes.Any(maybe => maybe.HasNoValue) ?
+            Null :
+            Maybe<TValue>.Have(maybes[0].Value);
+
     public TResult Match<TResult>(
         Func<TValue, TResult> onHasValue,
         Func<TResult> onNoValue) =>
