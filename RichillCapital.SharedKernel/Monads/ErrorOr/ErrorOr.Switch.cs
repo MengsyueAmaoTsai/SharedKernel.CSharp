@@ -9,10 +9,22 @@ public readonly partial record struct ErrorOr<TValue>
         if (IsError)
         {
             onIsError(Errors);
+            return;
         }
-        else
+
+        onIsValue(Value);
+    }
+
+    public async Task Switch(
+        Func<IEnumerable<Error>, Task> onIsError,
+        Func<TValue, Task> onIsValue)
+    {
+        if (IsError)
         {
-            onIsValue(Value);
+            await onIsError(Errors);
+            return;
         }
+
+        await onIsValue(Value);
     }
 }
