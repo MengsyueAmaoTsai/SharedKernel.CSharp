@@ -12,6 +12,7 @@
     "Swashbuckle",
     "Testcontainers",
     "USERPROFILE",
+    "Validatable",
     "webapps"
   ]
 }
