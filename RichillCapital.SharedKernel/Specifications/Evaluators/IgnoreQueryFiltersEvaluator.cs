@@ -4,7 +4,9 @@ namespace RichillCapital.SharedKernel.Specifications.Evaluators;
 
 public class IgnoreQueryFiltersEvaluator : IEvaluator
 {
-    private IgnoreQueryFiltersEvaluator() { }
+    private IgnoreQueryFiltersEvaluator()
+    {
+    }
 
     public static IgnoreQueryFiltersEvaluator Instance { get; } = new IgnoreQueryFiltersEvaluator();
 

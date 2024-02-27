@@ -2,7 +2,7 @@ using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-using RichillCapital.SharedKernel.Monad;
+using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.SharedKernel;
 
@@ -67,7 +67,7 @@ public abstract class Enumeration<TEnum, TValue>
             : (ignoreCase ?
                 _fromNameIgnoreCase.Value :
                 _fromName.Value).TryGetValue(name, out var enumeration) ?
-            enumeration :
+            Maybe<TEnum>.Have(enumeration) :
             Maybe<TEnum>.Null;
 
     [Pure]
@@ -76,7 +76,7 @@ public abstract class Enumeration<TEnum, TValue>
         value is null ?
             Maybe<TEnum>.Null :
             _fromValue.Value.TryGetValue(value, out var enumeration) ?
-                enumeration :
+                Maybe<TEnum>.Have(enumeration) :
                 Maybe<TEnum>.Null;
 
     public override string ToString() => Name;

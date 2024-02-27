@@ -270,21 +270,21 @@
     <Rule Id="SA1601" Action="Info" />
     <Rule Id="SA1602" Action="Info" />
     <Rule Id="SA1603" Action="Warning" />
-    <Rule Id="SA1604" Action="Warning" />
+    <Rule Id="SA1604" Action="Info" />
     <Rule Id="SA1605" Action="Warning" />
     <Rule Id="SA1606" Action="Warning" />
     <Rule Id="SA1607" Action="Warning" />
     <Rule Id="SA1608" Action="Warning" />
     <Rule Id="SA1609" Action="Info" />
     <Rule Id="SA1610" Action="Warning" />
-    <Rule Id="SA1611" Action="Warning" />
+    <Rule Id="SA1611" Action="Info" />
     <Rule Id="SA1612" Action="Warning" />
     <Rule Id="SA1613" Action="Warning" />
     <Rule Id="SA1614" Action="Warning" />
-    <Rule Id="SA1615" Action="Warning" />
-    <Rule Id="SA1616" Action="Warning" />
+    <Rule Id="SA1615" Action="Info" />
+    <Rule Id="SA1616" Action="Info" />
     <Rule Id="SA1617" Action="Warning" />
-    <Rule Id="SA1618" Action="Warning" />
+    <Rule Id="SA1618" Action="Info" />
     <Rule Id="SA1619" Action="Warning" />
     <Rule Id="SA1620" Action="Warning" />
     <Rule Id="SA1621" Action="Warning" />

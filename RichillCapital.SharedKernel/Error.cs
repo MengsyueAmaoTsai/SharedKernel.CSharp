@@ -2,11 +2,7 @@ namespace RichillCapital.SharedKernel;
 
 public readonly record struct Error
 {
-    public static readonly Error Null =
-        new(ErrorType.Null, string.Empty);
-
-    public static readonly Error NullValue =
-        new(ErrorType.Failure, "Null value was provided.");
+    public static readonly Error Null = new(ErrorType.Null, string.Empty);
 
     private Error(ErrorType type, string message) =>
         (Type, Message) = (type, message);
@@ -20,4 +16,6 @@ public readonly record struct Error
     public static Error Forbidden(string message) => new(ErrorType.Forbidden, message);
     public static Error NotFound(string message) => new(ErrorType.NotFound, message);
     public static Error Conflict(string message) => new(ErrorType.Conflict, message);
+    public static Error Unexpected(string message) => new(ErrorType.Unexpected, message);
+    public static Error Unavailable(string message) => new(ErrorType.Unavailable, message);
 }
