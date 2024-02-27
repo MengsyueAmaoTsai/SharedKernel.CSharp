@@ -1,5 +1,5 @@
 namespace RichillCapital.SharedKernel.UnitTests.Monads;
 
-public sealed partial class GenericResultTests
+public sealed partial class GenericErrorOrTests
 {
 }
