@@ -3,7 +3,7 @@ using FluentAssertions;
 using RichillCapital.SharedKernel;
 using RichillCapital.SharedKernel.Monads;
 
-namespace RichillCapital.Extensions.Monads.UnitTests;
+namespace RichillCapital.Extensions.Monads.UnitTests.Shared;
 
 public static partial class ResultAssertionExtensions
 {

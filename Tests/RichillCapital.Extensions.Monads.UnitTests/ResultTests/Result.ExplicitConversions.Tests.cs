@@ -1,8 +1,9 @@
+using RichillCapital.Extensions.Monads.UnitTests.Shared;
 using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.Extensions.Monads.UnitTests;
 
-public sealed class ResultTExplicitConversionsTests : ResultTests
+public sealed class ResultTExplicitConversionsTests : MonadTests
 {
     [Fact]
     public void ToResult_When_GivenValue_Should_CreateSuccessResultWithValue()

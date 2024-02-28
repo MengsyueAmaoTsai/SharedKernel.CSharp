@@ -1,8 +1,8 @@
 using RichillCapital.SharedKernel;
 
-namespace RichillCapital.Extensions.Monads.UnitTests;
+namespace RichillCapital.Extensions.Monads.UnitTests.Shared;
 
-public abstract class ResultTests
+public abstract class MonadTests
 {
     protected readonly static int Value = 5;
 

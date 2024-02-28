@@ -1,11 +1,11 @@
 using FluentAssertions;
 
-using RichillCapital.SharedKernel;
+using RichillCapital.Extensions.Monads.UnitTests.Shared;
 using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.Extensions.Monads.UnitTests;
 
-public sealed class ResultTFactoryTests : ResultTests
+public sealed class ResultTFactoryTests : MonadTests
 {
     [Fact]
     public void Success_When_GivenValue_Should_CreateSuccessResult()
