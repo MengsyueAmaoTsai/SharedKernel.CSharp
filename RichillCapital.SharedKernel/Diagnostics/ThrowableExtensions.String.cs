@@ -7,8 +7,14 @@ public static partial class ThrowableExtensions
         return throwable;
     }
 
-    public static Throwable<string> IfWhiteSpace(this Throwable<string> throwable)
+    public static ref readonly Throwable<string> IfWhiteSpace(
+        this in Throwable<string> throwable)
     {
-        return throwable;
+        if (throwable.Value.All(char.IsWhiteSpace))
+        {
+            Thrower.Throw(throwable.ParamName, "String should not be white space only.");
+        }
+
+        return ref throwable;
     }
 }

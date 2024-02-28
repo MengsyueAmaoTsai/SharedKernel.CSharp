@@ -1,7 +1,13 @@
+using System.Runtime.CompilerServices;
+
+using RichillCapital.SharedKernel.Specifications.Evaluators;
+
 namespace RichillCapital.SharedKernel.Diagnostics;
 
 public static partial class ThrowableExtensions
 {
     public static Throwable<TValue> Throw<TValue>(
-        this TValue value) => new(value, string.Empty);
+        this TValue value,
+        [CallerArgumentExpression("value")] string? paramName = null)
+        where TValue : notnull => new(value, paramName!);
 }

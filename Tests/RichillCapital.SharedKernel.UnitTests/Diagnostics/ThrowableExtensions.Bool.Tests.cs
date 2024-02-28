@@ -13,7 +13,7 @@ public sealed partial class ThrowableExtensionsTests
     {
         // Arrange
         var person = new Person(18);
-        var expectedMessage = $"Value should not meet condition (condition: 'person => person.Age == 18').";
+        var expectedMessage = $"Value should not meet condition (condition: 'person => person.Age == 18'). (Parameter '{nameof(person)}')";
 
         // Act
         Action action = () => person.Throw().IfTrue(person => person.Age == 18);
@@ -41,7 +41,7 @@ public sealed partial class ThrowableExtensionsTests
     {
         // Arrange
         var person = new Person(18);
-        var expectedMessage = $"Value should meet condition (condition: 'person => person.Age == 15').";
+        var expectedMessage = $"Value should meet condition (condition: 'person => person.Age == 15'). (Parameter '{nameof(person)}')";
 
         // Act
         Action action = () => person.Throw().IfFalse(person => person.Age == 15);
