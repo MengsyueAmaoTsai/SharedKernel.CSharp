@@ -6,12 +6,14 @@ namespace RichillCapital.Extensions.Monads.UnitTests.Shared;
 
 public static class MaybeAssertionExtensions
 {
-    public static void ShouldBeHasValueWith<TValue>(this Maybe<TValue> maybe, TValue value)
+    public static void ShouldBeHasValueWith<TValue>(
+        this Maybe<TValue> maybe,
+        TValue expectedValue)
     {
         maybe.HasValue.Should().BeTrue();
         maybe.IsNull.Should().BeFalse();
 
-        maybe.Value.Should().Be(value);
-        maybe.ValueOrDefault.Should().Be(value);
+        maybe.Value.Should().Be(expectedValue);
+        maybe.ValueOrDefault.Should().Be(expectedValue);
     }
 }
