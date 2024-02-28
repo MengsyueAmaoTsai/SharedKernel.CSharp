@@ -1,7 +1,5 @@
 using System.Runtime.CompilerServices;
 
-using RichillCapital.SharedKernel.Specifications.Evaluators;
-
 namespace RichillCapital.SharedKernel.Diagnostics;
 
 public static partial class ThrowableExtensions
