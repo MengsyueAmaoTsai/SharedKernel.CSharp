@@ -24,12 +24,13 @@ public static partial class ResultAssertionExtensions
         this Result<TValue> result,
         Error expectedError)
     {
-        var action = () => result.Value;
-
         result.IsSuccess.Should().BeFalse();
         result.IsFailure.Should().BeTrue();
 
-        action.Should().ThrowExactly<InvalidOperationException>();
+        result.Invoking(maybe => maybe.Value)
+            .Should().Throw<InvalidOperationException>()
+            .WithMessage($"Cannot access the value of a failed result.");
+
         result.ValueOrDefault.Should().Be(default(TValue));
 
         result.Error.Should().Be(expectedError);
