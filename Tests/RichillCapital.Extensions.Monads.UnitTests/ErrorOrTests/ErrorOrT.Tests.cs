@@ -1,5 +1,5 @@
 namespace RichillCapital.Extensions.Monads.UnitTests;
 
-public sealed class ErrorOrTests
+public sealed class ErrorOrTTests
 {
 }

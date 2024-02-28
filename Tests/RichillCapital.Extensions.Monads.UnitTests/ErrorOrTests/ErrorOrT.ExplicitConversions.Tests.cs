@@ -3,7 +3,7 @@ using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.Extensions.Monads.UnitTests;
 
-public sealed class ErrorOrExplicitConversionsTests : MonadTests
+public sealed class ErrorOrTExplicitConversionsTests : MonadTests
 {
     [Fact]
     public void ToErrorOr_When_GivenValue_Should_CreateErrorOrWithValue()
@@ -43,5 +43,15 @@ public sealed class ErrorOrExplicitConversionsTests : MonadTests
 
         // Assert
         errorOr.ShouldBeErrors(Errors);
+    }
+
+    [Fact]
+    public async Task ToErrorOrAsync_When_GivenValueTask_Should_CreateErrorOrWithValue()
+    {
+        // Arrange & Act
+        ErrorOr<int> errorOr = await Task.FromResult(Value).ToErrorOr();
+
+        // Assert
+        errorOr.ShouldBeValue(Value);
     }
 }
