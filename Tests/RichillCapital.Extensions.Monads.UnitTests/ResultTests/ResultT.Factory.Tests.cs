@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 using RichillCapital.Extensions.Monads.UnitTests.Shared;
 using RichillCapital.SharedKernel.Monads;
 
