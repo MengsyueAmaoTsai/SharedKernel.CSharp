@@ -2,8 +2,6 @@ using FluentAssertions;
 
 using RichillCapital.SharedKernel.Diagnostics;
 
-using Xunit.Sdk;
-
 namespace RichillCapital.SharedKernel.UnitTests.Diagnostics;
 
 public sealed partial class ThrowerTests
