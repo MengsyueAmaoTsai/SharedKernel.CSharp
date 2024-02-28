@@ -20,8 +20,8 @@ public readonly partial record struct Result<TValue>
         Func<TValue, bool> ensure,
         Error error) =>
         !ensure(value) ?
-            Result<TValue>.Failure(error) :
-            Result<TValue>.Success(value);
+            error.ToResult<TValue>() :
+            value.ToResult();
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
