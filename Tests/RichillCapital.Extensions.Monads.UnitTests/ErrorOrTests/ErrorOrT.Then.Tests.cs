@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using RichillCapital.Extensions.Monads.UnitTests.Shared;
 using RichillCapital.SharedKernel.Monads;
 
@@ -26,5 +28,31 @@ public sealed class ErrorOrTThenTests : MonadTests
 
         // Assert
         errorOr.ShouldBeValue(Value.ToString());
+    }
+
+    [Fact]
+    public void Then_When_HasError_Should_NotInvokeActionWithValue_And_ReturnErrorOrWithErrors()
+    {
+        // Arrange & Act
+        var errorOr = UnexpectedError
+            .ToErrorOr<int>()
+            .Then(value => throw new InvalidOperationException());
+
+        // Assert   
+        errorOr.ShouldBeError(UnexpectedError);
+    }
+
+    [Fact]
+    public void Then_When_IsValue_Should_InvokeActionWithValue_And_ReturnErrorOrWithValue()
+    {
+        // Arrange
+        var actionInvoked = false;
+
+        // Act
+        Value.ToErrorOr()
+            .Then(value => actionInvoked = true);
+
+        // Assert
+        actionInvoked.Should().BeTrue();
     }
 }

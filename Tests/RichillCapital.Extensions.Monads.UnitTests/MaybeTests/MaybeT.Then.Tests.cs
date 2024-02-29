@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using RichillCapital.Extensions.Monads.UnitTests.Shared;
 using RichillCapital.SharedKernel.Monads;
 
@@ -25,5 +27,30 @@ public sealed class MaybeTThenTests : MonadTests
 
         // Assert
         maybe.ShouldBeHasValueWith(Value.ToString());
+    }
+
+    [Fact]
+    public void Then_When_IsNull_Should_NotInvokeActionWithValue_And_ReturnNullMaybe()
+    {
+        // Arrange & Act
+        var maybe = Maybe<int>.Null
+            .Then(value => throw new InvalidOperationException());
+
+        // Assert   
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Then_When_IsValue_Should_InvokeActionWithValue_And_ReturnMaybeTWithValue()
+    {
+        // Arrange
+        var actionInvoked = false;
+
+        // Act
+        Value.ToMaybe()
+            .Then(value => actionInvoked = true);
+
+        // Assert
+        actionInvoked.Should().BeTrue();
     }
 }

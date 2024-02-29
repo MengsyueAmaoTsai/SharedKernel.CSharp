@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 using RichillCapital.Extensions.Monads.UnitTests.Shared;
 using RichillCapital.SharedKernel.Monads;
 
@@ -26,5 +28,31 @@ public sealed class ResultTThenTests : MonadTests
 
         // Assert
         result.ShouldBeSuccessWith(Value.ToString());
+    }
+
+    [Fact]
+    public void Then_When_IsFailure_Should_NotInvokeActionWithValue_And_ReturnFailureResult()
+    {
+        // Arrange & Act
+        var result = UnexpectedError
+            .ToResult<int>()
+            .Then(value => throw new InvalidOperationException());
+
+        // Assert   
+        result.ShouldBeFailureWith(UnexpectedError);
+    }
+
+    [Fact]
+    public void Then_When_IsSuccess_Should_InvokeActionWithValue_And_ReturnResultTWithValue()
+    {
+        // Arrange
+        var actionInvoked = false;
+
+        // Act
+        Value.ToResult()
+            .Then(value => actionInvoked = true);
+
+        // Assert
+        actionInvoked.Should().BeTrue();
     }
 }

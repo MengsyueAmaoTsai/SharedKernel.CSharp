@@ -2,13 +2,20 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Maybe<TValue>
 {
-    public Maybe<TResult> Then<TResult>(Func<TValue, TResult> resultFactory)
+    public Maybe<TResult> Then<TResult>(Func<TValue, TResult> resultFactory) =>
+        IsNull ?
+            Maybe<TResult>.Null :
+            resultFactory(Value).ToMaybe();
+
+    public Maybe<TValue> Then(Action<TValue> action)
     {
         if (IsNull)
         {
-            return Maybe<TResult>.Null;
+            return Null;
         }
 
-        return resultFactory(Value).ToMaybe();
+        action(Value);
+
+        return Value.ToMaybe();
     }
 }
