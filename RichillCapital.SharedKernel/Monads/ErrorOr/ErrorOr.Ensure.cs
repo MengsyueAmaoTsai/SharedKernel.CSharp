@@ -2,16 +2,27 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct ErrorOr<TValue>
 {
-    public ErrorOr<TValue> Ensure(
-    Func<TValue, bool> ensure,
-    Error error) =>
-    IsError ?
-        ErrorOr<TValue>.Is(_errors) :
-        ensure(_value) ?
-            ErrorOr<TValue>.Is(_value) :
-            ErrorOr<TValue>.Is(error);
+    public static ErrorOr<TValue> Ensure(TValue value, Func<TValue, bool> ensure, Error error)
+    {
+        if (!ensure(value))
+        {
+            return error.ToErrorOr<TValue>();
+        }
 
-    public ErrorOr<TValue> Ensure(
-        (Func<TValue, bool> predicate, Error error) ensure) =>
-        Ensure(ensure.predicate, ensure.error);
+        return value.ToErrorOr();
+    }
+
+    public static ErrorOr<TValue> Ensure(
+        TValue value,
+        params (Func<TValue, bool> ensure, Error error)[] rules) =>
+        ErrorOr<TValue>
+            .Combine(rules
+                .Select(rule => Ensure(value, rule.ensure, rule.error))
+                .ToArray());
+
+    public static ErrorOr<TValue> Ensure(
+        TValue value,
+        Func<TValue, bool> ensure,
+        Func<TValue, Error> errorFactory) =>
+        Ensure(value, ensure, errorFactory(value));
 }

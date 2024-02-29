@@ -2,20 +2,25 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Result<TValue>
 {
-    public Result<TValue> Ensure(
+    public static Result<TValue> Ensure(
+        TValue value,
         Func<TValue, bool> ensure,
         Error error) =>
-        IsFailure ?
-            Result<TValue>.Failure(_error) :
-            ensure(_value) ?
-                Result<TValue>.Success(_value) :
-                Result<TValue>.Failure(error);
+        !ensure(value) ?
+            error.ToResult<TValue>() :
+            value.ToResult();
 
-    public Result<TValue> Ensure(
-        (Func<TValue, bool> predicate, Error error) ensure) =>
-        Ensure(ensure.predicate, ensure.error);
-}
+    public static Result<TValue> Ensure(
+        TValue value,
+        params (Func<TValue, bool> ensure, Error error)[] rules) =>
+        Result<TValue>
+            .Combine(rules
+                .Select(rule => Ensure(value, rule.ensure, rule.error))
+                .ToArray());
 
-public readonly partial record struct Result
-{
+    public static Result<TValue> Ensure(
+        TValue value,
+        Func<TValue, bool> ensure,
+        Func<TValue, Error> errorFactory) =>
+        Ensure(value, ensure, errorFactory(value));
 }

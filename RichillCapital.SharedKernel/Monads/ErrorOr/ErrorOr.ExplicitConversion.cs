@@ -11,16 +11,6 @@ public static partial class ErrorOrExtensions
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static async Task<ErrorOr<TValue>> ToErrorOr<TValue>(this Task<TValue> valueTask) =>
-        (await valueTask).ToErrorOr();
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static async Task<ErrorOr<TValue>> ToErrorOr<TValue>(this ValueTask<TValue> valueTask) =>
-        (await valueTask).ToErrorOr();
-
-    [Pure]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ErrorOr<TValue> ToErrorOr<TValue>(this Error error) => ErrorOr<TValue>.Is(error);
 
     [Pure]
@@ -30,4 +20,9 @@ public static partial class ErrorOrExtensions
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ErrorOr<TValue> ToErrorOr<TValue>(this Error[] errors) => ErrorOr<TValue>.Is(errors);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static async Task<ErrorOr<TValue>> ToErrorOr<TValue>(this Task<TValue> valueTask) =>
+        ErrorOr<TValue>.Is(await valueTask);
 }

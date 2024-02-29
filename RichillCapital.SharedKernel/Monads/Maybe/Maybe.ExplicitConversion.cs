@@ -13,10 +13,10 @@ public static partial class MaybeExtensions
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static async Task<Maybe<TValue>> ToMaybe<TValue>(this Task<TValue> valueTask) =>
-        (await valueTask).ToMaybe();
+        Maybe<TValue>.Have(await valueTask);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static async Task<Maybe<TValue>> ToMaybe<TValue>(this ValueTask<TValue> valueTask) =>
-        (await valueTask).ToMaybe();
+    public static async ValueTask<Maybe<TValue>> ToMaybe<TValue>(this ValueTask<TValue> valueTask) =>
+        Maybe<TValue>.Have(await valueTask);
 }

@@ -29,27 +29,27 @@ public readonly partial record struct ErrorOr<TValue>
     }
 
     private ErrorOr(bool isError, List<Error> errors, TValue value) =>
-        (IsError, _errors, _value) = (isError, errors, value);
+        (HasError, _errors, _value) = (isError, errors, value);
 
-    public bool IsError { get; private init; }
+    public bool HasError { get; private init; }
 
-    public bool IsValue => !IsError;
+    public bool IsValue => !HasError;
 
     public List<Error> Errors =>
-        IsError ?
+        HasError ?
             _errors :
             [IsNotError];
 
     public List<Error> ErrorsOrEmpty =>
-        IsError ?
+        HasError ?
             _errors :
             new();
 
-    public TValue Value => IsError ?
+    public TValue Value => HasError ?
         throw new InvalidOperationException($"ErrorOr<{typeof(TValue)}> is not value") :
         _value;
 
-    public TValue ValueOrDefault => IsError ?
+    public TValue ValueOrDefault => HasError ?
         default! :
         _value;
 }

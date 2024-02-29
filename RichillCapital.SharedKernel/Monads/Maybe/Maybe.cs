@@ -1,6 +1,3 @@
-using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
-
 namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Maybe<TValue>
@@ -19,11 +16,11 @@ public readonly partial record struct Maybe<TValue>
 
     public bool HasValue { get; private init; }
 
-    public bool HasNoValue => !HasValue;
+    public bool IsNull => !HasValue;
 
-    public TValue Value => HasNoValue ?
+    public TValue Value => IsNull ?
         throw new InvalidOperationException($"Maybe<{typeof(TValue)}> is not value") :
         _value!;
 
-    public TValue ValueOrDefault => HasNoValue ? default! : _value!;
+    public TValue ValueOrDefault => IsNull ? default! : _value!;
 }
