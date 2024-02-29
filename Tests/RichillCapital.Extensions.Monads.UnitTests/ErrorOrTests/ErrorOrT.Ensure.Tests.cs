@@ -58,4 +58,29 @@ public sealed class ErrorOrTEnsureTests : MonadTests
         // Assert
         errorOr.ShouldBeValue(Value);
     }
+
+    [Fact]
+    public void EnsureFactory_When_EnsureFailure_Should_InvokeErrorFactory_And_ReturnErrorOrWithError()
+    {
+        // Arrange
+        var expectedError = ErrorFactory(Value);
+
+        // Act
+        var result = ErrorOr<int>.
+            Ensure(Value, value => value == 3, ErrorFactory);
+
+        // Assert
+        result.ShouldBeError(expectedError);
+    }
+
+    [Fact]
+    public void EnsureFactory_When_EnsureSuccess_Should_NotInvokeErrorFactory_And_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        var result = ErrorOr<int>
+            .Ensure(Value, value => value == Value, ErrorFactory);
+
+        // Assert
+        result.ShouldBeValue(Value);
+    }
 }

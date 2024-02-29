@@ -76,7 +76,7 @@ public sealed class ResultTEnsureTests : MonadTests
     }
 
     [Fact]
-    public void EnsureFactory_When_EnsureSuccess_Should_NotInvokeErrorFactory_And_ReturnSuccessResult()
+    public void EnsureFactory_When_EnsureSuccess_Should_NotInvokeErrorFactory_And_ReturnSuccessResultWithValue()
     {
         // Arrange & Act
         var result = Result<int>

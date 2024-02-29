@@ -19,4 +19,10 @@ public readonly partial record struct ErrorOr<TValue>
             .Combine(rules
                 .Select(rule => Ensure(value, rule.ensure, rule.error))
                 .ToArray());
+
+    public static ErrorOr<TValue> Ensure(
+        TValue value,
+        Func<TValue, bool> ensure,
+        Func<TValue, Error> errorFactory) =>
+        Ensure(value, ensure, errorFactory(value));
 }
