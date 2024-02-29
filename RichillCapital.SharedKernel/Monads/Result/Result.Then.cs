@@ -7,6 +7,11 @@ public readonly partial record struct Result<TValue>
             Error.ToResult<TResult>() :
             resultFactory(Value).ToResult();
 
+    public Result<TResult> Then<TResult>(Func<TResult> resultFactory) =>
+        IsFailure ?
+            Error.ToResult<TResult>() :
+            resultFactory().ToResult();
+
     public Result<TValue> Then(Action<TValue> action)
     {
         if (IsFailure)

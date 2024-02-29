@@ -8,7 +8,7 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class ResultTThenTests : MonadTests
 {
     [Fact]
-    public void Then_When_IsFailure_Should_NotInvokeResultFactory_And_ReturnErrorResultTWithErrors()
+    public void Then_When_IsFailure_Should_NotInvokeResultFactoryWithValue_And_ReturnErrorResultWithErrors()
     {
         // Arrange & Act
         var result = UnexpectedError
@@ -20,7 +20,7 @@ public sealed class ResultTThenTests : MonadTests
     }
 
     [Fact]
-    public void Then_When_IsSuccess_Should_InvokeResultFactory_And_ReturnResultTWithValue()
+    public void Then_When_IsSuccess_Should_InvokeResultFactoryWithValue_And_ReturnResultWithValue()
     {
         // Arrange & Act
         var result = Value.ToResult()
@@ -28,6 +28,29 @@ public sealed class ResultTThenTests : MonadTests
 
         // Assert
         result.ShouldBeSuccessWith(Value.ToString());
+    }
+
+    [Fact]
+    public void Then_When_IsFailure_Should_NotInvokeResultFactory_And_ReturnResultWithError()
+    {
+        // Arrange & Act
+        var result = UnexpectedError
+            .ToResult<int>()
+            .Then(() => 1);
+
+        // Assert
+        result.ShouldBeFailureWith(UnexpectedError);
+    }
+
+    [Fact]
+    public void Then_When_IsSuccess_Should_InvokeResultFactory_And_ReturnResultWithValue()
+    {
+        // Arrange & Act
+        var result = Value.ToResult()
+            .Then(() => 1);
+
+        // Assert
+        result.ShouldBeSuccessWith(1);
     }
 
     [Fact]
@@ -43,7 +66,7 @@ public sealed class ResultTThenTests : MonadTests
     }
 
     [Fact]
-    public void Then_When_IsSuccess_Should_InvokeActionWithValue_And_ReturnResultTWithValue()
+    public void Then_When_IsSuccess_Should_InvokeActionWithValue_And_ReturnResultWithValue()
     {
         // Arrange
         var actionInvoked = false;

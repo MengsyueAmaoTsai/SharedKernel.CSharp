@@ -7,6 +7,11 @@ public readonly partial record struct Maybe<TValue>
             Maybe<TResult>.Null :
             resultFactory(Value).ToMaybe();
 
+    public Maybe<TResult> Then<TResult>(Func<TResult> resultFactory) =>
+        IsNull ?
+            Maybe<TResult>.Null :
+            resultFactory().ToMaybe();
+
     public Maybe<TValue> Then(Action<TValue> action)
     {
         if (IsNull)

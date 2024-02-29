@@ -8,7 +8,7 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class ErrorOrTThenTests : MonadTests
 {
     [Fact]
-    public void Then_When_HasError_Should_NotInvokeResultFactory_And_ReturnErrorOrWithErrors()
+    public void Then_When_HasError_Should_NotInvokeResultFactoryWithValue_And_ReturnErrorOrWithErrors()
     {
         // Arrange & Act
         var errorOr = UnexpectedError
@@ -20,7 +20,7 @@ public sealed class ErrorOrTThenTests : MonadTests
     }
 
     [Fact]
-    public void Then_When_IsValue_Should_InvokeResultFactory_And_ReturnErrorOrWithValue()
+    public void Then_When_IsValue_Should_InvokeResultFactoryWithValue_And_ReturnErrorOrWithValue()
     {
         // Arrange & Act
         var errorOr = Value.ToErrorOr()
@@ -28,6 +28,29 @@ public sealed class ErrorOrTThenTests : MonadTests
 
         // Assert
         errorOr.ShouldBeValue(Value.ToString());
+    }
+
+    [Fact]
+    public void Then_When_HasError_Should_NotInvokeResultFactory_And_ReturnErrorOrWithErrors()
+    {
+        // Arrange
+        var errorOr = UnexpectedError
+            .ToErrorOr<int>()
+            .Then(() => 1);
+
+        // Assert
+        errorOr.ShouldBeError(UnexpectedError);
+    }
+
+    [Fact]
+    public void Then_When_IsValue_Should_InvokeResultFactory_And_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = Value.ToErrorOr()
+            .Then(() => 1);
+
+        // Assert
+        errorOr.ShouldBeValue(1);
     }
 
     [Fact]

@@ -7,6 +7,11 @@ public readonly partial record struct ErrorOr<TValue>
             Errors.ToErrorOr<TResult>() :
             resultFactory(Value).ToErrorOr();
 
+    public ErrorOr<TResult> Then<TResult>(Func<TResult> resultFactory) =>
+        HasError ?
+            Errors.ToErrorOr<TResult>() :
+            resultFactory().ToErrorOr();
+
     public ErrorOr<TValue> Then(Action<TValue> action)
     {
         if (HasError)
