@@ -23,8 +23,7 @@ public sealed class MaybeTThrowsTests : MonadTests
     public void ThrowIfNull_When_HasValueAndGivenError_Should_NotThrow()
     {
         // Arrange
-        var maybe = Value.ToMaybe();
-        var action = () => maybe.ThrowIfNull(UnexpectedError);
+        var action = () => Value.ToMaybe().ThrowIfNull(UnexpectedError);
 
         // Assert
         action.Should().NotThrow();
