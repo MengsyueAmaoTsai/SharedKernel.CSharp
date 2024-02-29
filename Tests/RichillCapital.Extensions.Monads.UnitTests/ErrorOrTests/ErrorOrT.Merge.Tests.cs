@@ -3,7 +3,7 @@ using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.Extensions.Monads.UnitTests;
 
-public sealed class ErrorOrMergeTests : MonadTests
+public sealed class ErrorOrTMergeTests : MonadTests
 {
     [Fact]
     public void Merge_When_OriginalIsValue_And_AllErrorOrsAreValue_Should_ReturnLastValue()
