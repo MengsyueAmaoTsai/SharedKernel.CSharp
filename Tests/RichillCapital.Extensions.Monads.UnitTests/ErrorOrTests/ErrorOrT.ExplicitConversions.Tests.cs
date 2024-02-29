@@ -46,6 +46,53 @@ public sealed class ErrorOrTExplicitConversionsTests : MonadTests
     }
 
     [Fact]
+    public void ToErrorOr_When_GivenFailureResult_Should_ConvertToErrorOrWithError()
+    {
+        // Arrange & Act
+        var errorOr = UnexpectedError
+            .ToResult<int>()
+            .ToErrorOr();
+
+        // Assert
+        errorOr.ShouldBeError(UnexpectedError);
+    }
+
+    [Fact]
+    public void ToErrorOr_When_GivenSuccessResult_Should_ConvertToErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = Value
+            .ToResult()
+            .ToErrorOr();
+
+        // Assert
+        errorOr.ShouldBeValue(Value);
+    }
+
+    [Fact]
+    public void ToErrorOr_When_GivenMaybeNull_Should_ConvertToErrorOrWithError()
+    {
+        // Arrange & Act
+        var errorOr = Maybe<int>
+            .Null
+            .ToErrorOr(UnexpectedError);
+
+        // Assert
+        errorOr.ShouldBeError(UnexpectedError);
+    }
+
+    [Fact]
+    public void ToErrorOr_When_GivenMaybeValue_Should_ConvertToErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = Value.ToMaybe()
+            .ToErrorOr(UnexpectedError);
+
+        // Assert
+        errorOr.ShouldBeValue(Value);
+    }
+
+    [Fact]
     public async Task ToErrorOrAsync_When_GivenValueTask_Should_CreateErrorOrWithValue()
     {
         // Arrange & Act

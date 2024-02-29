@@ -7,21 +7,37 @@ public static partial class ResultExtensions
 {
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> ToResult<TValue>(this TValue value) => Result<TValue>.Success(value);
+    public static Result<TValue> ToResult<TValue>(this TValue value) =>
+        Result<TValue>.Success(value);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static async Task<Result<TValue>> ToResult<TValue>(this Task<TValue> valueTask) =>
-        (await valueTask).ToResult();
+        Result<TValue>.Success(await valueTask);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static async Task<Result<TValue>> ToResult<TValue>(this ValueTask<TValue> valueTask) =>
-        (await valueTask).ToResult();
+        Result<TValue>.Success(await valueTask);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> ToResult<TValue>(this Error error) => Result<TValue>.Failure(error);
+    public static Result<TValue> ToResult<TValue>(this Error error) =>
+        Result<TValue>.Failure(error);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TValue> ToResult<TValue>(this Maybe<TValue> maybe, Error error) =>
+        maybe.IsNull ?
+            Result<TValue>.Failure(error) :
+            Result<TValue>.Success(maybe.Value);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TValue> ToResult<TValue>(this ErrorOr<TValue> errorOr) =>
+        errorOr.HasError ?
+            Result<TValue>.Failure(errorOr.Errors.First()) :
+            Result<TValue>.Success(errorOr.Value);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

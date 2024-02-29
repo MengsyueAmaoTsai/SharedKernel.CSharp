@@ -7,19 +7,37 @@ public static partial class ErrorOrExtensions
 {
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> ToErrorOr<TValue>(this TValue value) => ErrorOr<TValue>.Is(value);
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this TValue value) =>
+        ErrorOr<TValue>.Is(value);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> ToErrorOr<TValue>(this Error error) => ErrorOr<TValue>.Is(error);
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this Error error) =>
+        ErrorOr<TValue>.Is(error);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> ToErrorOr<TValue>(this List<Error> errors) => ErrorOr<TValue>.Is(errors);
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this List<Error> errors) =>
+        ErrorOr<TValue>.Is(errors);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> ToErrorOr<TValue>(this Error[] errors) => ErrorOr<TValue>.Is(errors);
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this Error[] errors) =>
+        ErrorOr<TValue>.Is(errors);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this Maybe<TValue> maybe, Error error) =>
+        maybe.IsNull ?
+            ErrorOr<TValue>.Is(error) :
+            ErrorOr<TValue>.Is(maybe.Value);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this Result<TValue> result) =>
+        result.IsFailure ?
+            ErrorOr<TValue>.Is(result.Error) :
+            ErrorOr<TValue>.Is(result.Value);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

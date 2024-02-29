@@ -16,6 +16,50 @@ public sealed class MaybeTExplicitConversionsTests : MonadTests
     }
 
     [Fact]
+    public void ToMaybe_When_GivenFailureResult_Should_ConvertToMaybeWithNull()
+    {
+        // Arrange & Act
+        Maybe<int> maybe = UnexpectedError.ToResult<int>()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public void ToMaybe_When_GivenSuccessResult_Should_ConvertToMaybeWithValue()
+    {
+        // Arrange & Act
+        Maybe<int> maybe = Value.ToResult()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeHasValueWith(Value);
+    }
+
+    [Fact]
+    public void ToMaybe_When_GivenErrorOrWithErrors_Should_ConvertToMaybeWithNull()
+    {
+        // Arrange & Act
+        Maybe<int> maybe = UnexpectedError.ToErrorOr<int>()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public void ToMaybe_When_GivenErrorOrWithValue_Should_ConvertToMaybeWithValue()
+    {
+        // Arrange & Act
+        Maybe<int> maybe = Value.ToErrorOr()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeHasValueWith(Value);
+    }
+
+    [Fact]
     public async Task ToMaybe_When_GivenTask_Should_CreateMaybeWithValue()
     {
         // Arrange & Act
