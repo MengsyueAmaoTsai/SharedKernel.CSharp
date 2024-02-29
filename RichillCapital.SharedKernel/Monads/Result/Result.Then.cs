@@ -2,15 +2,13 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Result<TValue>
 {
-    public Result<TResult> Then<TResult>(Func<TValue, TResult> valueFactory)
+    public Result<TResult> Then<TResult>(Func<TValue, TResult> resultFactory)
     {
         if (IsFailure)
         {
             return Error.ToResult<TResult>();
         }
 
-        var value = valueFactory(Value);
-
-        return value.ToResult();
+        return resultFactory(Value).ToResult();
     }
 }
