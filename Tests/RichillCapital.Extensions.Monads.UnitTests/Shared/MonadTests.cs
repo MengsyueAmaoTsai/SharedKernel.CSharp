@@ -17,4 +17,6 @@ public abstract class MonadTests
         Error.Invalid("Error 4"),
         Error.NotFound("Error 5"),
     };
+
+    protected static Error ErrorFactory(int value) => Error.Invalid($"Error {value}");
 }

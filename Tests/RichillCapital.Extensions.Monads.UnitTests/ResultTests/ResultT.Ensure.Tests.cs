@@ -60,4 +60,29 @@ public sealed class ResultTEnsureTests : MonadTests
         // Assert
         result.ShouldBeSuccessWith(Value);
     }
+
+    [Fact]
+    public void EnsureFactory_When_EnsureFailure_Should_InvokeErrorFactory_And_ReturnFailureResultWithError()
+    {
+        // Arrange
+        var expectedError = ErrorFactory(Value);
+
+        // Act
+        var result = Result<int>.
+            Ensure(Value, value => value == 3, ErrorFactory);
+
+        // Assert
+        result.ShouldBeFailureWith(expectedError);
+    }
+
+    [Fact]
+    public void EnsureFactory_When_EnsureSuccess_Should_NotInvokeErrorFactory_And_ReturnSuccessResult()
+    {
+        // Arrange & Act
+        var result = Result<int>
+            .Ensure(Value, value => value == Value, ErrorFactory);
+
+        // Assert
+        result.ShouldBeSuccessWith(Value);
+    }
 }
