@@ -37,29 +37,29 @@ public static class ErrorOrAssertionExtensions
 
     public static void ShouldBeErrors<TValue>(
         this ErrorOr<TValue> errorOr,
-        List<Error> expectedErrors)
+        IEnumerable<Error> expectedErrors)
     {
         errorOr.ShouldBeError();
 
-        errorOr.Errors.Should().HaveCount(expectedErrors.Count);
+        errorOr.Errors.Should().HaveCount(expectedErrors.Count());
         errorOr.Errors.Should().BeEquivalentTo(expectedErrors);
 
-        errorOr.ErrorsOrEmpty.Should().HaveCount(expectedErrors.Count);
+        errorOr.ErrorsOrEmpty.Should().HaveCount(expectedErrors.Count());
         errorOr.ErrorsOrEmpty.Should().BeEquivalentTo(expectedErrors);
     }
 
-    public static void ShouldBeErrors<TValue>(
-         this ErrorOr<TValue> errorOr,
-         Error[] expectedErrors)
-    {
-        errorOr.ShouldBeError();
+    // public static void ShouldBeErrors<TValue>(
+    //      this ErrorOr<TValue> errorOr,
+    //      Error[] expectedErrors)
+    // {
+    //     errorOr.ShouldBeError();
 
-        errorOr.Errors.Should().HaveCount(expectedErrors.Length);
-        errorOr.Errors.Should().BeEquivalentTo(expectedErrors);
+    //     errorOr.Errors.Should().HaveCount(expectedErrors.Length);
+    //     errorOr.Errors.Should().BeEquivalentTo(expectedErrors);
 
-        errorOr.ErrorsOrEmpty.Should().HaveCount(expectedErrors.Length);
-        errorOr.ErrorsOrEmpty.Should().BeEquivalentTo(expectedErrors);
-    }
+    //     errorOr.ErrorsOrEmpty.Should().HaveCount(expectedErrors.Length);
+    //     errorOr.ErrorsOrEmpty.Should().BeEquivalentTo(expectedErrors);
+    // }
 
     private static void ShouldBeError<TValue>(this ErrorOr<TValue> errorOr)
     {

@@ -7,6 +7,7 @@ public abstract class MonadTests
     protected readonly static int Value = 5;
 
     protected readonly static Error UnexpectedError = Error.Unexpected("Unexpected error");
+    protected readonly static Error NotFoundError = Error.NotFound("Not found");
 
     protected readonly static List<Error> Errors = new()
     {
