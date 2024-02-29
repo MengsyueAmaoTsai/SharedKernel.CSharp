@@ -7,8 +7,10 @@ public readonly partial record struct ErrorOr<TValue>
         if (errorOrs.Any(errorOr => errorOr.HasError))
         {
             return errorOrs
-                .First(errorOr => errorOr.HasError)
-                .Errors
+                .Where(errorOr => errorOr.HasError)
+                .SelectMany(errorOr => errorOr.Errors)
+                .Distinct()
+                .ToArray()
                 .ToErrorOr<TValue>();
         }
 

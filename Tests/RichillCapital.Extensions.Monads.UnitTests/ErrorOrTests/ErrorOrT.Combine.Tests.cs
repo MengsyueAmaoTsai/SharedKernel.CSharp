@@ -3,7 +3,7 @@ using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.Extensions.Monads.UnitTests;
 
-public sealed class ErrorOrCombineTests : MonadTests
+public sealed class ErrorOrTCombineTests : MonadTests
 {
     [Fact]
     public void CombineFactory_When_AllErrorOrsAreValue_Should_ReturnLastErrorOrWithValue()
