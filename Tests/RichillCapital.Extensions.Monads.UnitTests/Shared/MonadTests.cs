@@ -35,4 +35,7 @@ public abstract class MonadTests
 
     protected static async Task<Result<int>> ResultFactoryTask(int value) =>
         await Task.FromResult(value.ToResult()).ConfigureAwait(false);
+
+    protected async Task<bool> EnsureTaskSuccess(int value) => await Task.FromResult(value == 5);
+    protected async Task<bool> EnsureTaskFailure(int value) => await Task.FromResult(value == 3);
 }

@@ -66,21 +66,54 @@ public sealed class ErrorOrTEnsureTests : MonadTests
         var expectedError = ErrorFactory(Value);
 
         // Act
-        var result = ErrorOr<int>.
+        var errorOr = ErrorOr<int>.
             Ensure(Value, value => value == 3, ErrorFactory);
 
         // Assert
-        result.ShouldBeError(expectedError);
+        errorOr.ShouldBeError(expectedError);
     }
 
     [Fact]
     public void EnsureFactory_When_EnsureSuccess_Should_NotInvokeErrorFactory_And_ReturnErrorOrWithValue()
     {
         // Arrange & Act
-        var result = ErrorOr<int>
+        var errorOr = ErrorOr<int>
             .Ensure(Value, value => value == Value, ErrorFactory);
 
         // Assert
-        result.ShouldBeValue(Value);
+        errorOr.ShouldBeValue(Value);
+    }
+
+    [Fact]
+    public async Task EnsureAsync_When_HasError_Should_ReturnErrorOrWithErrors()
+    {
+        // Arrange & Act
+        var errorOr = await Errors.ToErrorOr<int>()
+            .Ensure(EnsureTaskSuccess, ErrorFactory);
+
+        // Assert
+        errorOr.ShouldBeErrors(Errors);
+    }
+
+    [Fact]
+    public async Task EnsureAsync_When_IsValue_And_EnsureTaskFailure_Should_ReturnErrorOrWithErrorFromFactory()
+    {
+        // Arrange & Act
+        var errorOr = await Value.ToErrorOr()
+            .Ensure(EnsureTaskFailure, ErrorFactory);
+
+        // Assert
+        errorOr.ShouldBeError(ErrorFactory(Value));
+    }
+
+    [Fact]
+    public async Task EnsureAsync_When_IsValue_And_EnsureTaskSuccess_Should_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = await Value.ToErrorOr()
+            .Ensure(EnsureTaskSuccess, ErrorFactory);
+
+        // Assert
+        errorOr.ShouldBeValue(Value);
     }
 }

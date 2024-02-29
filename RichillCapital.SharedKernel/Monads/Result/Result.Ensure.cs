@@ -23,4 +23,21 @@ public readonly partial record struct Result<TValue>
         Func<TValue, bool> ensure,
         Func<TValue, Error> errorFactory) =>
         Ensure(value, ensure, errorFactory(value));
+
+    public async Task<Result<TValue>> Ensure(
+        Func<TValue, Task<bool>> ensureTask,
+        Func<TValue, Error> errorFactory)
+    {
+        if (IsFailure)
+        {
+            return Error.ToResult<TValue>();
+        }
+
+        if (!await ensureTask(Value))
+        {
+            return errorFactory(Value).ToResult<TValue>();
+        }
+
+        return Value.ToResult();
+    }
 }

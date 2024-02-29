@@ -85,4 +85,37 @@ public sealed class ResultTEnsureTests : MonadTests
         // Assert
         result.ShouldBeSuccessWith(Value);
     }
+
+    [Fact]
+    public async Task EnsureAsync_When_IsFailure_Should_ReturnFailureResultWithError()
+    {
+        // Arrange & Act
+        var result = await UnexpectedError.ToResult<int>()
+            .Ensure(EnsureTaskSuccess, ErrorFactory);
+
+        // Assert
+        result.ShouldBeFailureWith(UnexpectedError);
+    }
+
+    [Fact]
+    public async Task EnsureAsync_When_IsSuccess_And_EnsureTaskFailure_Should_ReturnFailureResultWithErrorFromFactory()
+    {
+        // Arrange & Act
+        var result = await Value.ToResult()
+            .Ensure(EnsureTaskFailure, ErrorFactory);
+
+        // Assert
+        result.ShouldBeFailureWith(ErrorFactory(Value));
+    }
+
+    [Fact]
+    public async Task EnsureAsync_When_IsSuccess_And_EnsureTaskSuccess_Should_ReturnSuccessResultWithValue()
+    {
+        // Arrange & Act
+        var result = await Value.ToResult()
+            .Ensure(EnsureTaskSuccess, ErrorFactory);
+
+        // Assert
+        result.ShouldBeSuccessWith(Value);
+    }
 }

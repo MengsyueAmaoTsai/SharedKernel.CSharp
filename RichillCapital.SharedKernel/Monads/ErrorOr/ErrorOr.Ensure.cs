@@ -25,4 +25,21 @@ public readonly partial record struct ErrorOr<TValue>
         Func<TValue, bool> ensure,
         Func<TValue, Error> errorFactory) =>
         Ensure(value, ensure, errorFactory(value));
+
+    public async Task<ErrorOr<TValue>> Ensure(
+        Func<TValue, Task<bool>> ensureTask,
+        Func<TValue, Error> errorFactory)
+    {
+        if (HasError)
+        {
+            return Errors.ToErrorOr<TValue>();
+        }
+
+        if (!await ensureTask(Value))
+        {
+            return errorFactory(Value).ToErrorOr<TValue>();
+        }
+
+        return Value.ToErrorOr();
+    }
 }
