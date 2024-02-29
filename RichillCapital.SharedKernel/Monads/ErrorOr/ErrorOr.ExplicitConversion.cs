@@ -28,16 +28,12 @@ public static partial class ErrorOrExtensions
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ErrorOr<TValue> ToErrorOr<TValue>(this Maybe<TValue> maybe, Error error) =>
-        maybe.IsNull ?
-            ErrorOr<TValue>.Is(error) :
-            ErrorOr<TValue>.Is(maybe.Value);
+        maybe.Match(ErrorOr<TValue>.Is, () => ErrorOr<TValue>.Is(error));
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ErrorOr<TValue> ToErrorOr<TValue>(this Result<TValue> result) =>
-        result.IsFailure ?
-            ErrorOr<TValue>.Is(result.Error) :
-            ErrorOr<TValue>.Is(result.Value);
+        result.Match(ErrorOr<TValue>.Is, ErrorOr<TValue>.Is);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

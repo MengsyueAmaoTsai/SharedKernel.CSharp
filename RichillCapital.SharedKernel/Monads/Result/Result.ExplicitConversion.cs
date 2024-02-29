@@ -28,16 +28,12 @@ public static partial class ResultExtensions
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> ToResult<TValue>(this Maybe<TValue> maybe, Error error) =>
-        maybe.IsNull ?
-            Result<TValue>.Failure(error) :
-            Result<TValue>.Success(maybe.Value);
+        maybe.Match(Result<TValue>.Success, () => Result<TValue>.Failure(error));
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> ToResult<TValue>(this ErrorOr<TValue> errorOr) =>
-        errorOr.HasError ?
-            Result<TValue>.Failure(errorOr.Errors.First()) :
-            Result<TValue>.Success(errorOr.Value);
+        errorOr.Match(errors => Result<TValue>.Failure(errors.First()), Result<TValue>.Success);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

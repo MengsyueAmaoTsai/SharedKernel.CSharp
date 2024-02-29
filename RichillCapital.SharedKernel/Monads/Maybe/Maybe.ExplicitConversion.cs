@@ -13,16 +13,12 @@ public static partial class MaybeExtensions
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Maybe<TValue> ToMaybe<TValue>(this ErrorOr<TValue> errorOr) =>
-        errorOr.HasError ?
-            Maybe<TValue>.Null :
-            Maybe<TValue>.Have(errorOr.Value);
+        errorOr.Match(_ => Maybe<TValue>.Null, Maybe<TValue>.Have);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Maybe<TValue> ToMaybe<TValue>(this Result<TValue> result) =>
-        result.IsFailure ?
-            Maybe<TValue>.Null :
-            Maybe<TValue>.Have(result.Value);
+        result.Match(Maybe<TValue>.Have, _ => Maybe<TValue>.Null);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
