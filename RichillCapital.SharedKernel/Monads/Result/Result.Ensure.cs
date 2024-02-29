@@ -12,14 +12,9 @@ public readonly partial record struct Result<TValue>
 
     public static Result<TValue> Ensure(
         TValue value,
-        params (Func<TValue, bool> ensure, Error error)[] rules)
-    {
-        var results = rules
-            .Select(rule => Ensure(value, rule.ensure, rule.error))
-            .ToArray();
-
-        return results.Any(result => result.IsFailure) ?
-            results.First(result => result.IsFailure).Error.ToResult<TValue>() :
-            value.ToResult();
-    }
+        params (Func<TValue, bool> ensure, Error error)[] rules) =>
+        Result<TValue>
+            .Combine(rules
+                .Select(rule => Ensure(value, rule.ensure, rule.error))
+                .ToArray());
 }
