@@ -10,3 +10,16 @@ public readonly partial record struct Maybe<TValue>
             onValue(Value);
 
 }
+
+public static partial class MaybeExtensions
+{
+    public static async Task<TResult> Match<TValue, TResult>(
+        this Task<Maybe<TValue>> maybeTask,
+        Func<TValue, TResult> onHasValue,
+        Func<TResult> onNull)
+    {
+        var maybe = await maybeTask;
+
+        return maybe.Match(onHasValue, onNull);
+    }
+}

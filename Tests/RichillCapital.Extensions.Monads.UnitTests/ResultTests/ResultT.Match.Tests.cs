@@ -32,7 +32,29 @@ public sealed class ResultTMatchTests : MonadTests
         result.Should().Be(Value * 2);
     }
 
-    private static int OnSuccess(int value) => value * 2;
+    [Fact]
+    public async Task MatchAsync_When_IsFailure_Should_InvokeOnFailure_And_ReturnResult()
+    {
+        // Arrange & Act
+        var result = await UnexpectedError
+            .ToResult<int>()
+            .Then(ResultFactoryTask)
+            .Match(OnSuccess, OnFailure);
 
-    private static int OnFailure(Error _) => 0;
+        // Assert
+        result.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task MatchAsync_When_IsSuccess_Should_InvokeOnSuccess_And_ReturnResult()
+    {
+        // Arrange & Act
+        var result = await Value
+            .ToResult()
+            .Then(ResultFactoryTask)
+            .Match(OnSuccess, OnFailure);
+
+        // Assert
+        result.Should().Be(Value * 2);
+    }
 }

@@ -100,7 +100,4 @@ public sealed class ErrorOrTThenTests : MonadTests
         // Assert
         errorOr.ShouldBeValue(Value);
     }
-
-    private static async Task<ErrorOr<int>> ErrorOrFactoryTask(int value) =>
-        await Task.FromResult(value.ToErrorOr()).ConfigureAwait(false);
 }

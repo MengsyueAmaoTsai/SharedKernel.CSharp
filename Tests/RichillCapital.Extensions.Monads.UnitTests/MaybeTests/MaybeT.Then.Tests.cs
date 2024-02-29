@@ -97,7 +97,4 @@ public sealed class MaybeTThenTests : MonadTests
         // Assert
         maybe.ShouldBeHasValueWith(Value);
     }
-
-    private static async Task<Maybe<int>> MaybeFactoryTask(int value) =>
-        await Task.FromResult(value.ToMaybe()).ConfigureAwait(false);
 }

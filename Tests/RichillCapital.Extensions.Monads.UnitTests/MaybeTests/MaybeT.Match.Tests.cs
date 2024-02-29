@@ -1,32 +1,54 @@
 using FluentAssertions;
 
+using RichillCapital.Extensions.Monads.UnitTests.Shared;
+
 namespace RichillCapital.SharedKernel.Monads.UnitTests;
 
-public sealed class MaybeTMatchTests
+public sealed class MaybeTMatchTests : MonadTests
 {
     [Fact]
     public void Match_When_IsNull_Should_InvokeOnNull_And_ReturnResult()
     {
         // Arrange & Act
         var maybe = Maybe<int>.Null
-            .Match(OnValue, OnNull);
+            .Match(OnHasValue, OnNull);
 
         // Assert
         maybe.Should().Be(0);
     }
 
     [Fact]
-    public void Match_When_IsValue_Should_InvokeOnValue_And_ReturnResult()
+    public void Match_When_IsValue_Should_InvokeOnHasValue_And_ReturnResult()
     {
         // Arrange & Act
         var maybe = 1.ToMaybe()
-            .Match(OnValue, OnNull);
+            .Match(OnHasValue, OnNull);
 
         // Assert
         maybe.Should().Be(2);
     }
 
-    private static int OnValue(int value) => value * 2;
+    [Fact]
+    public async Task MatchAsync_When_IsNull_Should_InvokeOnNull_And_ReturnResult()
+    {
+        // Arrange & Act
+        var maybe = await Maybe<int>.Null
+            .Then(MaybeFactoryTask)
+            .Match(OnHasValue, OnNull);
 
-    private static int OnNull() => 0;
+        // Assert
+        maybe.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task MatchAsync_When_IsValue_Should_InvokeOnHasValue_And_ReturnResult()
+    {
+        // Arrange & Act
+        var maybe = await Value.ToMaybe()
+            .Then(MaybeFactoryTask)
+            .Match(OnHasValue, OnNull);
+
+        // Assert
+        maybe.Should().Be(Value * 2);
+    }
 }

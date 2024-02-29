@@ -102,7 +102,4 @@ public sealed class ResultTThenTests : MonadTests
         // Assert
         result.ShouldBeSuccessWith(Value);
     }
-
-    private static async Task<Result<int>> ResultFactoryTask(int value) =>
-        await Task.FromResult(value.ToResult()).ConfigureAwait(false);
 }
