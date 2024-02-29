@@ -23,4 +23,9 @@ public readonly partial record struct Maybe<TValue>
 
         return Value.ToMaybe();
     }
+
+    public async Task<Maybe<TResult>> Then<TResult>(Func<TValue, Task<Maybe<TResult>>> maybeFactoryTask) =>
+        IsNull ?
+            Maybe<TResult>.Null :
+            await maybeFactoryTask(Value).ConfigureAwait(false);
 }

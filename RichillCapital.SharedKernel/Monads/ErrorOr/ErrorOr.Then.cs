@@ -23,4 +23,9 @@ public readonly partial record struct ErrorOr<TValue>
 
         return Value.ToErrorOr();
     }
+
+    public async Task<ErrorOr<TResult>> Then<TResult>(Func<TValue, Task<ErrorOr<TResult>>> errorOrFactoryTask) =>
+        HasError ?
+            Errors.ToErrorOr<TResult>() :
+            await errorOrFactoryTask(Value).ConfigureAwait(false);
 }

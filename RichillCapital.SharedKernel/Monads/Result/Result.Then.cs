@@ -23,4 +23,9 @@ public readonly partial record struct Result<TValue>
 
         return Value.ToResult();
     }
+
+    public async Task<Result<TResult>> Then<TResult>(Func<TValue, Task<Result<TResult>>> resultFactoryTask) =>
+        IsFailure ?
+            Error.ToResult<TResult>() :
+            await resultFactoryTask(Value).ConfigureAwait(false);
 }
