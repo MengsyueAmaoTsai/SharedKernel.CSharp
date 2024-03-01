@@ -19,8 +19,12 @@ public abstract class MonadTests
 
     protected static async Task<int> GetTestValueAsync() => await Task.FromResult(TestValue);
 
-    protected int OnIsNull() => 0;
+
     protected int OnHasValue(int value) => value * 2;
+    protected int OnSuccess(int value) => value * 2;
+    protected int OnSuccess() => 0;
     protected int OnIsValue(int value) => value * 2;
+    protected int OnIsNull() => 0;
     protected int OnError(IEnumerable<Error> errors) => errors.Count();
+    protected int OnFailure(Error error) => 0;
 }
