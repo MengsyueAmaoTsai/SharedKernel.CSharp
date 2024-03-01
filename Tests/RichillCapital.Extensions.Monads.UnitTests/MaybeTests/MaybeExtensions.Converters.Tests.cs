@@ -6,13 +6,23 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class MaybeExtensionsConvertersTests : MonadTests
 {
     [Fact]
-    public void ToMaybe_When_FromValue_Should_ConvertValueToMaybeWithValue()
+    public void ToMaybe_When_FromValue_Should_ConvertToMaybeWithValue()
     {
         // Arrange & Act
         var maybe = TestValue
             .ToMaybe();
 
         // Assert
+        maybe.ShouldBeHas(TestValue);
+    }
+
+    [Fact]
+    public async Task ToMaybeAsync_When_FromValue_Should_ConvertToMaybeWithValue()
+    {
+        // Arrange & Act
+        var maybe = await GetTestValueAsync().ToMaybe();
+
+        // // Assert
         maybe.ShouldBeHas(TestValue);
     }
 }

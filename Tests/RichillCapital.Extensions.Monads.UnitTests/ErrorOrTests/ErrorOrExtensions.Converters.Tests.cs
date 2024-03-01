@@ -16,6 +16,16 @@ public sealed class ErrorOrExtensionsConvertersTests : MonadTests
     }
 
     [Fact]
+    public async Task ToErrorOrAsync_When_FromValue_Should_ConvertToErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = await GetTestValueAsync().ToErrorOr();
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue);
+    }
+
+    [Fact]
     public void ToErrorOr_When_FromError_Should_ConvertToErrorOrWithError()
     {
         // Arrange & Act

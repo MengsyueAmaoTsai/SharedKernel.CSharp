@@ -7,6 +7,12 @@ public static partial class ErrorOr
         return ErrorOr<TValue>.With(value);
     }
 
+    public static async Task<ErrorOr<TValue>> ToErrorOr<TValue>(this Task<TValue> valueTask)
+    {
+        var value = await valueTask;
+        return ErrorOr<TValue>.With(value);
+    }
+
     public static ErrorOr<TValue> ToErrorOr<TValue>(this Error error)
     {
         return ErrorOr<TValue>.WithError(error);

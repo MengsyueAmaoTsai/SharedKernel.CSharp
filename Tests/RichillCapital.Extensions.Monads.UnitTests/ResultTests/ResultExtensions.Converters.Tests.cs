@@ -9,7 +9,17 @@ public sealed class ResultExtensionsConvertersTests : MonadTests
     public void ToResult_When_GivenValue_Should_ConvertToSuccessResultWithValue()
     {
         // Arrange & Act
-        var result = TestValue.ToResult();
+        Result<int> result = TestValue.ToResult();
+
+        // Assert
+        result.ShouldBeSuccessWith(TestValue);
+    }
+
+    [Fact]
+    public async Task ToResultAsync_When_FromValue_Should_ConvertToSuccessResultWithValue()
+    {
+        // Arrange & Act
+        Result<int> result = await GetTestValueAsync().ToResult();
 
         // Assert
         result.ShouldBeSuccessWith(TestValue);
@@ -19,7 +29,7 @@ public sealed class ResultExtensionsConvertersTests : MonadTests
     public void ToResult_When_GivenError_Should_ConvertToFailureResultWithError()
     {
         // Arrange & Act
-        var result = TestError.ToResult<int>();
+        Result<int> result = TestError.ToResult<int>();
 
         // Assert
         result.ShouldBeFailureWith(TestError);
