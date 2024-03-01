@@ -7,3 +7,7 @@ public readonly partial record struct ErrorOr<TValue>
             Errors.ToErrorOr<TResult>() :
             factory(Value).ToErrorOr();
 }
+
+public static partial class ErrorOrExtensions
+{
+}
