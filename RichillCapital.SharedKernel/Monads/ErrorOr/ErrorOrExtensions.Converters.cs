@@ -6,4 +6,19 @@ public static partial class ErrorOr
     {
         return ErrorOr<TValue>.With(value);
     }
+
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this Error error)
+    {
+        return ErrorOr<TValue>.WithError(error);
+    }
+
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this List<Error> errors)
+    {
+        return ErrorOr<TValue>.WithErrors(errors);
+    }
+
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this Error[] errors)
+    {
+        return ErrorOr<TValue>.WithErrors(errors);
+    }
 }

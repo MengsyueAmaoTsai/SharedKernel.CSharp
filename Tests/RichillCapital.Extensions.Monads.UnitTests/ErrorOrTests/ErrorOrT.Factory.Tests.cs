@@ -4,7 +4,7 @@ using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.Extensions.Monads.UnitTests;
 
-public sealed class ErrorOrFactoryTests : MonadTests
+public sealed class ErrorOrTFactoryTests : MonadTests
 {
     [Fact]
     public void With_When_GivenValue_Should_CreateErrorOrWithValue()
