@@ -6,6 +6,17 @@ public readonly partial record struct ErrorOr<TValue>
         HasError ?
             Errors.ToErrorOr<TResult>() :
             factory(Value).ToErrorOr();
+
+    public ErrorOr<TValue> Then(Action<TValue> action)
+    {
+        if (HasError)
+        {
+            return Errors.ToErrorOr<TValue>();
+        }
+
+        action(Value);
+        return Value.ToErrorOr();
+    }
 }
 
 public static partial class ErrorOrExtensions

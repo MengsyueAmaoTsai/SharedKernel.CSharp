@@ -17,6 +17,8 @@ public abstract class MonadTests
         Error.NotFound("Error 5"),
     ];
 
+    protected static void SomeActionWithValue(int value) => Console.WriteLine(value);
+
     protected static string MapValueToResult(int value) => (value * 2).ToString();
 
     protected static readonly Func<int, bool> EnsureTrue = new(value => value == 5);

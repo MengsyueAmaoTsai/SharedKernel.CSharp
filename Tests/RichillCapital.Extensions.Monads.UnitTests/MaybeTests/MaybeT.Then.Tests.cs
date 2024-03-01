@@ -17,7 +17,7 @@ public sealed class MaybeTThenTests : MonadTests
     }
 
     [Fact]
-    public void Then_When_IsValue_Should_InvokeFactory_And_ReturnMaybeWithValue()
+    public void Then_When_HasValue_Should_InvokeFactory_And_ReturnMaybeWithValue()
     {
         // Arrange & Act
         var maybe = TestValue
@@ -26,5 +26,28 @@ public sealed class MaybeTThenTests : MonadTests
 
         // Assert
         maybe.ShouldBeHas(MapValueToResult(TestValue));
+    }
+
+    [Fact]
+    public void Then_When_IsNull_Should_NotInvokeActionWithValue_And_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = Maybe<int>.Null
+            .Then(SomeActionWithValue);
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Then_When_HasValue_Should_InvokeActionWithValue_And_ReturnMaybeWithValue()
+    {
+        // Arrange & Act
+        var maybe = TestValue
+            .ToMaybe()
+            .Then(SomeActionWithValue);
+
+        // Assert
+        maybe.ShouldBeHas(TestValue);
     }
 }

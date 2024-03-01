@@ -6,4 +6,15 @@ public readonly partial record struct Maybe<TValue>
         IsNull ?
             Maybe<TResult>.Null :
             factory(Value).ToMaybe();
+
+    public Maybe<TValue> Then(Action<TValue> action)
+    {
+        if (IsNull)
+        {
+            return Null;
+        }
+
+        action(Value);
+        return Value.ToMaybe();
+    }
 }

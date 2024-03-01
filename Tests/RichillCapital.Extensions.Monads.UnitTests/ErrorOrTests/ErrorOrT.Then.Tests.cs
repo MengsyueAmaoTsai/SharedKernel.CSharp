@@ -27,4 +27,28 @@ public sealed class ErrorOrTThenTests : MonadTests
         // Assert
         errorOr.ShouldBeValue(MapValueToResult(TestValue));
     }
+
+    [Fact]
+    public void Then_When_HasError_Should_NotInvokeActionWithValue_And_ReturnErrorOrWithErrors()
+    {
+        // Arrange & Act
+        var errorOr = TestErrors
+            .ToErrorOr<int>()
+            .Then(SomeActionWithValue);
+
+        // Assert
+        errorOr.ShouldBeErrors(TestErrors);
+    }
+
+    [Fact]
+    public void Then_When_HasValue_Should_InvokeActionWithValue_And_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = TestValue
+            .ToErrorOr()
+            .Then(SomeActionWithValue);
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue);
+    }
 }

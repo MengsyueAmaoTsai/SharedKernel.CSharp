@@ -28,4 +28,28 @@ public sealed class ResultTThenTests : MonadTests
         // Assert
         result.ShouldBeSuccessWith(MapValueToResult(TestValue));
     }
+
+    [Fact]
+    public void Then_When_IsFailure_Should_NotInvokeActionWithValue_And_ReturnFailureResultWithError()
+    {
+        // Arrange & Act
+        var result = TestError
+            .ToResult<int>()
+            .Then(SomeActionWithValue);
+
+        // Assert
+        result.ShouldBeFailureWith(TestError);
+    }
+
+    [Fact]
+    public void Then_When_IsSuccess_Should_InvokeActionWithValue_And_ReturnSuccessResultWithValue()
+    {
+        // Arrange & Act
+        var result = TestValue
+            .ToResult()
+            .Then(SomeActionWithValue);
+
+        // Assert
+        result.ShouldBeSuccessWith(TestValue);
+    }
 }
