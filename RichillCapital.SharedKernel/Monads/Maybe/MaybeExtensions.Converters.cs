@@ -17,4 +17,12 @@ public static partial class MaybeExtensions
         var value = await valueTask;
         return Maybe<TValue>.With(value);
     }
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static async ValueTask<Maybe<TValue>> ToMaybe<TValue>(this ValueTask<TValue> valueTask)
+    {
+        var value = await valueTask;
+        return Maybe<TValue>.With(value);
+    }
 }

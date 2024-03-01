@@ -22,6 +22,14 @@ public static partial class ResultExtensions
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static async ValueTask<Result<TValue>> ToResult<TValue>(this ValueTask<TValue> valueTask)
+    {
+        var value = await valueTask;
+        return Result<TValue>.With(value);
+    }
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> ToResult<TValue>(this Error error)
     {
         return Result<TValue>.Failure(error);

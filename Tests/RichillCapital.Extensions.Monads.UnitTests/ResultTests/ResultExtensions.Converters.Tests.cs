@@ -16,10 +16,20 @@ public sealed class ResultExtensionsConvertersTests : MonadTests
     }
 
     [Fact]
-    public async Task ToResultAsync_When_FromValue_Should_ConvertToSuccessResultWithValue()
+    public async Task ToResultAsync_When_FromTask_Should_ConvertToSuccessResultWithValue()
     {
         // Arrange & Act
         Result<int> result = await GetTestValueAsync().ToResult();
+
+        // Assert
+        result.ShouldBeSuccessWith(TestValue);
+    }
+
+    [Fact]
+    public async ValueTask ToResultAsync_When_FromValueTask_Should_ConvertToSuccessResultWithValue()
+    {
+        // Arrange & Act
+        Result<int> result = await GetTestValueValueTaskAsync().ToResult();
 
         // Assert
         result.ShouldBeSuccessWith(TestValue);
