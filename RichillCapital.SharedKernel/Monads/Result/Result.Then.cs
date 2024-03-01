@@ -17,6 +17,17 @@ public readonly partial record struct Result<TValue>
         action(Value);
         return Value.ToResult();
     }
+
+    public async Task<Result<TValue>> Then(Func<Task> task)
+    {
+        if (IsFailure)
+        {
+            return Error.ToResult<TValue>();
+        }
+
+        await task();
+        return Value.ToResult();
+    }
 }
 
 public readonly partial record struct Result

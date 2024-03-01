@@ -52,4 +52,28 @@ public sealed class ResultTThenTests : MonadTests
         // Assert
         result.ShouldBeSuccessWith(TestValue);
     }
+
+    [Fact]
+    public async Task ThenAsync_When_IsFailure_Should_NotInvokeTask_And_ReturnFailureResultWithError()
+    {
+        // Arrange & Act
+        var result = await TestError
+            .ToResult<int>()
+            .Then(SomeAsyncTask);
+
+        // Assert
+        result.ShouldBeFailureWith(TestError);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsSuccess_Should_InvokeTask_And_ReturnSuccessResultWithValue()
+    {
+        // Arrange & Act
+        var result = await TestValue
+            .ToResult()
+            .Then(SomeAsyncTask);
+
+        // Assert
+        result.ShouldBeSuccessWith(TestValue);
+    }
 }

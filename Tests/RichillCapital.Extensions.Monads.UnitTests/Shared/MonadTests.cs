@@ -18,6 +18,7 @@ public abstract class MonadTests
     ];
 
     protected static void SomeActionWithValue(int value) => Console.WriteLine(value);
+    protected static async Task SomeAsyncTask() => await Task.CompletedTask;
 
     protected static string MapValueToResult(int value) => (value * 2).ToString();
 

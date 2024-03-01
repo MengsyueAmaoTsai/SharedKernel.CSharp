@@ -17,6 +17,17 @@ public readonly partial record struct ErrorOr<TValue>
         action(Value);
         return Value.ToErrorOr();
     }
+
+    public async Task<ErrorOr<TValue>> Then(Func<Task> task)
+    {
+        if (HasError)
+        {
+            return Errors.ToErrorOr<TValue>();
+        }
+
+        await task();
+        return Value.ToErrorOr();
+    }
 }
 
 public static partial class ErrorOrExtensions

@@ -17,4 +17,15 @@ public readonly partial record struct Maybe<TValue>
         action(Value);
         return Value.ToMaybe();
     }
+
+    public async Task<Maybe<TValue>> Then(Func<Task> task)
+    {
+        if (IsNull)
+        {
+            return Null;
+        }
+
+        await task();
+        return Value.ToMaybe();
+    }
 }
