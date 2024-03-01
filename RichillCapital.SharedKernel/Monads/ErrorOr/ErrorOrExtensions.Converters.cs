@@ -14,11 +14,11 @@ public static partial class ErrorOr
 
     public static ErrorOr<TValue> ToErrorOr<TValue>(this List<Error> errors)
     {
-        return ErrorOr<TValue>.WithErrors(errors);
+        return ErrorOr<TValue>.WithError(errors);
     }
 
     public static ErrorOr<TValue> ToErrorOr<TValue>(this Error[] errors)
     {
-        return ErrorOr<TValue>.WithErrors(errors);
+        return ErrorOr<TValue>.WithError(errors);
     }
 }

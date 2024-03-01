@@ -62,4 +62,60 @@ public sealed class MaybeTTests : MonadTests
         // Assert
         result.Should().BeFalse();
     }
+
+    [Fact]
+    public void Null_Should_ReturnNullMaybe()
+    {
+        // Arrange & Act
+        var maybe = Maybe<int>.Null;
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Value_When_IsNull_Should_ThrowInvalidOperationException()
+    {
+        // Arrange
+        var maybe = Maybe<int>.Null;
+
+        // Act
+        Action action = () => _ = maybe.Value;
+
+        // Assert
+        action.Should().Throw<InvalidOperationException>()
+            .WithMessage($"Maybe<{typeof(int)}> is not value");
+    }
+
+    [Fact]
+    public void Value_When_IsNotNull_Should_ReturnValue()
+    {
+        // Arrange
+        var maybe = Maybe<int>.With(TestValue);
+
+        // Act
+        maybe.Value.Should().Be(TestValue);
+    }
+
+    [Fact]
+    public void ValueOrDefault_When_IsNull_Should_ReturnDefault()
+    {
+        // Arrange
+        var maybeInt = Maybe<int>.Null;
+        var maybeString = Maybe<string>.Null;
+
+        // Act
+        maybeInt.ValueOrDefault.Should().Be(0);
+        maybeString.ValueOrDefault.Should().BeNull();
+    }
+
+    [Fact]
+    public void ValueOrDefault_When_IsNotNull_Should_ReturnValue()
+    {
+        // Arrange
+        var maybe = Maybe<int>.With(TestValue);
+
+        // Act
+        maybe.ValueOrDefault.Should().Be(TestValue);
+    }
 }

@@ -21,14 +21,14 @@ public readonly partial record struct ErrorOr<TValue>
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> WithErrors(List<Error> errors)
+    public static ErrorOr<TValue> WithError(List<Error> errors)
     {
         return new(errors);
     }
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> WithErrors(Error[] errors)
+    public static ErrorOr<TValue> WithError(Error[] errors)
     {
         return new(errors);
     }

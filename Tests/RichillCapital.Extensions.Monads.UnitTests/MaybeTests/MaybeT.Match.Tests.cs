@@ -13,19 +13,19 @@ public sealed class MaybeTMatchTests : MonadTests
         // Arrange & Act
         var resultValue = TestValue
             .ToMaybe()
-            .Match(OnValue, OnNull);
+            .Match(OnHasValue, OnIsNull);
 
         // Assert
         resultValue.Should().Be(TestValue * 2);
     }
 
     [Fact]
-    public void Match_When_HasNoValue_Should_InvokeOnHasNoValue_And_ReturnResultValue()
+    public void Match_When_IsNull_Should_InvokeOnIsNull_And_ReturnResultValue()
     {
         // Arrange & Act
         var resultValue = Maybe<int>
             .Null
-            .Match(OnValue, OnNull);
+            .Match(OnHasValue, OnIsNull);
 
         // Assert
         resultValue.Should().Be(0);

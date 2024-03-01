@@ -28,22 +28,22 @@ public sealed class ErrorOrTFactoryTests : MonadTests
     }
 
     [Fact]
-    public void WithErrors_When_GivenErrorsArray_Should_CreateErrorOrWithErrors()
+    public void WithError_When_GivenErrorsArray_Should_CreateErrorOrWithErrors()
     {
         // Arrange & Act
         var errorOr = ErrorOr<int>
-            .WithErrors(TestErrors.ToArray());
+            .WithError(TestErrors.ToArray());
 
         // Assert
         errorOr.ShouldBeErrors(TestErrors);
     }
 
     [Fact]
-    public void WithErrors_When_GivenErrorsList_Should_CreateErrorOrWithErrors()
+    public void WithError_When_GivenErrorsList_Should_CreateErrorOrWithErrors()
     {
         // Arrange & Act
         var errorOr = ErrorOr<int>
-            .WithErrors(TestErrors.ToList());
+            .WithError(TestErrors.ToList());
 
         // Assert
         errorOr.ShouldBeErrors(TestErrors);

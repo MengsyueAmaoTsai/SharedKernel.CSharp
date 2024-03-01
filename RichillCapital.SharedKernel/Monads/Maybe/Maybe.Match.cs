@@ -4,8 +4,8 @@ public readonly partial record struct Maybe<TValue>
 {
     public TResult Match<TResult>(
         Func<TValue, TResult> onHasValue,
-        Func<TResult> onNull) =>
+        Func<TResult> onIsNull) =>
         IsNull ?
-            onNull() :
+            onIsNull() :
             onHasValue(Value);
 }
