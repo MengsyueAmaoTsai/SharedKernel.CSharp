@@ -16,4 +16,6 @@ public abstract class MonadTests
         Error.Invalid("Error 4"),
         Error.NotFound("Error 5"),
     ];
+
+    protected static async Task<int> GetTestValueAsync() => await Task.FromResult(TestValue);
 }
