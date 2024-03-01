@@ -5,4 +5,26 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 
 public sealed class MaybeTThenTests : MonadTests
 {
+    [Fact]
+    public void Then_When_IsNull_Should_NotInvokeFactory_And_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = Maybe<int>.Null
+            .Then(MapValueToResult);
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Then_When_IsValue_Should_InvokeFactory_And_ReturnMaybeWithValue()
+    {
+        // Arrange & Act
+        var maybe = TestValue
+            .ToMaybe()
+            .Then(MapValueToResult);
+
+        // Assert
+        maybe.ShouldBeHas(MapValueToResult(TestValue));
+    }
 }

@@ -17,6 +17,8 @@ public abstract class MonadTests
         Error.NotFound("Error 5"),
     ];
 
+    protected static string MapValueToResult(int value) => (value * 2).ToString();
+
     protected static async Task<int> GetTestValueAsync() => await Task.FromResult(TestValue);
     protected static async ValueTask<int> GetTestValueValueTaskAsync() => await new ValueTask<int>(TestValue);
 
