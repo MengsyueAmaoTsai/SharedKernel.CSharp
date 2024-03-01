@@ -16,18 +16,40 @@ public sealed class ErrorOrTMatchTests : MonadTests
             .Match(OnError, OnIsValue);
 
         // Assert
-        result.Should().Be(TestValue * 2);
+        result.Should().Be(OnIsValue(TestValue));
     }
 
     [Fact]
     public void Match_When_HasError_Should_InvokeOnHasErrorWithErrors_And_ReturnResultValue()
     {
         // Arrange & Act
-        var result = TestError
+        var result = TestErrors
             .ToErrorOr<int>()
             .Match(OnError, OnIsValue);
 
         // Assert
-        result.Should().Be(1);
+        result.Should().Be(OnError(TestErrors));
+    }
+
+    [Fact]
+    public async Task MatchAsync_When_ErrorOrTaskIsValue_Should_InvokeOnIsValueWithValue_And_ReturnResultValue()
+    {
+        // Arrange & Act
+        var result = await ErrorOrTaskWithValue()
+            .Match(OnError, OnIsValue);
+
+        // Assert
+        result.Should().Be(OnIsValue(TestValue));
+    }
+
+    [Fact]
+    public async Task MatchAsync_When_ErrorOrTaskHasError_Should_InvokeOnHasErrorWithErrors_And_ReturnResultValue()
+    {
+        // Arrange & Act
+        var result = await ErrorOrTaskWithErrors()
+            .Match(OnError, OnIsValue);
+
+        // Assert
+        result.Should().Be(OnError(TestErrors));
     }
 }

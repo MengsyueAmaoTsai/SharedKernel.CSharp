@@ -16,7 +16,7 @@ public sealed class MaybeTMatchTests : MonadTests
             .Match(OnHasValue, OnIsNull);
 
         // Assert
-        resultValue.Should().Be(TestValue * 2);
+        resultValue.Should().Be(OnHasValue(TestValue));
     }
 
     [Fact]
@@ -28,6 +28,28 @@ public sealed class MaybeTMatchTests : MonadTests
             .Match(OnHasValue, OnIsNull);
 
         // Assert
-        resultValue.Should().Be(0);
+        resultValue.Should().Be(OnIsNull());
+    }
+
+    [Fact]
+    public async Task MatchAsync_When_HasValue_Should_InvokeOnHasValueWithValue_And_ReturnResultValue()
+    {
+        // Arrange & Act
+        var resultValue = await MaybeTaskWithValue()
+            .Match(OnHasValue, OnIsNull);
+
+        // Assert
+        resultValue.Should().Be(OnHasValue(TestValue));
+    }
+
+    [Fact]
+    public async Task MatchAsync_When_IsNull_Should_InvokeOnIsNull_And_ReturnResultValue()
+    {
+        // Arrange & Act
+        var resultValue = await MaybeTaskWithNull()
+            .Match(OnHasValue, OnIsNull);
+
+        // Assert
+        resultValue.Should().Be(OnIsNull());
     }
 }

@@ -28,4 +28,26 @@ public sealed class ResultTMatchTests : MonadTests
         // Assert
         result.Should().Be(OnFailure(TestError));
     }
+
+    [Fact]
+    public async Task MatchAsync_WhenIsSuccess_Should_Invoke_OnSuccessWithValue_And_ReturnResultValue()
+    {
+        // Arrange & Act
+        var result = await ResultTaskWithValue()
+            .Match(OnSuccess, OnFailure);
+
+        // Assert
+        result.Should().Be(OnSuccess(TestValue));
+    }
+
+    [Fact]
+    public async Task MatchAsync_WhenIsFailure_Should_Invoke_OnFailureWithError_And_ReturnResultValue()
+    {
+        // Arrange & Act
+        var result = await ResultTaskWithError()
+            .Match(OnSuccess, OnFailure);
+
+        // Assert
+        result.Should().Be(OnFailure(TestError));
+    }
 }
