@@ -8,85 +8,58 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class MaybeTTests : MonadTests
 {
     [Fact]
-    public void HasValue_When_HasValue_Should_ReturnTrue()
+    public void Equals_When_GivenTwoNullMaybesWithDifferenceTypes_Should_ReturnFalse()
     {
         // Arrange
-        var maybe = Maybe<int>.Have(1);
-
-        // Act & Assert
-        maybe.HasValue.Should().BeTrue();
-    }
-
-    [Fact]
-    public void HasValue_When_IsNull_Should_ReturnFalse()
-    {
-        // Arrange
-        var maybe = Maybe<int>.Null;
-
-        // Act & Assert
-        maybe.HasValue.Should().BeFalse();
-    }
-
-    [Fact]
-    public void IsNull_When_HasValue_Should_ReturnFalse()
-    {
-        // Arrange
-        var maybe = Maybe<int>.Have(1);
-
-        // Act & Assert
-        maybe.IsNull.Should().BeFalse();
-    }
-
-    [Fact]
-    public void IsNull_When_IsNull_Should_ReturnTrue()
-    {
-        // Arrange
-        var maybe = Maybe<int>.Null;
-
-        // Act & Assert
-        maybe.IsNull.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Value_When_HasValue_Should_ReturnValue()
-    {
-        // Arrange
-        var maybe = Maybe<int>.Have(1);
-
-        // Act & Assert
-        maybe.Value.Should().Be(1);
-    }
-
-    [Fact]
-    public void Value_When_IsNull_Should_ThrowInvalidOperationException()
-    {
-        // Arrange
-        var maybe = Maybe<int>.Null;
+        var maybe1 = Maybe<int>.Null;
+        var maybe2 = Maybe<string>.Null;
 
         // Act
-        Action act = () => _ = maybe.Value;
+        var result = maybe1.Equals(maybe2);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>();
+        result.Should().BeFalse();
     }
 
     [Fact]
-    public void ValueOrDefault_When_HasValue_Should_ReturnValue()
+    public void Equals_When_GivenTwoNullMaybesWithSameTypes_Should_ReturnTrue()
     {
         // Arrange
-        var maybe = Maybe<int>.Have(1);
+        var maybe1 = Maybe<int>.Null;
+        var maybe2 = Maybe<int>.Null;
 
-        // Act & Assert
-        maybe.ValueOrDefault.Should().Be(1);
+        // Act
+        var result = maybe1.Equals(maybe2);
+
+        // Assert
+        result.Should().BeTrue();
     }
 
     [Fact]
-    public void ValueOrDefault_When_IsNull_Should_ReturnDefault()
+    public void Equals_When_GivenTwoMaybesWithSameValues_Should_ReturnTrue()
     {
         // Arrange
-        var maybe = Maybe<int>.Null;
+        var maybe1 = Maybe<int>.With(TestValue);
+        var maybe2 = Maybe<int>.With(TestValue);
 
-        // Act & Assert
-        maybe.ValueOrDefault.Should().Be(default);
+        // Act
+        var result = maybe1.Equals(maybe2);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Equals_When_GivenTwoMaybesWithDifferentValues_Should_ReturnFalse()
+    {
+        // Arrange
+        var maybe1 = Maybe<int>.With(TestValue);
+        var maybe2 = Maybe<int>.With(TestValue + 1);
+
+        // Act
+        var result = maybe1.Equals(maybe2);
+
+        // Assert
+        result.Should().BeFalse();
     }
 }
