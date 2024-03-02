@@ -58,4 +58,39 @@ public sealed class MaybeTEnsureTests : MonadTests
         // Assert
         maybe.ShouldBeHas(TestValue);
     }
+
+    [Fact]
+    public async Task EnsureAsync_When_IsNull_Should_NotInvokeEnsureTask_And_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = await Maybe<int>.Null
+            .Ensure(EnsureTrueAsync);
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task EnsureAsync_When_HasValue_And_EnsureFalse_Should_InvokeEnsureTask_And_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = await TestValue
+            .ToMaybe()
+            .Ensure(EnsureFalseAsync);
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task EnsureAsync_When_HasValue_And_EnsureTrue_Should_InvokeEnsureTask_And_ReturnValue()
+    {
+        // Arrange & Act
+        var maybe = await TestValue
+            .ToMaybe()
+            .Ensure(EnsureTrueAsync);
+
+        // Assert
+        maybe.ShouldBeHas(TestValue);
+    }
 }

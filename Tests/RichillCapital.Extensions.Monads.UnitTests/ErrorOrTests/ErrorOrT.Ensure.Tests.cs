@@ -59,4 +59,40 @@ public sealed class ErrorOrTEnsureTests : MonadTests
         // Assert
         errorOr.ShouldBeValue(TestValue);
     }
+
+    [Fact]
+    public async Task EnsureAsync_When_HasError_Should_NotInvokeEnsureTask_And_ReturnErrorOrWithError()
+    {
+        // Arrange & Act
+        var errorOr = await TestErrors
+            .ToErrorOr<int>()
+            .Ensure(EnsureTrueAsync, ErrorFactoryWithValue);
+
+        // Assert
+        errorOr.ShouldBeErrors(TestErrors);
+    }
+
+    [Fact]
+    public async Task EnsureAsync_When_IsValue_And_EnsureTaskFalse_Should_InvokeEnsureTask_And_ReturnErrorOrWithGivenError()
+    {
+        // Arrange & Act
+        var errorOr = await TestValue
+            .ToErrorOr()
+            .Ensure(EnsureFalseAsync, ErrorFactoryWithValue);
+
+        // Assert
+        errorOr.ShouldBeError(ErrorFactoryWithValue(TestValue));
+    }
+
+    [Fact]
+    public async Task EnsureAsync_When_IsValue_And_EnsureTaskTrue_Should_InvokeEnsureTask_And_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = await TestValue
+            .ToErrorOr()
+            .Ensure(EnsureTrueAsync, ErrorFactoryWithValue);
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue);
+    }
 }

@@ -28,4 +28,14 @@ public static partial class ErrorOrExtensions
         errorOr.HasError ?
             errorOr.Errors.ToErrorOr<TValue>() :
             ErrorOr<TValue>.Ensure(errorOr.Value, ensure, error);
+
+    public static async Task<ErrorOr<TValue>> Ensure<TValue>(
+        this ErrorOr<TValue> errorOr,
+        Func<TValue, Task<bool>> ensureTask,
+        Func<TValue, Error> errorFactory) =>
+        errorOr.HasError ?
+            errorOr.Errors.ToErrorOr<TValue>() :
+            !await ensureTask(errorOr.Value) ?
+                errorFactory(errorOr.Value).ToErrorOr<TValue>() :
+                errorOr.Value.ToErrorOr();
 }

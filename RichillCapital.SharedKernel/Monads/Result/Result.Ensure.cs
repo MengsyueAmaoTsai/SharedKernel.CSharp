@@ -32,4 +32,14 @@ public static partial class ResultExtensions
         result.IsFailure ?
             result.Error.ToResult<TValue>() :
             Result<TValue>.Ensure(result.Value, ensure, error);
+
+    public static async Task<Result<TValue>> Ensure<TValue>(
+        this Result<TValue> result,
+        Func<TValue, Task<bool>> ensureTask,
+        Func<TValue, Error> errorFactory) =>
+        result.IsFailure ?
+            result.Error.ToResult<TValue>() :
+            !await ensureTask(result.Value) ?
+                errorFactory(result.Value).ToResult<TValue>() :
+                result.Value.ToResult();
 }

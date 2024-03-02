@@ -78,7 +78,8 @@ public abstract class MonadTests
 
     protected static readonly Func<int, bool> EnsureTrue = new(value => value == 5);
     protected static readonly Func<int, bool> EnsureFalse = new(value => value > 10);
-
+    protected static async Task<bool> EnsureTrueAsync(int value) => await Task.FromResult(value == 5);
+    protected static async Task<bool> EnsureFalseAsync(int value) => await Task.FromResult(value == 3);
 
 
     protected static async Task<int> GetTestValueAsync() => await Task.FromResult(TestValue);
