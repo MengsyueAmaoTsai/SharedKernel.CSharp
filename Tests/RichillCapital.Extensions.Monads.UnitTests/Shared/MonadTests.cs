@@ -40,6 +40,24 @@ public abstract class MonadTests
     protected static int ValueFactory() => TestValue * 2;
     protected static int ValueFactoryWithValue(int value) => value * 2;
 
+    protected static ErrorOr<string> ErrorOrFactoryWithValue(int value) =>
+        value.ToString().ToErrorOr();
+
+    protected static async Task<ErrorOr<string>> ErrorOrFactoryWithValueTask(int value) =>
+        await Task.FromResult(value.ToString().ToErrorOr());
+
+    protected static Result<string> ResultFactoryWithValue(int value) =>
+        value.ToString().ToResult();
+
+    protected static async Task<Result<string>> ResultFactoryWithValueTask(int value) =>
+        await Task.FromResult(value.ToString().ToResult());
+
+    protected static Maybe<string> MaybeFactoryWithValue(int value) =>
+        value.ToString().ToMaybe();
+
+    protected static async Task<Maybe<string>> MaybeFactoryWithValueTask(int value) =>
+        await Task.FromResult(value.ToString().ToMaybe());
+
     protected static readonly Func<int, bool> EnsureTrue = new(value => value == 5);
     protected static readonly Func<int, bool> EnsureFalse = new(value => value > 10);
 

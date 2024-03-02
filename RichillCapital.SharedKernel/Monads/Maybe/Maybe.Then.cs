@@ -45,6 +45,27 @@ public readonly partial record struct Maybe<TValue>
 
         return factoryWithValue(Value).ToMaybe();
     }
+
+    // Untested
+    public Maybe<TResult> Then<TResult>(Func<TValue, Maybe<TResult>> maybeFactoryWithValue)
+    {
+        if (IsNull)
+        {
+            return Maybe<TResult>.Null;
+        }
+
+        return maybeFactoryWithValue(Value);
+    }
+
+    public async Task<Maybe<TResult>> Then<TResult>(Func<TValue, Task<Maybe<TResult>>> maybeFactoryWithValueTask)
+    {
+        if (IsNull)
+        {
+            return Maybe<TResult>.Null;
+        }
+
+        return await maybeFactoryWithValueTask(Value);
+    }
 }
 
 public static partial class MaybeExtensions

@@ -45,6 +45,28 @@ public readonly partial record struct Result<TValue>
 
         return factoryWithValue(Value).ToResult();
     }
+
+    // Untested
+    public Result<TResult> Then<TResult>(Func<TValue, Result<TResult>> resultFactoryWithValue)
+    {
+        if (IsFailure)
+        {
+            return Error
+                .ToResult<TResult>();
+        }
+
+        return resultFactoryWithValue(Value);
+    }
+
+    public async Task<Result<TResult>> Then<TResult>(Func<TValue, Task<Result<TResult>>> resultFactoryWithValueTask)
+    {
+        if (IsFailure)
+        {
+            return Error.ToResult<TResult>();
+        }
+
+        return await resultFactoryWithValueTask(Value);
+    }
 }
 
 public readonly partial record struct Result

@@ -49,6 +49,28 @@ public readonly partial record struct ErrorOr<TValue>
 
         return factoryWithValue(Value).ToErrorOr();
     }
+
+    // Untested
+    public ErrorOr<TResult> Then<TResult>(Func<TValue, ErrorOr<TResult>> errorOrFactoryWithValue)
+    {
+        if (HasError)
+        {
+            return Errors
+                .ToErrorOr<TResult>();
+        }
+
+        return errorOrFactoryWithValue(Value);
+    }
+
+    public async Task<ErrorOr<TResult>> Then<TResult>(Func<TValue, Task<ErrorOr<TResult>>> errorOrFactoryWithValueTask)
+    {
+        if (HasError)
+        {
+            return Errors.ToErrorOr<TResult>();
+        }
+
+        return await errorOrFactoryWithValueTask(Value);
+    }
 }
 
 public static partial class ErrorOrExtensions
