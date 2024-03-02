@@ -27,7 +27,7 @@ public sealed class MaybeExtensionsConvertersTests : MonadTests
     }
 
     [Fact]
-    public async ValueTask ToMaybeAsync_When_FromValueTask_Should_ConvertToMaybeWithValue()
+    public async Task ToMaybeAsync_When_FromValueTask_Should_ConvertToMaybeWithValue()
     {
         // Arrange & Act
         var maybe = await GetTestValueValueTaskAsync().ToMaybe();
