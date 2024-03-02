@@ -5,6 +5,26 @@ namespace RichillCapital.SharedKernel.Monads.UnitTests;
 public sealed class ResulTEnsureTests : MonadTests
 {
     [Fact]
+    public void EnsureFactory_When_EnsureTrue_Should_ReturnSuccessResultWithValue()
+    {
+        // Arrange & Act
+        var result = Result<int>.Ensure(TestValue, EnsureTrue, TestError);
+
+        // Assert
+        result.ShouldBeSuccessWith(TestValue);
+    }
+
+    [Fact]
+    public void EnsureFactory_When_EnsureFalse_Should_ReturnFailureResultWithError()
+    {
+        // Arrange & Act
+        var result = Result<int>.Ensure(TestValue, EnsureFalse, TestError);
+
+        // Assert
+        result.ShouldBeFailureWith(TestError);
+    }
+
+    [Fact]
     public void Ensure_When_IsFailure_Should_NotInvokeEnsure_And_ReturnFailureResultWithError()
     {
         // Arrange & Act

@@ -5,6 +5,26 @@ namespace RichillCapital.SharedKernel.Monads.UnitTests;
 public sealed class MaybeTEnsureTests : MonadTests
 {
     [Fact]
+    public void EnsureFactory_When_HasValue_Should_ReturnMaybeWithValue()
+    {
+        // Arrange & Act
+        var maybe = Maybe<int>.Ensure(TestValue, EnsureTrue);
+
+        // Assert
+        maybe.ShouldBeHas(TestValue);
+    }
+
+    [Fact]
+    public void EnsureFactory_When_EnsureFalse_Should_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = Maybe<int>.Ensure(TestValue, EnsureFalse);
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
     public void Ensure_When_IsNull_Should_NotInvokeEnsure_And_ReturnNull()
     {
         // Arrange & Act

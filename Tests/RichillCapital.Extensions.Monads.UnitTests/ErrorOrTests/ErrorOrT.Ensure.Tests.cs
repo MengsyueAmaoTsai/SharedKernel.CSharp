@@ -5,6 +5,26 @@ namespace RichillCapital.SharedKernel.Monads.UnitTests;
 public sealed class ErrorOrTEnsureTests : MonadTests
 {
     [Fact]
+    public void EnsureFactory_When_EnsureTrue_Should_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = ErrorOr<int>.Ensure(TestValue, EnsureTrue, TestError);
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue);
+    }
+
+    [Fact]
+    public void EnsureFactory_When_EnsureFalse_Should_ReturnErrorOrWithError()
+    {
+        // Arrange & Act
+        var errorOr = ErrorOr<int>.Ensure(TestValue, EnsureFalse, TestError);
+
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
+
+    [Fact]
     public void Ensure_When_HasError_Should_NotInvokeEnsure_And_ReturnErrorOrWithError()
     {
         // Arrange & Act
