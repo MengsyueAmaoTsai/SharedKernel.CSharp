@@ -1,156 +1,146 @@
 using FluentAssertions;
 
+using RichillCapital.Extensions.Monads.UnitTests.Shared;
 using RichillCapital.SharedKernel;
 using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.Extensions.Monads.UnitTests;
 
-public sealed class ResultTTests
+public sealed class ResultTTests : MonadTests
 {
     [Fact]
-    public void IsSuccess_When_IsSuccess_Should_ReturnTrue()
+    public void Equals_When_SuccessResultsWithDifferentValues_Should_ReturnFalse()
     {
         // Arrange
-        Result<int> intResult = Result<int>.Success(1);
+        Result<int> result1 = TestValue.ToResult();
+        Result<int> result2 = 1.ToResult();
 
-        // Act & Assert
-        intResult.IsSuccess.Should().BeTrue();
+        // Act
+        var result = result1.Equals(result2);
+
+        // Assert
+        result.Should().BeFalse();
     }
 
     [Fact]
-    public void IsSuccess_When_IsFailure_Should_ReturnFalse()
+    public void Equals_When_SuccessResultWithSameValue_Should_ReturnTrue()
     {
         // Arrange
-        Result<int> intResult = Result<int>.Failure(Error.Invalid("Invalid"));
+        Result<int> result1 = TestValue.ToResult();
+        Result<int> result2 = TestValue.ToResult();
 
-        // Act & Assert
-        intResult.IsSuccess.Should().BeFalse();
+        // Act
+        var result = result1.Equals(result2);
+
+        // Assert
+        result.Should().BeTrue();
     }
 
     [Fact]
-    public void IsFailure_When_IsFailure_Should_ReturnTrue()
+    public void Equals_When_FailureResultsWithSameError_And_DifferentTypes_Should_ReturnFalse()
     {
         // Arrange
-        Result<int> intResult = Result<int>.Failure(Error.Invalid("Invalid"));
+        Result<int> result1 = TestError.ToResult<int>();
+        Result<string> result2 = TestError.ToResult<string>();
 
-        // Act & Assert
-        intResult.IsFailure.Should().BeTrue();
+        // Act
+        var result = result1.Equals(result2);
+
+        // Assert
+        result.Should().BeFalse();
     }
 
     [Fact]
-    public void IsFailure_When_IsSuccess_Should_ReturnFalse()
+    public void Equals_When_FailureResultsWithDifferentErrors_Should_ReturnFalse()
     {
         // Arrange
-        Result<int> intResult = Result<int>.Success(1);
+        Result<int> result1 = TestError.ToResult<int>();
+        Result<int> result2 = Error.Invalid("other").ToResult<int>();
 
-        // Act & Assert
-        intResult.IsFailure.Should().BeFalse();
+        // Act
+        var result = result1.Equals(result2);
+
+        // Assert
+        result.Should().BeFalse();
     }
 
     [Fact]
-    public void Error_When_IsSuccess_Should_ReturnNullError()
+    public void Equals_When_FailureResultsWithSameError_Should_ReturnTrue()
     {
         // Arrange
-        Result<int> intResult = Result<int>.Success(1);
+        Result<int> result1 = TestError.ToResult<int>();
+        Result<int> result2 = TestError.ToResult<int>();
 
-        // Act & Assert
-        intResult.Error.Should().Be(Error.Null);
+        // Act
+        var result = result1.Equals(result2);
+
+        // Assert
+        result.Should().BeTrue();
     }
 
     [Fact]
     public void Error_When_IsFailure_Should_ReturnError()
     {
         // Arrange
-        Error error = Error.Invalid("Invalid");
-        Result<int> intResult = Result<int>.Failure(error);
+        var result = TestError.ToResult<int>();
 
-        // Act & Assert
-        intResult.Error.Should().Be(error);
+        // Assert
+        result.Error.Should().Be(TestError);
     }
 
     [Fact]
-    public void Value_When_IsSuccess_Should_ReturnValue()
+    public void Error_When_IsSuccess_Should_ReturnNullError()
     {
         // Arrange
-        Result<int> intResult = Result<int>.Success(1);
+        var result = TestValue.ToResult();
 
-        // Act & Assert
-        intResult.Value.Should().Be(1);
+        // Assert
+        result.Error.Should().Be(Error.Null);
     }
 
     [Fact]
     public void Value_When_IsFailure_Should_ThrowInvalidOperationException()
     {
         // Arrange
-        Result<int> intResult = Result<int>.Failure(Error.Invalid("Invalid"));
+        var result = TestError.ToResult<int>();
 
-        // Act & Assert
-        Action act = () => intResult.Value.Should().Be(1);
-        act.Should().Throw<InvalidOperationException>().WithMessage("Cannot access the value of a failed result.");
+        // Act
+        var action = () => _ = result.Value;
+
+        // Assert
+        action.Should().Throw<InvalidOperationException>()
+            .WithMessage("Cannot access the value of a failed result.");
+    }
+
+    [Fact]
+    public void Value_When_IsSuccess_Should_ReturnValue()
+    {
+        // Arrange
+        var result = TestValue.ToResult();
+
+        // Assert
+        result.Value.Should().Be(TestValue);
     }
 
     [Fact]
     public void ValueOrDefault_When_IsSuccess_Should_ReturnValue()
     {
         // Arrange
-        Result<int> intResult = Result<int>.Success(1);
+        var result = TestValue.ToResult();
 
-        // Act & Assert
-        intResult.ValueOrDefault.Should().Be(1);
+        // Assert
+        result.ValueOrDefault.Should().Be(TestValue);
     }
 
     [Fact]
-    public void ValueOrDefault_When_IsFailure_Should_ReturnDefault()
+    public void ValueOrDefault_When_IsFailure_Should_ReturnDefaultValue()
     {
         // Arrange
-        Result<int> intResult = Result<int>.Failure(Error.Invalid("Invalid"));
+        var result = TestError.ToResult<int>();
+        var result2 = TestError.ToResult<string>();
 
-        // Act & Assert
-        intResult.ValueOrDefault.Should().Be(default);
-    }
-
-    [Fact]
-    public void Equals_When_IsFailureAndSameError_Should_ReturnTrue()
-    {
-        // Arrange
-        Error error = Error.Invalid("Invalid");
-        Result<int> intResult1 = Result<int>.Failure(error);
-        Result<int> intResult2 = Result<int>.Failure(error);
-
-        // Act & Assert
-        intResult1.Equals(intResult2).Should().BeTrue();
-    }
-
-    [Fact]
-    public void Equals_When_IsFailureAndDifferentError_Should_ReturnFalse()
-    {
-        // Arrange
-        Result<int> intResult1 = Result<int>.Failure(Error.Invalid("Invalid"));
-        Result<int> intResult2 = Result<int>.Failure(Error.Invalid("Invalid2"));
-
-        // Act & Assert
-        intResult1.Equals(intResult2).Should().BeFalse();
-    }
-
-    [Fact]
-    public void Equals_When_IsSuccessAndSameValue_Should_ReturnTrue()
-    {
-        // Arrange
-        Result<int> intResult1 = Result<int>.Success(1);
-        Result<int> intResult2 = Result<int>.Success(1);
-
-        // Act & Assert
-        intResult1.Equals(intResult2).Should().BeTrue();
-    }
-
-    [Fact]
-    public void Equals_When_IsSuccessAndDifferentValue_Should_ReturnFalse()
-    {
-        // Arrange
-        Result<int> intResult1 = Result<int>.Success(1);
-        Result<int> intResult2 = Result<int>.Success(2);
-
-        // Act & Assert
-        intResult1.Equals(intResult2).Should().BeFalse();
+        // Assert
+        result.ValueOrDefault.Should().Be(0);
+        result2.ValueOrDefault.Should().Be(null);
     }
 }

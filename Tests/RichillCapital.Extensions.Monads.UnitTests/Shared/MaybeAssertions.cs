@@ -6,7 +6,7 @@ namespace RichillCapital.Extensions.Monads.UnitTests.Shared;
 
 public static class MaybeAssertionExtensions
 {
-    public static void ShouldBeHasValueWith<TValue>(
+    public static void ShouldBeHas<TValue>(
         this Maybe<TValue> maybe,
         TValue expectedValue)
     {

@@ -7,23 +7,18 @@ public readonly partial record struct Result<TValue>
         if (results.Any(result => result.IsFailure))
         {
             return results
-                .First(result => result.IsFailure).Error
+                .Where(result => result.IsFailure)
+                .Select(result => result.Error)
+                .ToArray()
+                .Distinct()
+                .First()
                 .ToResult<TValue>();
         }
 
-        return results.Last();
+        return results.Last().Value.ToResult();
     }
+}
 
-    public static Result<TValue> Combine(params ErrorOr<TValue>[] errorOrs)
-    {
-        if (errorOrs.Any(errorOr => errorOr.HasError))
-        {
-            return errorOrs
-                .First(errorOr => errorOr.HasError)
-                .Errors.First()
-                .ToResult<TValue>();
-        }
-
-        return errorOrs.Last().Value.ToResult();
-    }
+public readonly partial record struct Result
+{
 }

@@ -7,17 +7,29 @@ public readonly partial record struct ErrorOr<TValue>
 {
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> Is(TValue value) => new(value);
+    public static ErrorOr<TValue> With(TValue value)
+    {
+        return new(value);
+    }
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> Is(Error error) => new(error);
+    public static ErrorOr<TValue> WithError(Error error)
+    {
+        return new(error);
+    }
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> Is(List<Error> errors) => new(errors);
+    public static ErrorOr<TValue> WithError(List<Error> errors)
+    {
+        return new(errors);
+    }
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ErrorOr<TValue> Is(Error[] errors) => new(errors);
+    public static ErrorOr<TValue> WithError(Error[] errors)
+    {
+        return new(errors);
+    }
 }

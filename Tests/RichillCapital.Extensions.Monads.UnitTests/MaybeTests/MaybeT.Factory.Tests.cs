@@ -6,22 +6,28 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class MaybeTFactoryTests : MonadTests
 {
     [Fact]
-    public void Have_When_GivenValue_Should_CreateMaybeWithValue()
+    public void With_When_GivenValue_Should_CreateMaybeWithGivenValue()
     {
         // Arrange & Act
-        var maybe = Maybe<int>.Have(Value);
+        var maybe = Maybe<int>.With(TestValue);
 
-        // Assert
-        maybe.ShouldBeHasValueWith(Value);
+        // Assert   
+        maybe.ShouldBeHas(TestValue);
     }
 
     [Fact]
-    public void Null_Should_CreateMaybeWithNoValue()
+    public void With_When_GivenDefault_Should_CreateMaybeWithDefaultValue()
     {
         // Arrange & Act
-        var maybe = Maybe<int>.Null;
+        var maybeInt = Maybe<int>.With(default);
+        var maybeString = Maybe<string>.With(default!);
+        var maybeObject = Maybe<object>.With(default!);
 
-        // Assert
-        maybe.ShouldBeNull();
+        var defaultInt = 0;
+
+        // Assert   
+        maybeInt.ShouldBeHas(defaultInt);
+        maybeString.ShouldBeNull();
+        maybeObject.ShouldBeNull();
     }
 }

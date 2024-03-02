@@ -67,7 +67,7 @@ public abstract class Enumeration<TEnum, TValue>
             : (ignoreCase ?
                 _fromNameIgnoreCase.Value :
                 _fromName.Value).TryGetValue(name, out var enumeration) ?
-            Maybe<TEnum>.Have(enumeration) :
+            Maybe<TEnum>.With(enumeration) :
             Maybe<TEnum>.Null;
 
     [Pure]
@@ -76,7 +76,7 @@ public abstract class Enumeration<TEnum, TValue>
         value is null ?
             Maybe<TEnum>.Null :
             _fromValue.Value.TryGetValue(value, out var enumeration) ?
-                Maybe<TEnum>.Have(enumeration) :
+                Maybe<TEnum>.With(enumeration) :
                 Maybe<TEnum>.Null;
 
     public override string ToString() => Name;

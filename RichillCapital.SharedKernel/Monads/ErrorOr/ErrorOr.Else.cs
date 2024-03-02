@@ -2,13 +2,13 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct ErrorOr<TValue>
 {
-    public ErrorOr<TValue> Else(TValue valueOnError)
+    public ErrorOr<TValue> Else(TValue elseValue)
     {
         if (HasError)
         {
-            return valueOnError.ToErrorOr();
+            return elseValue.ToErrorOr();
         }
 
-        return _value.ToErrorOr();
+        return Value.ToErrorOr();
     }
 }

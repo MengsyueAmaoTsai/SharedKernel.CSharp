@@ -1,7 +1,12 @@
+using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
+
 namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Result<TValue>
 {
-    public Result<TValue> Merge(params Result<TValue>[] results) =>
-        Combine([this, .. results]);
+}
+
+public readonly partial record struct Result
+{
 }

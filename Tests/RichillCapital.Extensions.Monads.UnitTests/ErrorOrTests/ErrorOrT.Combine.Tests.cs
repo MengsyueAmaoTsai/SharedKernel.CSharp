@@ -1,59 +1,39 @@
-using RichillCapital.Extensions.Monads.UnitTests.Shared;
-using RichillCapital.SharedKernel.Monads;
+using FluentAssertions;
 
-namespace RichillCapital.Extensions.Monads.UnitTests;
+using RichillCapital.Extensions.Monads.UnitTests.Shared;
+
+namespace RichillCapital.SharedKernel.Monads.UnitTests;
 
 public sealed class ErrorOrTCombineTests : MonadTests
 {
     [Fact]
-    public void CombineFactory_When_AllErrorOrsAreValue_Should_ReturnLastErrorOrWithValue()
+    public void Combine_When_AllErrorOrsAreValue_Should_ReturnLastErrorOr()
     {
-        // Arrange & Act
-        var errorOr = ErrorOr<int>.Combine(
-            1.ToErrorOr(),
-            2.ToErrorOr(),
-            3.ToErrorOr());
+        // Arrange
+        var errorOr1 = 1.ToErrorOr();
+        var errorOr2 = 2.ToErrorOr();
+        var errorOr3 = 3.ToErrorOr();
+
+        // Act
+        var combinedErrorOr = ErrorOr<int>.Combine(errorOr1, errorOr2, errorOr3);
 
         // Assert
-        errorOr.ShouldBeValue(3);
+        combinedErrorOr.ShouldBeValue(3);
     }
 
     [Fact]
-    public void CombineFactory_When_ErrorOrsContainError_Should_ReturnFirstErrorOr()
+    public void Combine_When_AnyErrorOrHasError_Should_ReturnErrorOrWithDistinctErrors()
     {
-        // Arrange & Act
-        var errorOr = ErrorOr<int>.Combine(
-            1.ToErrorOr(),
-            UnexpectedError.ToErrorOr<int>(),
-            3.ToErrorOr());
+        // Arrange
+        var errorOr1 = TestError.ToErrorOr<int>();
+        var errorOr2 = TestErrors.ToErrorOr<int>();
+        var errorOr3 = 3.ToErrorOr();
+
+        // Act
+        var combinedErrorOr = ErrorOr<int>.Combine(errorOr1, errorOr2, errorOr3);
 
         // Assert
-        errorOr.ShouldBeError(UnexpectedError);
-    }
-
-    [Fact]
-    public void CombineFactory_When_AllResultsAreSuccess_Should_ConvertLastResultToErrorOrWithValue()
-    {
-        // Arrange & Act
-        var errorOr = ErrorOr<int>.Combine(
-            1.ToResult(),
-            2.ToResult(),
-            3.ToResult());
-
-        // Assert
-        errorOr.ShouldBeValue(3);
-    }
-
-    [Fact]
-    public void CombineFactory_When_ResultsContainFailure_Should_ConvertFirstFailureToErrorOrWithError()
-    {
-        // Arrange & Act
-        var errorOr = ErrorOr<int>.Combine(
-            UnexpectedError.ToResult<int>(),
-            NotFoundError.ToResult<int>(),
-            3.ToResult());
-
-        // Assert
-        errorOr.ShouldBeErrors([UnexpectedError, NotFoundError]);
+        combinedErrorOr.ShouldBeErrors([TestError, .. TestErrors]);
+        combinedErrorOr.Errors.First().Should().Be(TestError);
     }
 }

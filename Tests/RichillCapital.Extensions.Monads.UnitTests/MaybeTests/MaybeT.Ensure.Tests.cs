@@ -1,56 +1,61 @@
 using RichillCapital.Extensions.Monads.UnitTests.Shared;
-using RichillCapital.SharedKernel.Monads;
 
-namespace RichillCapital.Extensions.Monads.UnitTests;
+namespace RichillCapital.SharedKernel.Monads.UnitTests;
 
 public sealed class MaybeTEnsureTests : MonadTests
 {
     [Fact]
-    public void EnsureFactory_When_EnsureFailure_Should_CreateMaybeNull()
+    public void EnsureFactory_When_HasValue_Should_ReturnMaybeWithValue()
     {
         // Arrange & Act
-        var maybe = Maybe<int>.Ensure(3, value => value == 4);
+        var maybe = Maybe<int>.Ensure(TestValue, EnsureTrue);
+
+        // Assert
+        maybe.ShouldBeHas(TestValue);
+    }
+
+    [Fact]
+    public void EnsureFactory_When_EnsureFalse_Should_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = Maybe<int>.Ensure(TestValue, EnsureFalse);
 
         // Assert
         maybe.ShouldBeNull();
     }
 
     [Fact]
-    public void EnsureFactory_When_EnsureSuccess_Should_CreateMaybeWithValue()
+    public void Ensure_When_IsNull_Should_NotInvokeEnsure_And_ReturnNull()
     {
         // Arrange & Act
-        var maybe = Maybe<int>.Ensure(3, value => value == 3);
-
-        // Assert
-        maybe.ShouldBeHasValueWith(3);
-    }
-
-    [Fact]
-    public void EnsureFactory_When_AnyFailure_Should_CreateMaybeNull()
-    {
-        // Arrange & Act
-        var maybe = Maybe<int>.Ensure(
-            Value,
-            value => value == 10,
-            value => value == 20,
-            value => value == 30);
+        var maybe = Maybe<int>.Null
+            .Ensure(EnsureTrue);
 
         // Assert
         maybe.ShouldBeNull();
     }
 
     [Fact]
-    public void EnsureFactory_When_NoFailure_Should_CreateMaybeWithValue()
+    public void Ensure_When_IsValue_And_EnsureFalse_Should_InvokeEnsure_And_ReturnNull()
     {
         // Arrange & Act
-        var maybe = Maybe<int>.Ensure(
-            Value,
-            value => value == 5,
-            value => value < 10,
-            value => value > 0,
-            value => value <= 5);
+        var maybe = TestValue
+            .ToMaybe()
+            .Ensure(EnsureFalse);
 
         // Assert
-        maybe.ShouldBeHasValueWith(Value);
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Ensure_When_IsValue_And_EnsureTrue_Should_InvokeEnsure_And_ReturnValue()
+    {
+        // Arrange & Act
+        var maybe = TestValue
+            .ToMaybe()
+            .Ensure(EnsureTrue);
+
+        // Assert
+        maybe.ShouldBeHas(TestValue);
     }
 }

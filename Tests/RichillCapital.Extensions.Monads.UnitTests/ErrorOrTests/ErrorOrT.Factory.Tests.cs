@@ -1,4 +1,5 @@
 using RichillCapital.Extensions.Monads.UnitTests.Shared;
+using RichillCapital.SharedKernel;
 using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.Extensions.Monads.UnitTests;
@@ -6,42 +7,45 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class ErrorOrTFactoryTests : MonadTests
 {
     [Fact]
-    public void Is_When_GivenValue_Should_CreateErrorOrWithGivenValue()
+    public void With_When_GivenValue_Should_CreateErrorOrWithValue()
     {
         // Arrange & Act
-        var errorOr = ErrorOr<int>.Is(Value);
+        var errorOr = ErrorOr<int>.With(TestValue);
 
         // Assert
-        errorOr.ShouldBeValue(Value);
+        errorOr.ShouldBeValue(TestValue);
     }
 
     [Fact]
-    public void Is_When_GivenErrorList_Should_CreateErrorOrWithGivenError()
+    public void WithError_When_GivenError_Should_CreateErrorOrWithError()
     {
         // Arrange & Act
-        var errorOr = ErrorOr<int>.Is(Errors);
+        var errorOr = ErrorOr<Error>
+            .WithError(TestError);
 
         // Assert
-        errorOr.ShouldBeErrors(Errors);
+        errorOr.ShouldBeError(TestError);
     }
 
     [Fact]
-    public void Is_When_GivenErrorArray_Should_CreateErrorOrWithGivenError()
+    public void WithError_When_GivenErrorsArray_Should_CreateErrorOrWithErrors()
     {
         // Arrange & Act
-        var errorOr = ErrorOr<int>.Is(Errors.ToArray());
+        var errorOr = ErrorOr<int>
+            .WithError(TestErrors.ToArray());
 
         // Assert
-        errorOr.ShouldBeErrors(Errors.ToArray());
+        errorOr.ShouldBeErrors(TestErrors);
     }
 
     [Fact]
-    public void Is_When_GivenError_Should_CreateErrorOrWithGivenError()
+    public void WithError_When_GivenErrorsList_Should_CreateErrorOrWithErrors()
     {
         // Arrange & Act
-        var errorOr = ErrorOr<int>.Is(UnexpectedError);
+        var errorOr = ErrorOr<int>
+            .WithError(TestErrors.ToList());
 
         // Assert
-        errorOr.ShouldBeError(UnexpectedError);
+        errorOr.ShouldBeErrors(TestErrors);
     }
 }

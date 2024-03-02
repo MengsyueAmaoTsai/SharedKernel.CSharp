@@ -8,53 +8,69 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class MaybeTTests : MonadTests
 {
     [Fact]
-    public void HasValue_When_HasValue_Should_ReturnTrue()
+    public void Equals_When_GivenTwoNullMaybesWithDifferenceTypes_Should_ReturnFalse()
     {
         // Arrange
-        var maybe = Maybe<int>.Have(1);
+        var maybe1 = Maybe<int>.Null;
+        var maybe2 = Maybe<string>.Null;
 
-        // Act & Assert
-        maybe.HasValue.Should().BeTrue();
+        // Act
+        var result = maybe1.Equals(maybe2);
+
+        // Assert
+        result.Should().BeFalse();
     }
 
     [Fact]
-    public void HasValue_When_IsNull_Should_ReturnFalse()
+    public void Equals_When_GivenTwoNullMaybesWithSameTypes_Should_ReturnTrue()
     {
         // Arrange
+        var maybe1 = Maybe<int>.Null;
+        var maybe2 = Maybe<int>.Null;
+
+        // Act
+        var result = maybe1.Equals(maybe2);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Equals_When_GivenTwoMaybesWithSameValues_Should_ReturnTrue()
+    {
+        // Arrange
+        var maybe1 = Maybe<int>.With(TestValue);
+        var maybe2 = Maybe<int>.With(TestValue);
+
+        // Act
+        var result = maybe1.Equals(maybe2);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Equals_When_GivenTwoMaybesWithDifferentValues_Should_ReturnFalse()
+    {
+        // Arrange
+        var maybe1 = Maybe<int>.With(TestValue);
+        var maybe2 = Maybe<int>.With(TestValue + 1);
+
+        // Act
+        var result = maybe1.Equals(maybe2);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Null_Should_ReturnNullMaybe()
+    {
+        // Arrange & Act
         var maybe = Maybe<int>.Null;
 
-        // Act & Assert
-        maybe.HasValue.Should().BeFalse();
-    }
-
-    [Fact]
-    public void IsNull_When_HasValue_Should_ReturnFalse()
-    {
-        // Arrange
-        var maybe = Maybe<int>.Have(1);
-
-        // Act & Assert
-        maybe.IsNull.Should().BeFalse();
-    }
-
-    [Fact]
-    public void IsNull_When_IsNull_Should_ReturnTrue()
-    {
-        // Arrange
-        var maybe = Maybe<int>.Null;
-
-        // Act & Assert
-        maybe.IsNull.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Value_When_HasValue_Should_ReturnValue()
-    {
-        // Arrange
-        var maybe = Maybe<int>.Have(1);
-
-        // Act & Assert
-        maybe.Value.Should().Be(1);
+        // Assert
+        maybe.ShouldBeNull();
     }
 
     [Fact]
@@ -64,29 +80,42 @@ public sealed class MaybeTTests : MonadTests
         var maybe = Maybe<int>.Null;
 
         // Act
-        Action act = () => _ = maybe.Value;
+        Action action = () => _ = maybe.Value;
 
         // Assert
-        act.Should().Throw<InvalidOperationException>();
+        action.Should().Throw<InvalidOperationException>()
+            .WithMessage($"Maybe<{typeof(int)}> is not value");
     }
 
     [Fact]
-    public void ValueOrDefault_When_HasValue_Should_ReturnValue()
+    public void Value_When_IsNotNull_Should_ReturnValue()
     {
         // Arrange
-        var maybe = Maybe<int>.Have(1);
+        var maybe = Maybe<int>.With(TestValue);
 
-        // Act & Assert
-        maybe.ValueOrDefault.Should().Be(1);
+        // Act
+        maybe.Value.Should().Be(TestValue);
     }
 
     [Fact]
     public void ValueOrDefault_When_IsNull_Should_ReturnDefault()
     {
         // Arrange
-        var maybe = Maybe<int>.Null;
+        var maybeInt = Maybe<int>.Null;
+        var maybeString = Maybe<string>.Null;
 
-        // Act & Assert
-        maybe.ValueOrDefault.Should().Be(default);
+        // Act
+        maybeInt.ValueOrDefault.Should().Be(0);
+        maybeString.ValueOrDefault.Should().BeNull();
+    }
+
+    [Fact]
+    public void ValueOrDefault_When_IsNotNull_Should_ReturnValue()
+    {
+        // Arrange
+        var maybe = Maybe<int>.With(TestValue);
+
+        // Act
+        maybe.ValueOrDefault.Should().Be(TestValue);
     }
 }

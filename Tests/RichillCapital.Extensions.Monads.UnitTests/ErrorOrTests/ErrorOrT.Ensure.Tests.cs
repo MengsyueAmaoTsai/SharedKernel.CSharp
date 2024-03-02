@@ -1,86 +1,62 @@
 using RichillCapital.Extensions.Monads.UnitTests.Shared;
-using RichillCapital.SharedKernel;
-using RichillCapital.SharedKernel.Monads;
 
-namespace RichillCapital.Extensions.Monads.UnitTests;
+namespace RichillCapital.SharedKernel.Monads.UnitTests;
 
 public sealed class ErrorOrTEnsureTests : MonadTests
 {
     [Fact]
-    public void EnsureFactory_When_EnsureFailure_Should_CreateErrorOrWithError()
+    public void EnsureFactory_When_EnsureTrue_Should_ReturnErrorOrWithValue()
     {
         // Arrange & Act
-        var expectedError = Error.Invalid("Wrong number");
-
-        var errorOr = ErrorOr<int>
-            .Ensure(3, value => value == 4, expectedError);
+        var errorOr = ErrorOr<int>.Ensure(TestValue, EnsureTrue, TestError);
 
         // Assert
-        errorOr.ShouldBeError(expectedError);
+        errorOr.ShouldBeValue(TestValue);
     }
 
     [Fact]
-    public void EnsureFactory_When_EnsureSuccess_Should_CreateErrorOrWithValue()
+    public void EnsureFactory_When_EnsureFalse_Should_ReturnErrorOrWithError()
     {
         // Arrange & Act
-        var errorOr = ErrorOr<int>
-            .Ensure(3, value => value == 3, Error.Invalid("Wrong number"));
+        var errorOr = ErrorOr<int>.Ensure(TestValue, EnsureFalse, TestError);
 
         // Assert
-        errorOr.ShouldBeValue(3);
+        errorOr.ShouldBeError(TestError);
     }
 
     [Fact]
-    public void EnsureFactory_When_AnyFailure_Should_CreateErrorOrWithError()
+    public void Ensure_When_HasError_Should_NotInvokeEnsure_And_ReturnErrorOrWithError()
     {
         // Arrange & Act
-        var errorOr = ErrorOr<int>.Ensure(
-            Value,
-            (value => value == 10, UnexpectedError),
-            (value => value == 20, NotFoundError),
-            (value => value == 30, NotFoundError));
+        var errorOr = TestErrors
+            .ToErrorOr<int>()
+            .Ensure(EnsureTrue, TestError);
 
         // Assert
-        errorOr.ShouldBeErrors([UnexpectedError, NotFoundError]);
+        errorOr.ShouldBeErrors(TestErrors);
     }
 
     [Fact]
-    public void EnsureFactory_When_NoFailure_Should_CreateErrorOrWithValue()
+    public void Ensure_When_IsValue_And_EnsureFalse_Should_InvokeEnsure_And_ReturnErrorOrWithGivenError()
     {
         // Arrange & Act
-        var errorOr = ErrorOr<int>.Ensure(
-            Value,
-            (value => value == 5, UnexpectedError),
-            (value => value < 10, NotFoundError),
-            (value => value > 0, NotFoundError),
-            (value => value <= 5, NotFoundError));
+        var errorOr = TestValue
+            .ToErrorOr()
+            .Ensure(EnsureFalse, TestError);
 
         // Assert
-        errorOr.ShouldBeValue(Value);
+        errorOr.ShouldBeError(TestError);
     }
 
     [Fact]
-    public void EnsureFactory_When_EnsureFailure_Should_InvokeErrorFactory_And_ReturnErrorOrWithError()
-    {
-        // Arrange
-        var expectedError = ErrorFactory(Value);
-
-        // Act
-        var result = ErrorOr<int>.
-            Ensure(Value, value => value == 3, ErrorFactory);
-
-        // Assert
-        result.ShouldBeError(expectedError);
-    }
-
-    [Fact]
-    public void EnsureFactory_When_EnsureSuccess_Should_NotInvokeErrorFactory_And_ReturnErrorOrWithValue()
+    public void Ensure_When_IsValue_And_EnsureTrue_Should_InvokeEnsure_And_ReturnErrorOrWithValue()
     {
         // Arrange & Act
-        var result = ErrorOr<int>
-            .Ensure(Value, value => value == Value, ErrorFactory);
+        var errorOr = TestValue
+            .ToErrorOr()
+            .Ensure(EnsureTrue, TestError);
 
         // Assert
-        result.ShouldBeValue(Value);
+        errorOr.ShouldBeValue(TestValue);
     }
 }

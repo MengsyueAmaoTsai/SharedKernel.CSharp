@@ -6,26 +6,24 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class MaybeTElseTests : MonadTests
 {
     [Fact]
-    public void Else_When_IsSuccess_Should_ReturnMaybeWithOriginalValue()
+    public void Else_When_IsNull_Should_ReturnElseValue()
     {
         // Arrange & Act
-        var maybe = Value
-            .ToMaybe()
-            .Else(10);
+        var maybe = Maybe<int>.Null
+            .Else(TestValue);
 
         // Assert
-        maybe.ShouldBeHasValueWith(Value);
+        maybe.ShouldBeHas(TestValue);
     }
 
     [Fact]
-    public void Else_When_IsNull_Should_ReturnMaybeWithElseValue()
+    public void Else_When_HasValue_Should_ReturnOriginal()
     {
         // Arrange & Act
-        var expectedValue = 10;
-        var maybe = Maybe<int>.Null
-            .Else(expectedValue);
+        var maybe = TestValue.ToMaybe()
+            .Else(0);
 
         // Assert
-        maybe.ShouldBeHasValueWith(expectedValue);
+        maybe.ShouldBeHas(TestValue);
     }
 }

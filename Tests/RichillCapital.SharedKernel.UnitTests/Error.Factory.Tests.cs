@@ -2,7 +2,7 @@ using FluentAssertions;
 
 namespace RichillCapital.SharedKernel.UnitTests;
 
-public sealed partial class ErrorTests
+public sealed partial class ErrorFactoryTests
 {
     [Fact]
     public void Null_Should_ReturnNullError()

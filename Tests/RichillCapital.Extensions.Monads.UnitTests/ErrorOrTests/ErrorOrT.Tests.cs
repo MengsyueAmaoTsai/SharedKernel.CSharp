@@ -7,83 +7,132 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 
 public sealed class ErrorOrTTests : MonadTests
 {
+    // [Fact]
+    // public void Equals_When_ErrorOrAreSameValues_Should_ReturnTrue()
+    // {
+    //     // Arrange
+    //     var errorOr1 = ErrorOr<int>.With(3);
+    //     var errorOr2 = ErrorOr<int>.With(3);
+
+    //     // Act
+    //     var result = errorOr1.Equals(errorOr2);
+
+    //     // Assert
+    //     result.Should().BeTrue();
+    // }
+
     [Fact]
-    public void HasError_When_HasError_Should_ReturnTrue()
+    public void Equals_When_ErrorOrHasSameErrors_Should_ReturnTrue()
     {
         // Arrange
-        var errorOr = ErrorOr<int>.Is(Errors);
+        var errorOr1 = ErrorOr<int>.WithError(TestErrors);
+        var errorOr2 = ErrorOr<int>.WithError(TestErrors);
 
-        // Act & Assert
-        errorOr.HasError.Should().BeTrue();
+        // Act
+        var result = errorOr1.Equals(errorOr2);
+
+        // Assert
+        result.Should().BeTrue();
     }
 
     [Fact]
-    public void HasError_When_IsValue_Should_ReturnFalse()
+    public void Equals_When_ErrorOrHasSameErrors_And_DifferentTypes_Should_ReturnFalse()
     {
         // Arrange
-        var errorOr = ErrorOr<int>.Is(1);
+        var errorOr1 = ErrorOr<int>.WithError(TestErrors);
+        var errorOr2 = ErrorOr<string>.WithError(TestErrors);
 
-        // Act & Assert
-        errorOr.HasError.Should().BeFalse();
+        // Act
+        var result = errorOr1.Equals(errorOr2);
+
+        // Assert
+        result.Should().BeFalse();
     }
 
     [Fact]
-    public void IsValue_When_HasError_Should_ReturnFalse()
+    public void Errors_When_IsValue_Should_Return_ErrorsWithUnexpectedError()
     {
-        // Arrange
-        var errorOr = ErrorOr<int>.Is(Errors);
+        // Arrange & Act
+        var errorOr = ErrorOr<int>.With(TestValue);
 
-        // Act & Assert
-        errorOr.IsValue.Should().BeFalse();
-    }
-
-    [Fact]
-    public void IsValue_When_IsValue_Should_ReturnTrue()
-    {
-        // Arrange
-        var errorOr = ErrorOr<int>.Is(1);
-
-        // Act & Assert
-        errorOr.IsValue.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Errors_When_HasError_Should_ReturnErrors()
-    {
-        // Arrange
-        var errorOr = ErrorOr<int>.Is(Errors);
-
-        // Act & Assert
-        errorOr.Errors.Should().BeEquivalentTo(Errors);
-    }
-
-    [Fact]
-    public void Errors_When_IsValue_Should_ReturnIsNotError()
-    {
-        // Arrange
-        var errorOr = ErrorOr<int>.Is(1);
-
-        // Act & Assert
+        // Assert
         errorOr.Errors.Should().HaveCount(1);
     }
 
     [Fact]
-    public void ErrorsOrEmpty_When_HasError_Should_ReturnErrors()
+    public void Errors_When_HasError_Should_Return_Errors()
     {
-        // Arrange
-        var errorOr = ErrorOr<int>.Is(Errors);
+        // Arrange & Act
+        var errorOr = ErrorOr<int>.WithError(TestErrors);
 
-        // Act & Assert
-        errorOr.ErrorsOrEmpty.Should().BeEquivalentTo(Errors);
+        // Assert
+        errorOr.Errors.Should().HaveCount(TestErrors.Count);
+        errorOr.Errors.Should().BeEquivalentTo(TestErrors);
     }
 
     [Fact]
-    public void ErrorsOrEmpty_When_IsValue_Should_ReturnEmpty()
+    public void ErrorsOrEmpty_When_IsValue_Should_ReturnEmptyList()
+    {
+        // Arrange & Act
+        var errorOr = ErrorOr<int>.With(TestValue);
+
+        // Assert
+        errorOr.ErrorsOrEmpty.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void ErrorsOrEmpty_When_HasError_Should_Return_Errors()
+    {
+        // Arrange & Act
+        var errorOr = ErrorOr<int>.WithError(TestErrors);
+
+        // Assert
+        errorOr.ErrorsOrEmpty.Should().HaveCount(TestErrors.Count);
+        errorOr.ErrorsOrEmpty.Should().BeEquivalentTo(TestErrors);
+    }
+
+    [Fact]
+    public void Value_When_IsValue_Should_ReturnValue()
+    {
+        // Arrange & Act
+        var errorOr = ErrorOr<int>.With(TestValue);
+
+        // Assert
+        errorOr.Value.Should().Be(TestValue);
+    }
+
+    [Fact]
+    public void Value_When_HasError_Should_ThrowException()
     {
         // Arrange
-        var errorOr = ErrorOr<int>.Is(1);
+        var errorOr = ErrorOr<int>.WithError(TestErrors);
+
+        // Act
+        Action act = () => _ = errorOr.Value;
+
+        // Assert
+        act.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
+    public void ValueOrDefault_When_IsValue_Should_ReturnValue()
+    {
+        // Arrange & Act
+        var errorOr = ErrorOr<int>.With(TestValue);
+
+        // Assert
+        errorOr.ValueOrDefault.Should().Be(TestValue);
+    }
+
+    [Fact]
+    public void ValueOrDefault_When_HasError_Should_ReturnDefaultValue()
+    {
+        // Arrange
+        var errorOr = ErrorOr<int>.WithError(TestErrors);
+        var errorOr2 = ErrorOr<string>.WithError(TestErrors);
 
         // Act & Assert
-        errorOr.ErrorsOrEmpty.Should().BeEmpty();
+        errorOr.ValueOrDefault.Should().Be(0);
+        errorOr2.ValueOrDefault.Should().Be(null);
     }
 }

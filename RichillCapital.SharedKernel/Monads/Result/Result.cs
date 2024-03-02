@@ -1,6 +1,3 @@
-using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
-
 namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Result<TValue>
@@ -36,6 +33,8 @@ public readonly partial record struct Result<TValue>
 
 public readonly partial record struct Result
 {
+    public static readonly Result Success = new(true, Error.Null);
+
     private Result(Error error)
         : this(false, error)
     {

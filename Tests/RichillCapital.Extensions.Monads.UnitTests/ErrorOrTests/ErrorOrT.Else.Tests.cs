@@ -6,27 +6,24 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class ErrorOrTElseTests : MonadTests
 {
     [Fact]
-    public void Else_When_IsValue_Should_ReturnErrorOrWithOriginalValue()
+    public void Else_When_HasError_Should_ReturnElseValue()
     {
         // Arrange & Act
-        var errorOr = Value
-            .ToErrorOr()
-            .Else(10);
+        var errorOr = TestError.ToErrorOr<int>()
+            .Else(TestValue);
 
         // Assert
-        errorOr.ShouldBeValue(Value);
+        errorOr.ShouldBeValue(TestValue);
     }
 
     [Fact]
-    public void Else_When_IsError_Should_ReturnErrorOrWithElseValue()
+    public void Else_When_HasValue_Should_ReturnOriginal()
     {
         // Arrange & Act
-        var expectedValue = 10;
-        var errorOr = UnexpectedError
-            .ToErrorOr<int>()
-            .Else(expectedValue);
+        var errorOr = TestValue.ToErrorOr()
+            .Else(0);
 
         // Assert
-        errorOr.ShouldBeValue(expectedValue);
+        errorOr.ShouldBeValue(TestValue);
     }
 }

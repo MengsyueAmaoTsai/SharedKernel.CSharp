@@ -6,27 +6,24 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class ResultTElseTests : MonadTests
 {
     [Fact]
-    public void Else_When_IsSuccess_Should_ReturnSuccessResultWithOriginalValue()
+    public void Else_When_IsFailure_Should_ReturnElseValue()
     {
         // Arrange & Act
-        var result = Value
-            .ToResult()
-            .Else(10);
+        var result = TestError.ToResult<int>()
+            .Else(TestValue);
 
         // Assert
-        result.ShouldBeSuccessWith(Value);
+        result.ShouldBeSuccessWith(TestValue);
     }
 
     [Fact]
-    public void Else_When_IsFailure_Should_ReturnSuccessResultWithElseValue()
+    public void Else_When_IsSuccess_Should_ReturnOriginal()
     {
         // Arrange & Act
-        var expectedValue = 10;
-        var result = UnexpectedError
-            .ToResult<int>()
-            .Else(expectedValue);
+        var result = TestValue.ToResult()
+            .Else(0);
 
         // Assert
-        result.ShouldBeSuccessWith(expectedValue);
+        result.ShouldBeSuccessWith(TestValue);
     }
 }

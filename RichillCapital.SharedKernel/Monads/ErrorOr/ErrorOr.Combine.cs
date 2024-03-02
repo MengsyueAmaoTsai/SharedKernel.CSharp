@@ -14,21 +14,6 @@ public readonly partial record struct ErrorOr<TValue>
                 .ToErrorOr<TValue>();
         }
 
-        return errorOrs.Last();
-    }
-
-    public static ErrorOr<TValue> Combine(params Result<TValue>[] results)
-    {
-        if (results.Any(result => result.IsFailure))
-        {
-            return results
-                .Where(result => result.IsFailure)
-                .Select(result => result.Error)
-                .Distinct()
-                .ToArray()
-                .ToErrorOr<TValue>();
-        }
-
-        return results.Last().Value.ToErrorOr();
+        return errorOrs.Last().Value.ToErrorOr();
     }
 }

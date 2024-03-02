@@ -9,26 +9,6 @@ public readonly partial record struct Maybe<TValue>
             return Null;
         }
 
-        return maybes.Last();
-    }
-
-    public static Maybe<TValue> Combine(params Result<TValue>[] results)
-    {
-        if (results.Any(result => result.IsFailure))
-        {
-            return Null;
-        }
-
-        return results.Last().Value.ToMaybe();
-    }
-
-    public static Maybe<TValue> Combine(params ErrorOr<TValue>[] errorOrs)
-    {
-        if (errorOrs.Any(errorOr => errorOr.HasError))
-        {
-            return Null;
-        }
-
-        return errorOrs.Last().Value.ToMaybe();
+        return maybes.Last().Value.ToMaybe();
     }
 }

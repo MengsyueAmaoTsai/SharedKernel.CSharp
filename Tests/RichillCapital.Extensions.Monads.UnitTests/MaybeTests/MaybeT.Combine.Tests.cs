@@ -1,85 +1,36 @@
 using RichillCapital.Extensions.Monads.UnitTests.Shared;
-using RichillCapital.SharedKernel.Monads;
 
-namespace RichillCapital.Extensions.Monads.UnitTests;
+namespace RichillCapital.SharedKernel.Monads.UnitTests;
 
-public sealed partial class MaybeTCombineTests : MonadTests
+public sealed class MaybeTCombineTests
 {
     [Fact]
-    public void CombineFactory_When_AllMaybesAreHaveValue_Should_ReturnLastMaybeWithAValue()
+    public void Combine_When_AllMaybesAreHaveValue_Should_ReturnLastValue()
     {
-        // Arrange & Act
-        var maybe = Maybe<int>.Combine(
-            Maybe<int>.Have(1),
-            Maybe<int>.Have(2),
-            Maybe<int>.Have(3));
+        // Arrange
+        var maybe1 = 1.ToMaybe();
+        var maybe2 = 2.ToMaybe();
+        var maybe3 = 3.ToMaybe();
+
+        // Act
+        var combinedMaybe = Maybe<int>.Combine(maybe1, maybe2, maybe3);
 
         // Assert
-        maybe.ShouldBeHasValueWith(3);
+        combinedMaybe.ShouldBeHas(3);
     }
 
     [Fact]
-    public void CombineFactory_When_MaybesContainNull_Should_ReturnMaybeNull()
+    public void Combine_When_AnyMaybeIsNull_Should_ReturnNull()
     {
-        // Arrange & Act
-        var maybe = Maybe<int>.Combine(
-            Maybe<int>.Have(1),
-            Maybe<int>.Null,
-            Maybe<int>.Have(3));
+        // Arrange
+        var maybe1 = 1.ToMaybe();
+        var maybe2 = Maybe<int>.Null;
+        var maybe3 = 3.ToMaybe();
+
+        // Act
+        var combinedMaybe = Maybe<int>.Combine(maybe1, maybe2, maybe3);
 
         // Assert
-        maybe.ShouldBeNull();
-    }
-
-    [Fact]
-    public void CombineFactory_When_AllResultsAreSuccess_Should_ConvertLastResultToMaybeWithValue()
-    {
-        // Arrange & Act
-        var maybe = Maybe<int>.Combine(
-            Result<int>.Success(1),
-            Result<int>.Success(2),
-            Result<int>.Success(3));
-
-        // Assert
-        maybe.ShouldBeHasValueWith(3);
-    }
-
-    [Fact]
-    public void CombineFactory_When_ResultsContainFailure_Should_ReturnMaybeNull()
-    {
-        // Arrange & Act
-        var maybe = Maybe<int>.Combine(
-            Result<int>.Failure(UnexpectedError),
-            Result<int>.Failure(NotFoundError),
-            Result<int>.Success(3));
-
-        // Assert
-        maybe.ShouldBeNull();
-    }
-
-    [Fact]
-    public void CombineFactory_When_AllErrorOrsAreValue_Should_ConvertLastErrorOrToMaybeWithValue()
-    {
-        // Arrange & Act
-        var maybe = Maybe<int>.Combine(
-            1.ToErrorOr(),
-            2.ToErrorOr(),
-            3.ToErrorOr());
-
-        // Assert
-        maybe.ShouldBeHasValueWith(3);
-    }
-
-    [Fact]
-    public void CombineFactory_When_ErrorOrsContainError_Should_ReturnFirstErrorOr()
-    {
-        // Arrange & Act
-        var maybe = Maybe<int>.Combine(
-            1.ToErrorOr(),
-            UnexpectedError.ToErrorOr<int>(),
-            3.ToErrorOr());
-
-        // Assert
-        maybe.ShouldBeNull();
+        combinedMaybe.ShouldBeNull();
     }
 }

@@ -6,22 +6,22 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class ResultTFactoryTests : MonadTests
 {
     [Fact]
-    public void Success_When_GivenValue_Should_CreateSuccessResult()
+    public void With_When_GivenValue_Should_CreateSuccessResultWithValue()
     {
         // Arrange & Act
-        Result<int> intResult = Result<int>.Success(Value);
+        var result = Result<int>.With(TestValue);
 
         // Assert
-        intResult.ShouldBeSuccessWith(Value);
+        result.ShouldBeSuccessWith(TestValue);
     }
 
     [Fact]
-    public void Failure_When_GivenError_Should_CreateFailureResult()
+    public void Failure_When_GivenError_Should_CreateFailureResultWithError()
     {
         // Arrange & Act
-        Result<int> intResult = Result<int>.Failure(UnexpectedError);
+        Result<int> result = Result<int>.Failure(TestError);
 
         // Assert
-        intResult.ShouldBeFailureWith(UnexpectedError);
+        result.ShouldBeFailureWith(TestError);
     }
 }
