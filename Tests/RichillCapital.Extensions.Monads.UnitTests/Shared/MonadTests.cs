@@ -17,20 +17,31 @@ public abstract class MonadTests
         Error.NotFound("Error 5"),
     ];
 
-    protected static Error ErrorFactoryWithValue(int value) => Error.Invalid($"Invalid value: {value}");
+    protected static int OnHasValue(int value) => value * 2;
+    protected static int OnIsNull() => 0;
 
-    // Ensure 
+    protected static int OnSuccess(int value) => value * 2;
+    protected static int OnSuccess() => 0;
+    protected static int OnFailure(Error _) => 0;
+
+    protected static int OnIsValue(int value) => value * 2;
+    protected static int OnError(IEnumerable<Error> errors) => errors.Count();
+
+    protected static void DoSomeAction()
+    {
+        // Do something
+    }
+
+    protected static void DoSomeActionWithValue(int _)
+    {
+        // Do something
+    }
+
+    protected static int ValueFactory() => TestValue * 2;
+    protected static int ValueFactoryWithValue(int value) => value * 2;
+
     protected static readonly Func<int, bool> EnsureTrue = new(value => value == 5);
     protected static readonly Func<int, bool> EnsureFalse = new(value => value > 10);
-
-    // Action<TValue>
-    protected static void SomeActionWithValue(int value) => Console.WriteLine(value);
-
-    // Action<Task>
-    protected static async Task SomeAsyncTask() => await Task.CompletedTask;
-
-    // Func<TValue, TResult>
-    protected static string FactoryWithValue(int value) => (value * 2).ToString();
 
     protected static async Task<int> GetTestValueAsync() => await Task.FromResult(TestValue);
     protected static async ValueTask<int> GetTestValueValueTaskAsync() => await new ValueTask<int>(TestValue);
@@ -44,11 +55,4 @@ public abstract class MonadTests
     protected static async Task<Maybe<int>> MaybeTaskWithValue() => await Task.FromResult(TestValue.ToMaybe());
     protected static async Task<Maybe<int>> MaybeTaskWithNull() => await Task.FromResult(Maybe<int>.Null);
 
-    protected static int OnHasValue(int value) => value * 2;
-    protected static int OnSuccess(int value) => value * 2;
-    protected static int OnSuccess() => 0;
-    protected static int OnIsValue(int value) => value * 2;
-    protected static int OnIsNull() => 0;
-    protected static int OnError(IEnumerable<Error> errors) => errors.Count();
-    protected static int OnFailure(Error _) => 0;
 }

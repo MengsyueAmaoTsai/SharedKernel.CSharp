@@ -4,97 +4,99 @@ namespace RichillCapital.SharedKernel.Monads.UnitTests;
 
 public sealed class ErrorOrTThenTests : MonadTests
 {
-    // [Fact]
-    // public void Then_When_HasError_Should_NotInvokeFactory_And_ReturnErrorOrWithErrors()
-    // {
-    //     // Arrange & Act
-    //     var errorOr = TestErrors
-    //         .ToErrorOr<int>()
-    //         .Then(FactoryWithValue);
+    [Fact]
+    public void Then_When_IsValue_Should_InvokeAction_And_ReturnOriginal()
+    {
+        // Arrange & Act
+        var errorOr = TestValue
+            .ToErrorOr()
+            .Then(DoSomeAction);
 
-    //     // Assert
-    //     errorOr.ShouldBeErrors(TestErrors);
-    // }
+        // Assert
+        errorOr.ShouldBeValue(TestValue);
+    }
 
-    // [Fact]
-    // public void Then_When_HasValue_Should_InvokeFactory_And_ReturnErrorOrWithResultValue()
-    // {
-    //     // Arrange & Act
-    //     var errorOr = TestValue
-    //         .ToErrorOr()
-    //         .Then(FactoryWithValue);
+    [Fact]
+    public void Then_When_HasError_Should_NotInvokeAction_And_ReturnOriginal()
+    {
+        // Arrange & Act
+        var errorOr = TestError
+            .ToErrorOr<int>()
+            .Then(DoSomeAction);
 
-    //     // Assert
-    //     errorOr.ShouldBeValue(FactoryWithValue(TestValue));
-    // }
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
 
-    // [Fact]
-    // public void Then_When_HasError_Should_NotInvokeActionWithValue_And_ReturnErrorOrWithErrors()
-    // {
-    //     // Arrange & Act
-    //     var errorOr = TestErrors
-    //         .ToErrorOr<int>()
-    //         .Then(SomeActionWithValue);
+    [Fact]
+    public void Then_When_IsValue_Should_InvokeActionWithValue_And_ReturnOriginal()
+    {
+        // Arrange & Act
+        var errorOr = TestValue
+            .ToErrorOr()
+            .Then(DoSomeActionWithValue);
 
-    //     // Assert
-    //     errorOr.ShouldBeErrors(TestErrors);
-    // }
+        // Assert
+        errorOr.ShouldBeValue(TestValue);
+    }
 
-    // [Fact]
-    // public void Then_When_IsValue_Should_InvokeActionWithValue_And_ReturnErrorOrWithValue()
-    // {
-    //     // Arrange & Act
-    //     var errorOr = TestValue
-    //         .ToErrorOr()
-    //         .Then(SomeActionWithValue);
+    [Fact]
+    public void Then_When_HasError_Should_NotInvokeActionWithValue_And_ReturnOriginal()
+    {
+        // Arrange & Act
+        var errorOr = TestError
+            .ToErrorOr<int>()
+            .Then(DoSomeActionWithValue);
 
-    //     // Assert
-    //     errorOr.ShouldBeValue(TestValue);
-    // }
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
 
-    // [Fact]
-    // public async Task ThenAsync_When_HasError_Should_NotInvokeTask_And_ReturnErrorOrWithErrors()
-    // {
-    //     // Arrange & Act
-    //     var errorOr = await TestErrors
-    //         .ToErrorOr<int>()
-    //         .Then(SomeAsyncTask);
+    [Fact]
+    public void Then_When_IsValue_Should_InvokeFactory_And_ReturnErrorOrWithResultValue()
+    {
+        // Arrange & Act
+        var errorOr = TestValue
+            .ToErrorOr()
+            .Then(ValueFactory);
 
-    //     // Assert
-    //     errorOr.ShouldBeErrors(TestErrors);
-    // }
+        // Assert
+        errorOr.ShouldBeValue(TestValue * 2);
+    }
 
-    // [Fact]
-    // public async Task ThenAsync_When_IsValue_Should_InvokeTask_And_ReturnErrorOrWithValue()
-    // {
-    //     // Arrange & Act
-    //     var errorOr = await TestValue
-    //         .ToErrorOr()
-    //         .Then(SomeAsyncTask);
+    [Fact]
+    public void Then_When_HasError_Should_NotInvokeFactory_And_ReturnOriginal()
+    {
+        // Arrange & Act
+        var errorOr = TestError
+            .ToErrorOr<int>()
+            .Then(ValueFactory);
 
-    //     // Assert
-    //     errorOr.ShouldBeValue(TestValue);
-    // }
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
 
-    // [Fact]
-    // public async Task ThenAsync_When_ErrorOrTaskHasError_Should_NotInvokeFactory_And_ReturnErrorOrWithErrors()
-    // {
-    //     // Arrange & Act
-    //     var errorOr = await ErrorOrTaskWithErrors()
-    //         .Then(FactoryWithValue);
+    [Fact]
+    public void Then_When_IsValue_Should_InvokeFactoryWithValue_And_ReturnErrorOrWithResultValue()
+    {
+        // Arrange & Act
+        var errorOr = TestValue
+            .ToErrorOr()
+            .Then(ValueFactoryWithValue);
 
-    //     // Assert
-    //     errorOr.ShouldBeErrors(TestErrors);
-    // }
+        // Assert
+        errorOr.ShouldBeValue(TestValue * 2);
+    }
 
-    // [Fact]
-    // public async Task ThenAsync_When_ErrorOrTaskIsValue_Should_InvokeFactory_And_ReturnErrorOrWithResultValue()
-    // {
-    //     // Arrange & Act
-    //     var errorOr = await ErrorOrTaskWithValue()
-    //         .Then(FactoryWithValue);
+    [Fact]
+    public void Then_When_HasError_Should_NotInvokeFactoryWithValue_And_ReturnOriginal()
+    {
+        // Arrange & Act
+        var errorOr = TestError
+            .ToErrorOr<int>()
+            .Then(ValueFactoryWithValue);
 
-    //     // Assert
-    //     errorOr.ShouldBeValue(FactoryWithValue(TestValue));
-    // }
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
 }
