@@ -164,4 +164,74 @@ public sealed class MaybeTThenTests : MonadTests
         // Assert
         maybe.ShouldBeNull();
     }
+
+    [Fact]
+    public async Task ThenAsync_When_IsNull_Should_NotInvokeResultFactoryWithValueTask_And_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = await Maybe<int>.Null
+            .Then(ResultFactoryWithValueTask);
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_HasValue_And_ResultTaskIsFailure_Should_InvokeResultFactoryWithValueTask_And_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = await TestValue
+            .ToMaybe()
+            .Then(ResultFactoryWithValueTask_IsFailure);
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_HasValue_And_ResultTaskIsSuccess_Should_InvokeFactoryWithValue_And_ReturnMaybeWithResultValue()
+    {
+        // Arrange & Act
+        var maybe = await TestValue
+            .ToMaybe()
+            .Then(ResultFactoryWithValueTask);
+
+        // Assert
+        maybe.ShouldBeHas(TestValue.ToString());
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsNull_Should_NotInvokeErrorOrFactoryWithValueTask_And_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = await Maybe<int>.Null
+            .Then(ErrorOrFactoryWithValueTask);
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_HasValue_And_ErrorOrTaskHasError_Should_InvokeErrorOrFactoryWithValueTask_And_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = await TestValue
+            .ToMaybe()
+            .Then(ErrorOrFactoryWithValueTask_HasError);
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_HasValue_And_ErrorOrTaskIsValue_Should_InvokeErrorOrFactoryWithValueTask_And_ReturnMaybeWithResultValue()
+    {
+        // Arrange & Act
+        var maybe = await TestValue
+            .ToMaybe()
+            .Then(ErrorOrFactoryWithValueTask);
+
+        // Assert
+        maybe.ShouldBeHas(TestValue.ToString());
+    }
 }

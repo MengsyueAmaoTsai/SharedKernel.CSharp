@@ -170,4 +170,76 @@ public sealed class ErrorOrTThenTests : MonadTests
         // Assert
         errorOr.ShouldBeError(TestError);
     }
+
+    [Fact]
+    public async Task ThenAsync_When_HasError_Should_NotInvokeMaybeFactoryWithValueTask_And_ReturnErrors()
+    {
+        // Arrange & Act
+        var errorOr = await TestError
+            .ToErrorOr<int>()
+            .Then(MaybeFactoryWithValueTask, ErrorFactoryWithValue);
+
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsValue_And_MaybeTaskIsNull_Should_InvokeMaybeFactoryWithValueTask_And_ReturnErrorFromFactory()
+    {
+        // Arrange & Act
+        var errorOr = await TestValue
+            .ToErrorOr()
+            .Then(MaybeFactoryWithValueTask_Null, ErrorFactoryWithValue);
+
+        // Assert
+        errorOr.ShouldBeError(ErrorFactoryWithValue(TestValue));
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsValue_And_MaybeTaskHasValue_Should_InvokeMaybeFactoryWithValueTask_And_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = await TestValue
+            .ToErrorOr()
+            .Then(MaybeFactoryWithValueTask, ErrorFactoryWithValue);
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue.ToString());
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_HasError_Should_NotInvokeResultFactoryWithValueTask_And_ReturnErrors()
+    {
+        // Arrange & Act
+        var errorOr = await TestErrors
+            .ToErrorOr<int>()
+            .Then(ResultFactoryWithValueTask);
+
+        // Assert
+        errorOr.ShouldBeErrors(TestErrors);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsValue_And_ResultTaskIsFailure_Should_InvokeResultFactoryWithValueTask_And_ReturnErrorOrWithError()
+    {
+        // Arrange & Act
+        var errorOr = await TestValue
+            .ToErrorOr()
+            .Then(ResultFactoryWithValueTask_IsFailure);
+
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsValue_And_ResultTaskIsSuccess_Should_InvokeResultFactoryWithValueTask_And_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = await TestValue
+            .ToErrorOr()
+            .Then(ResultFactoryWithValueTask);
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue.ToString());
+    }
 }

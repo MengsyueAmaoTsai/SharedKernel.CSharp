@@ -63,6 +63,10 @@ public abstract class MonadTests
     protected static async Task<Result<string>> ResultFactoryWithValueTask(int value) =>
         await Task.FromResult(value.ToString().ToResult());
 
+
+    protected static async Task<Result<string>> ResultFactoryWithValueTask_IsFailure(int value) =>
+        await Task.FromResult(TestError.ToResult<string>());
+
     protected static Maybe<string> MaybeFactoryWithValue(int value) =>
         value.ToString().ToMaybe();
 
