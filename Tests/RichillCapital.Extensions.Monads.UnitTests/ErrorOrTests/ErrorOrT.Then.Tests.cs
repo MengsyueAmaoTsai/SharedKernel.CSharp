@@ -101,6 +101,30 @@ public sealed class ErrorOrTThenTests : MonadTests
     }
 
     [Fact]
+    public async Task ThenAsync_When_HasError_Should_NotInvokeFactoryWithValueTask_And_ReturnErrorOrWithErrors()
+    {
+        // Arrange & Act
+        var errorOr = await TestErrors
+            .ToErrorOr<int>()
+            .Then(ValueFactoryWithValueTask);
+
+        // Assert
+        errorOr.ShouldBeErrors(TestErrors);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsValue_Should_InvokeFactoryWithValueTask_And_ReturnErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = await TestValue
+            .ToErrorOr()
+            .Then(ValueFactoryWithValueTask);
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue * 2);
+    }
+
+    [Fact]
     public void Then_When_IsValue_Should_InvokeErrorOrFactoryWithValue_And_ReturnErrorOrWithResultValue()
     {
         // Arrange & Act

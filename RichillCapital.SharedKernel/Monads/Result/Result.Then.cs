@@ -62,6 +62,20 @@ public static partial class ResultExtensions
         return factoryWithValue(result.Value).ToResult();
     }
 
+    public static async Task<Result<TResult>> Then<TValue, TResult>(
+        this Result<TValue> result,
+        Func<TValue, Task<TResult>> factoryWithValueTask)
+    {
+        if (result.IsFailure)
+        {
+            return result.Error.ToResult<TResult>();
+        }
+
+        var resultValue = await factoryWithValueTask(result.Value);
+
+        return resultValue.ToResult();
+    }
+
     public static Result<TResult> Then<TValue, TResult>(
         this Result<TValue> result,
         Func<TValue, Result<TResult>> resultFactoryWithValue)

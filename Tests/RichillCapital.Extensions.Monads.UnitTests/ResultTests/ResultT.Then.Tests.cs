@@ -126,6 +126,30 @@ public sealed class ResultTThenTests : MonadTests
     }
 
     [Fact]
+    public async Task ThenAsync_When_IsFailure_Should_NotInvokeFactoryWithValueTask_And_ReturnFailureResultWithError()
+    {
+        // Arrange & Act
+        var result = await TestError
+            .ToResult<int>()
+            .Then(ValueFactoryWithValueTask);
+
+        // Assert
+        result.ShouldBeFailureWith(TestError);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsSuccess_Should_InvokeFactoryWithValueTask_And_ReturnSuccessResultWithResultValue()
+    {
+        // Arrange & Act
+        var result = await TestValue
+            .ToResult()
+            .Then(ValueFactoryWithValueTask);
+
+        // Assert
+        result.ShouldBeSuccessWith(TestValue * 2);
+    }
+
+    [Fact]
     public async Task ThenAsync_When_IsSuccess_Should_InvokeResultFactoryWithValueTask_And_ReturnSuccessResultWithResultValue()
     {
         // Arrange & Act

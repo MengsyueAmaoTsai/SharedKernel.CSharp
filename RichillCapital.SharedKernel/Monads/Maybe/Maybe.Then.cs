@@ -58,6 +58,20 @@ public static partial class MaybeExtensions
         return factoryWithValue(maybe.Value).ToMaybe();
     }
 
+    public static async Task<Maybe<TResult>> Then<TValue, TResult>(
+        this Maybe<TValue> result,
+        Func<TValue, Task<TResult>> factoryWithValueTask)
+    {
+        if (result.IsNull)
+        {
+            return Maybe<TResult>.Null;
+        }
+
+        var resultValue = await factoryWithValueTask(result.Value);
+
+        return resultValue.ToMaybe();
+    }
+
     public static Maybe<TResult> Then<TValue, TResult>(
         this Maybe<TValue> maybe,
         Func<TValue, Maybe<TResult>> maybeFactoryWithValue)
