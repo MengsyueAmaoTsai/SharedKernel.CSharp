@@ -2,78 +2,91 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct ErrorOr<TValue>
 {
-    public ErrorOr<TValue> Then(Action action)
+}
+
+public static partial class ErrorOrExtensions
+{
+    public static ErrorOr<TValue> Then<TValue>(
+        this ErrorOr<TValue> errorOr,
+        Action action)
     {
-        if (HasError)
+        if (errorOr.HasError)
         {
-            return Errors
+            return errorOr.Errors
                 .ToErrorOr<TValue>();
         }
 
         action();
 
-        return Value.ToErrorOr();
+        return errorOr.Value.ToErrorOr();
     }
 
-    public ErrorOr<TValue> Then(Action<TValue> actionWithValue)
+    public static ErrorOr<TValue> Then<TValue>(
+        this ErrorOr<TValue> errorOr,
+        Action<TValue> actionWithValue)
     {
-        if (HasError)
+        if (errorOr.HasError)
         {
-            return Errors
+            return errorOr.Errors
                 .ToErrorOr<TValue>();
         }
 
-        actionWithValue(Value);
+        actionWithValue(errorOr.Value);
 
-        return Value.ToErrorOr();
+        return errorOr.Value.ToErrorOr();
     }
 
-    public ErrorOr<TResult> Then<TResult>(Func<TResult> factory)
+    public static ErrorOr<TResult> Then<TValue, TResult>(
+        this ErrorOr<TValue> errorOr,
+        Func<TResult> factory)
     {
-        if (HasError)
+        if (errorOr.HasError)
         {
-            return Errors
+            return errorOr.Errors
                 .ToErrorOr<TResult>();
         }
 
         return factory().ToErrorOr();
     }
 
-    public ErrorOr<TResult> Then<TResult>(Func<TValue, TResult> factoryWithValue)
+    public static ErrorOr<TResult> Then<TValue, TResult>(
+        this ErrorOr<TValue> errorOr,
+        Func<TValue, TResult> factoryWithValue)
     {
-        if (HasError)
+        if (errorOr.HasError)
         {
-            return Errors
+            return errorOr.Errors
                 .ToErrorOr<TResult>();
         }
 
-        return factoryWithValue(Value).ToErrorOr();
+        return factoryWithValue(errorOr.Value).ToErrorOr();
     }
 
-    public ErrorOr<TResult> Then<TResult>(Func<TValue, ErrorOr<TResult>> errorOrFactoryWithValue)
+    public static ErrorOr<TResult> Then<TValue, TResult>(
+        this ErrorOr<TValue> errorOr,
+        Func<TValue, ErrorOr<TResult>> errorOrFactoryWithValue)
     {
-        if (HasError)
+        if (errorOr.HasError)
         {
-            return Errors
+            return errorOr.Errors
                 .ToErrorOr<TResult>();
         }
 
-        return errorOrFactoryWithValue(Value);
+        return errorOrFactoryWithValue(errorOr.Value);
     }
 
-    public async Task<ErrorOr<TResult>> Then<TResult>(Func<TValue, Task<ErrorOr<TResult>>> errorOrFactoryWithValueTask)
+    public static async Task<ErrorOr<TResult>> Then<TValue, TResult>(
+        this ErrorOr<TValue> errorOr,
+        Func<TValue, Task<ErrorOr<TResult>>> errorOrFactoryWithValueTask)
     {
-        if (HasError)
+        if (errorOr.HasError)
         {
-            return Errors.ToErrorOr<TResult>();
+            return errorOr.Errors.ToErrorOr<TResult>();
         }
 
-        return await errorOrFactoryWithValueTask(Value);
+        return await errorOrFactoryWithValueTask(errorOr.Value);
     }
-}
 
-public static partial class ErrorOrExtensions
-{
     public static async Task<ErrorOr<TResult>> Then<TValue, TResult>(
         this Task<ErrorOr<TValue>> errorOrTask,
         Func<TValue, TResult> factoryWithValue)
