@@ -50,7 +50,6 @@ public readonly partial record struct ErrorOr<TValue>
         return factoryWithValue(Value).ToErrorOr();
     }
 
-    // Untested
     public ErrorOr<TResult> Then<TResult>(Func<TValue, ErrorOr<TResult>> errorOrFactoryWithValue)
     {
         if (HasError)

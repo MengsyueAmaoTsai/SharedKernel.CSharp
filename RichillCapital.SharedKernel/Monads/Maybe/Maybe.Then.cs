@@ -46,7 +46,6 @@ public readonly partial record struct Maybe<TValue>
         return factoryWithValue(Value).ToMaybe();
     }
 
-    // Untested
     public Maybe<TResult> Then<TResult>(Func<TValue, Maybe<TResult>> maybeFactoryWithValue)
     {
         if (IsNull)
