@@ -59,4 +59,72 @@ public sealed class MaybeExtensionsConvertersTests : MonadTests
         // Assert
         maybe.ShouldBeHas(TestValue);
     }
+
+    [Fact]
+    public async Task ToMaybeAsync_When_FromTaskErrorOrHasError_Should_ConvertToNull()
+    {
+        // Arrange & Act
+        var maybe = await ErrorOrTaskWithErrors()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task ToMaybeAsync_When_FromTaskErrorOrIsValue_Should_ConvertToMaybeWithValue()
+    {
+        // Arrange & Act
+        var maybe = await ErrorOrTaskWithValue()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeHas(TestValue);
+    }
+
+    [Fact]
+    public void ToMaybe_When_ResultIsFailure_Should_ConvertToNull()
+    {
+        // Arrange & Act
+        var maybe = TestError
+            .ToResult<int>()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public void ToMaybe_When_ResultIsSuccess_Should_ConvertToMaybeWithValue()
+    {
+        // Arrange & Act
+        var maybe = TestValue
+            .ToResult()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeHas(TestValue);
+    }
+
+    [Fact]
+    public async Task ToMaybeAsync_When_ResultTaskIsFailure_Should_ConvertToNull()
+    {
+        // Arrange & Act
+        var maybe = await ResultTaskWithError()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task ToMaybeAsync_When_ResultTaskIsSuccess_Should_ConvertToMaybeWithValue()
+    {
+        // Arrange & Act
+        var maybe = await ResultTaskWithValue()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeHas(TestValue);
+    }
 }

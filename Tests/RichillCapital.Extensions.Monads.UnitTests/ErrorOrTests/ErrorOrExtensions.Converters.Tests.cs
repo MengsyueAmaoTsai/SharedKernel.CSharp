@@ -92,6 +92,28 @@ public sealed class ErrorOrExtensionsConvertersTests : MonadTests
     }
 
     [Fact]
+    public async Task ToErrorOrAsync_When_ResultTaskIsFailure_Should_ConvertToErrorOrWithError()
+    {
+        // Arrange & Act
+        var errorOr = await ResultTaskWithError()
+            .ToErrorOr();
+
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
+
+    [Fact]
+    public async Task ToErrorOrAsync_When_ResultTaskIsSuccess_Should_ConvertToErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = await ResultTaskWithValue()
+            .ToErrorOr();
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue);
+    }
+
+    [Fact]
     public void ToErrorOr_When_MaybeIsNull_Should_ConvertToErrorOrWithError()
     {
         // Arrange & Act
@@ -108,6 +130,28 @@ public sealed class ErrorOrExtensionsConvertersTests : MonadTests
         // Arrange & Act
         var maybe = TestValue.ToMaybe();
         var errorOr = maybe.ToErrorOr(TestError);
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue);
+    }
+
+    [Fact]
+    public async Task ToErrorOrAsync_When_MaybeTaskIsNull_Should_ConvertToErrorOrWithError()
+    {
+        // Arrange & Act
+        var errorOr = await MaybeTaskWithNull()
+            .ToErrorOr(TestError);
+
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
+
+    [Fact]
+    public async Task ToErrorOrAsync_When_MaybeTaskHasValue_Should_ConvertToErrorOrWithValue()
+    {
+        // Arrange & Act
+        var errorOr = await MaybeTaskWithValue()
+            .ToErrorOr(TestError);
 
         // Assert
         errorOr.ShouldBeValue(TestValue);
