@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace RichillCapital.SharedKernel.Monads;
 
-public static partial class ErrorOr
+public static partial class ErrorOrExtensions
 {
     /// <summary>
     /// Converts a value to an <see cref="ErrorOr{TValue}"/>.
