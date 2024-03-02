@@ -10,7 +10,7 @@ public sealed class MaybeTThenTests : MonadTests
     {
         // Arrange & Act
         var maybe = Maybe<int>.Null
-            .Then(MapValueToResult);
+            .Then(FactoryWithValue);
 
         // Assert
         maybe.ShouldBeNull();
@@ -22,10 +22,10 @@ public sealed class MaybeTThenTests : MonadTests
         // Arrange & Act
         var maybe = TestValue
             .ToMaybe()
-            .Then(MapValueToResult);
+            .Then(FactoryWithValue);
 
         // Assert
-        maybe.ShouldBeHas(MapValueToResult(TestValue));
+        maybe.ShouldBeHas(FactoryWithValue(TestValue));
     }
 
     [Fact]
@@ -72,5 +72,27 @@ public sealed class MaybeTThenTests : MonadTests
 
         // Assert
         maybe.ShouldBeHas(TestValue);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsNull_Should_NotInvokeFactory_And_ReturnNull()
+    {
+        // Arrange & Act
+        var maybe = await MaybeTaskWithNull()
+            .Then(FactoryWithValue);
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_HasValue_Should_InvokeFactory_And_ReturnMaybeWithValue()
+    {
+        // Arrange & Act
+        var maybe = await MaybeTaskWithValue()
+            .Then(FactoryWithValue);
+
+        // Assert
+        maybe.ShouldBeHas(FactoryWithValue(TestValue));
     }
 }

@@ -11,7 +11,7 @@ public sealed class ResultTThenTests : MonadTests
         // Arrange & Act
         var result = TestError
             .ToResult<int>()
-            .Then(MapValueToResult);
+            .Then(FactoryWithValue);
 
         // Assert
         result.ShouldBeFailureWith(TestError);
@@ -23,10 +23,10 @@ public sealed class ResultTThenTests : MonadTests
         // Arrange & Act
         var result = TestValue
             .ToResult()
-            .Then(MapValueToResult);
+            .Then(FactoryWithValue);
 
         // Assert
-        result.ShouldBeSuccessWith(MapValueToResult(TestValue));
+        result.ShouldBeSuccessWith(FactoryWithValue(TestValue));
     }
 
     [Fact]
@@ -75,5 +75,27 @@ public sealed class ResultTThenTests : MonadTests
 
         // Assert
         result.ShouldBeSuccessWith(TestValue);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_ResultTaskIsFailure_Should_NotInvokeFactory_And_ReturnFailureResultWithError()
+    {
+        // Arrange & Act
+        var result = await ResultTaskWithError()
+            .Then(FactoryWithValue);
+
+        // Assert
+        result.ShouldBeFailureWith(TestError);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_ResultTaskIsSuccess_Should_InvokeFactory_And_ReturnSuccessResultWithResultValue()
+    {
+        // Arrange & Act
+        var result = await ResultTaskWithValue()
+            .Then(FactoryWithValue);
+
+        // Assert
+        result.ShouldBeSuccessWith(FactoryWithValue(TestValue));
     }
 }

@@ -29,3 +29,14 @@ public readonly partial record struct Maybe<TValue>
         return Value.ToMaybe();
     }
 }
+
+public static partial class MaybeExtensions
+{
+    public static async Task<Maybe<TResult>> Then<TValue, TResult>(
+        this Task<Maybe<TValue>> maybeTask,
+        Func<TValue, TResult> factory)
+    {
+        var maybe = await maybeTask;
+        return maybe.Then(factory);
+    }
+}

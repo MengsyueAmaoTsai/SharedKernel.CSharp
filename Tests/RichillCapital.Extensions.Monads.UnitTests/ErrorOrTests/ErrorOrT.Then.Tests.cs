@@ -10,7 +10,7 @@ public sealed class ErrorOrTThenTests : MonadTests
         // Arrange & Act
         var errorOr = TestErrors
             .ToErrorOr<int>()
-            .Then(MapValueToResult);
+            .Then(FactoryWithValue);
 
         // Assert
         errorOr.ShouldBeErrors(TestErrors);
@@ -22,10 +22,10 @@ public sealed class ErrorOrTThenTests : MonadTests
         // Arrange & Act
         var errorOr = TestValue
             .ToErrorOr()
-            .Then(MapValueToResult);
+            .Then(FactoryWithValue);
 
         // Assert
-        errorOr.ShouldBeValue(MapValueToResult(TestValue));
+        errorOr.ShouldBeValue(FactoryWithValue(TestValue));
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public sealed class ErrorOrTThenTests : MonadTests
     }
 
     [Fact]
-    public void Then_When_HasValue_Should_InvokeActionWithValue_And_ReturnErrorOrWithValue()
+    public void Then_When_IsValue_Should_InvokeActionWithValue_And_ReturnErrorOrWithValue()
     {
         // Arrange & Act
         var errorOr = TestValue
@@ -65,7 +65,7 @@ public sealed class ErrorOrTThenTests : MonadTests
     }
 
     [Fact]
-    public async Task ThenAsync_When_HasValue_Should_InvokeTask_And_ReturnErrorOrWithValue()
+    public async Task ThenAsync_When_IsValue_Should_InvokeTask_And_ReturnErrorOrWithValue()
     {
         // Arrange & Act
         var errorOr = await TestValue
@@ -74,5 +74,27 @@ public sealed class ErrorOrTThenTests : MonadTests
 
         // Assert
         errorOr.ShouldBeValue(TestValue);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_ErrorOrTaskHasError_Should_NotInvokeFactory_And_ReturnErrorOrWithErrors()
+    {
+        // Arrange & Act
+        var errorOr = await ErrorOrTaskWithErrors()
+            .Then(FactoryWithValue);
+
+        // Assert
+        errorOr.ShouldBeErrors(TestErrors);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_ErrorOrTaskIsValue_Should_InvokeFactory_And_ReturnErrorOrWithResultValue()
+    {
+        // Arrange & Act
+        var errorOr = await ErrorOrTaskWithValue()
+            .Then(FactoryWithValue);
+
+        // Assert
+        errorOr.ShouldBeValue(FactoryWithValue(TestValue));
     }
 }

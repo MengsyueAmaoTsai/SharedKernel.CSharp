@@ -33,3 +33,14 @@ public readonly partial record struct Result<TValue>
 public readonly partial record struct Result
 {
 }
+
+public static partial class ResultExtensions
+{
+    public static async Task<Result<TResult>> Then<TValue, TResult>(
+        this Task<Result<TValue>> resultTask,
+        Func<TValue, TResult> factory)
+    {
+        var result = await resultTask;
+        return result.Then(factory);
+    }
+}
