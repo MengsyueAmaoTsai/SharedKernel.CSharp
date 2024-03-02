@@ -75,4 +75,17 @@ public readonly partial record struct Result
 
 public static partial class ResultExtensions
 {
+    public static async Task<Result<TResult>> Then<TValue, TResult>(
+        this Task<Result<TValue>> resultTask,
+        Func<TValue, TResult> factoryWithValue)
+    {
+        var result = await resultTask;
+
+        if (result.IsFailure)
+        {
+            return result.Error.ToResult<TResult>();
+        }
+
+        return factoryWithValue(result.Value).ToResult();
+    }
 }
