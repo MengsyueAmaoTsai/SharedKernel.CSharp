@@ -47,6 +47,7 @@ public abstract class MonadTests
 
     protected static int ValueFactory() => TestValue * 2;
     protected static int ValueFactoryWithValue(int value) => value * 2;
+    protected static Task<int> ValueFactoryWithValueTask(int value) => Task.FromResult(value * 2);
 
     protected static ErrorOr<string> ErrorOrFactoryWithValue(int value) =>
         value.ToString().ToErrorOr();

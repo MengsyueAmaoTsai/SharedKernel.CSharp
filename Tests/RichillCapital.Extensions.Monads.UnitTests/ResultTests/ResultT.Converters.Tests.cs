@@ -1,5 +1,4 @@
 using RichillCapital.Extensions.Monads.UnitTests.Shared;
-using RichillCapital.SharedKernel;
 using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.Extensions.Monads.UnitTests;
@@ -27,7 +26,7 @@ public sealed class ResultExtensionsConvertersTests : MonadTests
     }
 
     [Fact]
-    public async ValueTask ToResultAsync_When_FromValueTask_Should_ConvertToSuccessResultWithValue()
+    public async Task ToResultAsync_When_FromValueTask_Should_ConvertToSuccessResultWithValue()
     {
         // Arrange & Act
         Result<int> result = await GetTestValueValueTaskAsync().ToResult();
