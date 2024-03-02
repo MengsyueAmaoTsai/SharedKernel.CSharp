@@ -12,6 +12,18 @@ public readonly partial record struct Result<TValue>
 
         return onSuccess(Value);
     }
+
+    public async Task<TResult> Match<TResult>(
+        Func<TValue, Task<TResult>> onSuccessTask,
+        Func<Error, Task<TResult>> onFailureTask)
+    {
+        if (IsFailure)
+        {
+            return await onFailureTask(Error);
+        }
+
+        return await onSuccessTask(Value);
+    }
 }
 
 public readonly partial record struct Result

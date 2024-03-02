@@ -52,4 +52,27 @@ public sealed class MaybeTMatchTests : MonadTests
         // Assert
         resultValue.Should().Be(OnIsNull());
     }
+
+    [Fact]
+    public async Task MatchAsync_When_IsNull_Should_InvokeOnIsNullAsync_And_ReturnResultValue()
+    {
+        // Arrange & Act
+        var resultValue = await Maybe<int>.Null
+            .Match(OnHasValueAsync, OnIsNullAsync);
+
+        // Assert
+        resultValue.Should().Be(OnIsNull());
+    }
+
+    [Fact]
+    public async Task MatchAsync_When_HasValue_Should_InvokeOnHasValueAsync_And_ReturnResultValue()
+    {
+        // Arrange & Act
+        var resultValue = await TestValue
+            .ToMaybe()
+            .Match(OnHasValueAsync, OnIsNullAsync);
+
+        // Assert
+        resultValue.Should().Be(await OnHasValueAsync(TestValue));
+    }
 }

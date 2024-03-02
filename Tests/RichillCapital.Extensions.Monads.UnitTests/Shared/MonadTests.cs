@@ -18,14 +18,20 @@ public abstract class MonadTests
     ];
 
     protected static int OnHasValue(int value) => value * 2;
+    protected static async Task<int> OnHasValueAsync(int value) => await Task.FromResult(value * 2);
     protected static int OnIsNull() => 0;
+    protected static async Task<int> OnIsNullAsync() => await Task.FromResult(0);
 
     protected static int OnSuccess(int value) => value * 2;
+    protected static async Task<int> OnSuccessAsync(int value) => await Task.FromResult(value * 2);
     protected static int OnSuccess() => 0;
     protected static int OnFailure(Error _) => 0;
+    protected static async Task<int> OnFailureAsync(Error _) => await Task.FromResult(0);
 
     protected static int OnIsValue(int value) => value * 2;
-    protected static int OnError(IEnumerable<Error> errors) => errors.Count();
+    protected static async Task<int> OnIsValueAsync(int value) => await Task.FromResult(value * 2);
+    protected static int OnHasError(IEnumerable<Error> errors) => errors.Count();
+    protected static async Task<int> OnHasErrorAsync(IEnumerable<Error> errors) => await Task.FromResult(errors.Count());
 
     protected static void DoSomeAction()
     {

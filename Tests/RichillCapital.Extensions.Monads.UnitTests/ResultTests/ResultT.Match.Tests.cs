@@ -8,7 +8,7 @@ namespace RichillCapital.Extensions.Monads.UnitTests;
 public sealed class ResultTMatchTests : MonadTests
 {
     [Fact]
-    public void Match_WhenIsSuccess_Should_Invoke_OnSuccessWithValue_And_ReturnResultValue()
+    public void Match_When_IsSuccess_Should_InvokeOnSuccessWithValue_And_ReturnResultValue()
     {
         // Arrange & Act
         var result = TestValue.ToResult()
@@ -19,7 +19,7 @@ public sealed class ResultTMatchTests : MonadTests
     }
 
     [Fact]
-    public void Match_WhenIsFailure_Should_Invoke_OnFailureWithError_And_ReturnResultValue()
+    public void Match_When_IsFailure_Should_InvokeOnFailureWithError_And_ReturnResultValue()
     {
         // Arrange & Act
         var result = TestError.ToResult<int>()
@@ -30,7 +30,7 @@ public sealed class ResultTMatchTests : MonadTests
     }
 
     [Fact]
-    public async Task MatchAsync_WhenIsSuccess_Should_Invoke_OnSuccessWithValue_And_ReturnResultValue()
+    public async Task MatchAsync_When_IsSuccess_Should_InvokeOnSuccessWithValue_And_ReturnResultValue()
     {
         // Arrange & Act
         var result = await ResultTaskWithValue()
@@ -41,7 +41,7 @@ public sealed class ResultTMatchTests : MonadTests
     }
 
     [Fact]
-    public async Task MatchAsync_WhenIsFailure_Should_Invoke_OnFailureWithError_And_ReturnResultValue()
+    public async Task MatchAsync_When_IsFailure_Should_InvokeOnFailureWithError_And_ReturnResultValue()
     {
         // Arrange & Act
         var result = await ResultTaskWithError()
@@ -49,5 +49,29 @@ public sealed class ResultTMatchTests : MonadTests
 
         // Assert
         result.Should().Be(OnFailure(TestError));
+    }
+
+    [Fact]
+    public async Task MatchAsync_When_IsFailure_Should_InvokeOnFailureTaskWithError_And_ReturnResultValue()
+    {
+        // Arrange & Act
+        var result = await TestError
+            .ToResult<int>()
+            .Match(OnSuccessAsync, OnFailureAsync);
+
+        // Assert
+        result.Should().Be(OnFailure(TestError));
+    }
+
+    [Fact]
+    public async Task MatchAsync_When_IsSuccess_Should_InvokeOnSuccessTaskWithValue_And_ReturnResultValue()
+    {
+        // Arrange & Act
+        var result = await TestValue
+            .ToResult()
+            .Match(OnSuccessAsync, OnFailureAsync);
+
+        // Assert
+        result.Should().Be(OnSuccess(TestValue));
     }
 }

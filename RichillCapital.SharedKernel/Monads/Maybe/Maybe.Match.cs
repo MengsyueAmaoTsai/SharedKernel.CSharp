@@ -8,6 +8,18 @@ public readonly partial record struct Maybe<TValue>
         IsNull ?
             onIsNull() :
             onHasValue(Value);
+
+    public async Task<TResult> Match<TResult>(
+        Func<TValue, Task<TResult>> onHasValueTask,
+        Func<Task<TResult>> onIsNullTask)
+    {
+        if (IsNull)
+        {
+            return await onIsNullTask();
+        }
+
+        return await onHasValueTask(Value);
+    }
 }
 
 public static partial class MaybeExtensions

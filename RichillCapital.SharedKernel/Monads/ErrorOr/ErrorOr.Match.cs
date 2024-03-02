@@ -13,6 +13,18 @@ public readonly partial record struct ErrorOr<TValue>
 
         return onIsValue(Value);
     }
+
+    public async Task<TResult> Match<TResult>(
+        Func<IEnumerable<Error>, Task<TResult>> onHasErrorTask,
+        Func<TValue, Task<TResult>> onIsValueTask)
+    {
+        if (HasError)
+        {
+            return await onHasErrorTask(Errors);
+        }
+
+        return await onIsValueTask(Value);
+    }
 }
 
 public static partial class ErrorOrExtensions
