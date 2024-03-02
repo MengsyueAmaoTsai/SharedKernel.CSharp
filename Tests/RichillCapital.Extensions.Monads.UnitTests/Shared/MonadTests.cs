@@ -17,6 +17,8 @@ public abstract class MonadTests
         Error.NotFound("Error 5"),
     ];
 
+    protected static Error ErrorFactoryWithValue(int value) => Error.Invalid(value.ToString());
+
     protected static int OnHasValue(int value) => value * 2;
     protected static async Task<int> OnHasValueAsync(int value) => await Task.FromResult(value * 2);
     protected static int OnIsNull() => 0;
@@ -52,11 +54,18 @@ public abstract class MonadTests
     protected static async Task<ErrorOr<string>> ErrorOrFactoryWithValueTask(int value) =>
         await Task.FromResult(value.ToString().ToErrorOr());
 
+    protected static async Task<ErrorOr<string>> ErrorOrFactoryWithValueTask_HasError(int value) =>
+        await Task.FromResult(TestErrors.ToErrorOr<string>());
+
     protected static Result<string> ResultFactoryWithValue(int value) =>
         value.ToString().ToResult();
 
     protected static async Task<Result<string>> ResultFactoryWithValueTask(int value) =>
         await Task.FromResult(value.ToString().ToResult());
+
+
+    protected static async Task<Result<string>> ResultFactoryWithValueTask_IsFailure(int value) =>
+        await Task.FromResult(TestError.ToResult<string>());
 
     protected static Maybe<string> MaybeFactoryWithValue(int value) =>
         value.ToString().ToMaybe();
@@ -64,9 +73,13 @@ public abstract class MonadTests
     protected static async Task<Maybe<string>> MaybeFactoryWithValueTask(int value) =>
         await Task.FromResult(value.ToString().ToMaybe());
 
+    protected static async Task<Maybe<string>> MaybeFactoryWithValueTask_Null(int value) =>
+        await Task.FromResult(Maybe<string>.Null);
+
     protected static readonly Func<int, bool> EnsureTrue = new(value => value == 5);
     protected static readonly Func<int, bool> EnsureFalse = new(value => value > 10);
-
+    protected static async Task<bool> EnsureTrueAsync(int value) => await Task.FromResult(value == 5);
+    protected static async Task<bool> EnsureFalseAsync(int value) => await Task.FromResult(value == 3);
 
 
     protected static async Task<int> GetTestValueAsync() => await Task.FromResult(TestValue);

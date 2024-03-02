@@ -2,33 +2,43 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Maybe<TValue>
 {
-    public Maybe<TValue> Then(Action action)
+}
+
+public static partial class MaybeExtensions
+{
+    public static Maybe<TValue> Then<TValue>(
+        this Maybe<TValue> maybe,
+        Action action)
     {
-        if (IsNull)
+        if (maybe.IsNull)
         {
-            return Null;
+            return Maybe<TValue>.Null;
         }
 
         action();
 
-        return Value.ToMaybe();
+        return maybe.Value.ToMaybe();
     }
 
-    public Maybe<TValue> Then(Action<TValue> actionWithValue)
+    public static Maybe<TValue> Then<TValue>(
+        this Maybe<TValue> maybe,
+        Action<TValue> actionWithValue)
     {
-        if (IsNull)
+        if (maybe.IsNull)
         {
-            return Null;
+            return Maybe<TValue>.Null;
         }
 
-        actionWithValue(Value);
+        actionWithValue(maybe.Value);
 
-        return Value.ToMaybe();
+        return maybe.Value.ToMaybe();
     }
 
-    public Maybe<TResult> Then<TResult>(Func<TResult> factory)
+    public static Maybe<TResult> Then<TValue, TResult>(
+        this Maybe<TValue> maybe,
+        Func<TResult> factory)
     {
-        if (IsNull)
+        if (maybe.IsNull)
         {
             return Maybe<TResult>.Null;
         }
@@ -36,39 +46,42 @@ public readonly partial record struct Maybe<TValue>
         return factory().ToMaybe();
     }
 
-    public Maybe<TResult> Then<TResult>(Func<TValue, TResult> factoryWithValue)
+    public static Maybe<TResult> Then<TValue, TResult>(
+        this Maybe<TValue> maybe,
+        Func<TValue, TResult> factoryWithValue)
     {
-        if (IsNull)
+        if (maybe.IsNull)
         {
             return Maybe<TResult>.Null;
         }
 
-        return factoryWithValue(Value).ToMaybe();
+        return factoryWithValue(maybe.Value).ToMaybe();
     }
 
-    public Maybe<TResult> Then<TResult>(Func<TValue, Maybe<TResult>> maybeFactoryWithValue)
+    public static Maybe<TResult> Then<TValue, TResult>(
+        this Maybe<TValue> maybe,
+        Func<TValue, Maybe<TResult>> maybeFactoryWithValue)
     {
-        if (IsNull)
+        if (maybe.IsNull)
         {
             return Maybe<TResult>.Null;
         }
 
-        return maybeFactoryWithValue(Value);
+        return maybeFactoryWithValue(maybe.Value);
     }
 
-    public async Task<Maybe<TResult>> Then<TResult>(Func<TValue, Task<Maybe<TResult>>> maybeFactoryWithValueTask)
+    public static async Task<Maybe<TResult>> Then<TValue, TResult>(
+        this Maybe<TValue> maybe,
+        Func<TValue, Task<Maybe<TResult>>> maybeFactoryWithValueTask)
     {
-        if (IsNull)
+        if (maybe.IsNull)
         {
             return Maybe<TResult>.Null;
         }
 
-        return await maybeFactoryWithValueTask(Value);
+        return await maybeFactoryWithValueTask(maybe.Value);
     }
-}
 
-public static partial class MaybeExtensions
-{
     public static async Task<Maybe<TResult>> Then<TValue, TResult>(
         this Task<Maybe<TValue>> maybeTask,
         Func<TValue, TResult> factoryWithValue)
@@ -81,5 +94,33 @@ public static partial class MaybeExtensions
         }
 
         return factoryWithValue(result.Value).ToMaybe();
+    }
+
+    public static async Task<Maybe<TResult>> Then<TValue, TResult>(
+        this Maybe<TValue> maybe,
+        Func<TValue, Task<Result<TResult>>> resultFactoryWithValueTask)
+    {
+        if (maybe.IsNull)
+        {
+            return Maybe<TResult>.Null;
+        }
+
+        var result = await resultFactoryWithValueTask(maybe.Value);
+
+        return result.ToMaybe();
+    }
+
+    public static async Task<Maybe<TResult>> Then<TValue, TResult>(
+        this Maybe<TValue> maybe,
+        Func<TValue, Task<ErrorOr<TResult>>> errorOrFactoryWithValueTask)
+    {
+        if (maybe.IsNull)
+        {
+            return Maybe<TResult>.Null;
+        }
+
+        var errorOr = await errorOrFactoryWithValueTask(maybe.Value);
+
+        return errorOr.ToMaybe();
     }
 }

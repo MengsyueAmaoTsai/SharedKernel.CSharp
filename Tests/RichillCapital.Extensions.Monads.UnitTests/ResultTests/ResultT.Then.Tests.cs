@@ -170,4 +170,76 @@ public sealed class ResultTThenTests : MonadTests
         // Assert
         result.ShouldBeFailureWith(TestError);
     }
+
+    [Fact]
+    public async Task ThenAsync_When_IsFailure_Should_NotInvokeMaybeFactoryWithValueTask_And_ReturnFailureResultWithError()
+    {
+        // Arrange & Act
+        var result = await TestError
+            .ToResult<int>()
+            .Then(MaybeFactoryWithValueTask, ErrorFactoryWithValue);
+
+        // Assert
+        result.ShouldBeFailureWith(TestError);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsSuccess_And_MaybeTaskIsNull_Should_InvokeMaybeFactoryWithValueTask_And_ReturnFailureResultWithGivenError()
+    {
+        // Arrange & Act
+        var result = await TestValue
+            .ToResult()
+            .Then(MaybeFactoryWithValueTask_Null, ErrorFactoryWithValue);
+
+        // Assert
+        result.ShouldBeFailureWith(ErrorFactoryWithValue(TestValue));
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsSuccess_And_MaybeTaskHasValue_Should_InvokeMaybeFactoryWithValueTask_And_ReturnSuccessResultWithValue()
+    {
+        // Arrange & Act
+        var result = await TestValue
+            .ToResult()
+            .Then(MaybeFactoryWithValueTask, ErrorFactoryWithValue);
+
+        // Assert
+        result.ShouldBeSuccessWith(TestValue.ToString());
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsFailure_Should_NotInvokeErrorOrFactoryWithValueTask_And_ReturnFailureResultWithError()
+    {
+        // Arrange & Act
+        var result = await TestError
+            .ToResult<int>()
+            .Then(ErrorOrFactoryWithValueTask);
+
+        // Assert
+        result.ShouldBeFailureWith(TestError);
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsSuccess_And_ErrorOrTaskHasError_Should_InvokeErrorOrFactoryWithValueTask_And_ReturnFailureResultWithError()
+    {
+        // Arrange & Act
+        var result = await TestValue
+            .ToResult()
+            .Then(ErrorOrFactoryWithValueTask_HasError);
+
+        // Assert
+        result.ShouldBeFailureWith(TestErrors.First());
+    }
+
+    [Fact]
+    public async Task ThenAsync_When_IsSuccess_And_ErrorOrTaskIsValue_Should_InvokeErrorOrFactoryWithValueTask_And_ReturnSuccessResultWithValue()
+    {
+        // Arrange & Act
+        var result = await TestValue
+            .ToResult()
+            .Then(ErrorOrFactoryWithValueTask);
+
+        // Assert
+        result.ShouldBeSuccessWith(TestValue.ToString());
+    }
 }

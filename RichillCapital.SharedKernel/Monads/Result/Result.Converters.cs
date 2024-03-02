@@ -5,36 +5,41 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public static partial class ResultExtensions
 {
+    /// <summary>
+    /// Converts a value to a <see cref="Result{TValue}"/>.
+    /// </summary>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> ToResult<TValue>(this TValue value)
-    {
-        return Result<TValue>.With(value);
-    }
+    public static Result<TValue> ToResult<TValue>(this TValue value) =>
+        Result<TValue>.With(value);
 
+    /// <summary>
+    /// Converts a <see cref="Task{TValue}"/> to a <see cref="Result{TValue}"/>.
+    /// </summary>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static async Task<Result<TValue>> ToResult<TValue>(this Task<TValue> valueTask)
-    {
-        var value = await valueTask;
-        return Result<TValue>.With(value);
-    }
+    public static async Task<Result<TValue>> ToResult<TValue>(this Task<TValue> valueTask) =>
+        Result<TValue>.With(await valueTask);
 
+    /// <summary>
+    /// Converts a <see cref="ValueTask{TValue}"/> to a <see cref="Result{TValue}"/>.
+    /// </summary>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static async ValueTask<Result<TValue>> ToResult<TValue>(this ValueTask<TValue> valueTask)
-    {
-        var value = await valueTask;
-        return Result<TValue>.With(value);
-    }
+    public static async ValueTask<Result<TValue>> ToResult<TValue>(this ValueTask<TValue> valueTask) =>
+        Result<TValue>.With(await valueTask);
 
+    /// <summary>
+    /// Converts an <see cref="Error"/> to a <see cref="Result{TValue}"/>.
+    /// </summary>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> ToResult<TValue>(this Error error)
-    {
-        return Result<TValue>.Failure(error);
-    }
+    public static Result<TValue> ToResult<TValue>(this Error error) =>
+        Result<TValue>.Failure(error);
 
+    /// <summary>
+    /// Converts an <see cref="Error"/> to a <see cref="Result"/>.
+    /// </summary>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> ToResult<TValue>(this ErrorOr<TValue> errorOr) =>
@@ -42,6 +47,9 @@ public static partial class ResultExtensions
             Result<TValue>.Failure(errorOr.Errors.First()) :
             Result<TValue>.With(errorOr.Value);
 
+    /// <summary>
+    /// Converts a <see cref="Task{ErrorOr{TValue}}"/> to a <see cref="Result{TValue}"/>.
+    /// </summary>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static async Task<Result<TValue>> ToResult<TValue>(this Task<ErrorOr<TValue>> errorOrTask)
@@ -53,6 +61,9 @@ public static partial class ResultExtensions
             Result<TValue>.With(errorOr.Value);
     }
 
+    /// <summary>
+    /// Converts a <see cref="Result{TValue}"/> to a <see cref="Maybe{TValue}"/>.
+    /// </summary>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result<TValue> ToResult<TValue>(
@@ -62,6 +73,9 @@ public static partial class ResultExtensions
             Result<TValue>.Failure(error) :
             Result<TValue>.With(maybe.Value);
 
+    /// <summary>
+    /// Converts a <see cref="Task{Maybe{TValue}}"/> to a <see cref="Result{TValue}"/>.
+    /// </summary>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static async Task<Result<TValue>> ToResult<TValue>(
@@ -78,10 +92,11 @@ public static partial class ResultExtensions
 
 public static partial class ResultExtensions
 {
+    /// <summary>
+    /// Converts an <see cref="Error"/> to a <see cref="Result"/>.
+    /// </summary>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result ToResult(this Error error)
-    {
-        return Result.Failure(error);
-    }
+    public static Result ToResult(this Error error) =>
+        Result.Failure(error);
 }

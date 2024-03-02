@@ -1,28 +1,21 @@
-using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
-
 namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Result<TValue>
 {
-    public Result<TValue> Merge(params Result<TValue>[] results)
-    {
-        if (IsFailure)
-        {
-            return Error.ToResult<TValue>();
-        }
-
-        if (results.Any(result => result.IsFailure))
-        {
-            return results
-                .First(result => result.IsFailure).Error
-                .ToResult<TValue>();
-        }
-
-        return results.Last().Value.ToResult();
-    }
 }
 
 public readonly partial record struct Result
 {
+}
+
+public static partial class ResultExtensions
+{
+    public static Result<TValue> Merge<TValue>(
+        this Result<TValue> result,
+        params Result<TValue>[] results) =>
+        result.IsFailure ?
+            result.Error.ToResult<TValue>() :
+            results.Any(result => result.IsFailure) ?
+                results.First(result => result.IsFailure).Error.ToResult<TValue>() :
+                results.Last().Value.ToResult();
 }

@@ -2,47 +2,30 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Result<TValue>
 {
-    public TResult Match<TResult>(
-        Func<TValue, TResult> onSuccess, Func<Error, TResult> onFailure)
-    {
-        if (IsFailure)
-        {
-            return onFailure(Error);
-        }
-
-        return onSuccess(Value);
-    }
-
-    public async Task<TResult> Match<TResult>(
-        Func<TValue, Task<TResult>> onSuccessTask,
-        Func<Error, Task<TResult>> onFailureTask)
-    {
-        if (IsFailure)
-        {
-            return await onFailureTask(Error);
-        }
-
-        return await onSuccessTask(Value);
-    }
 }
 
 public readonly partial record struct Result
 {
-    public TResult Match<TResult>(
-        Func<TResult> onSuccess,
-        Func<Error, TResult> onFailure)
-    {
-        if (IsFailure)
-        {
-            return onFailure(Error);
-        }
-
-        return onSuccess();
-    }
 }
 
 public static partial class ResultExtensions
 {
+    public static TResult Match<TValue, TResult>(
+        this Result<TValue> result,
+        Func<TValue, TResult> onSuccess,
+        Func<Error, TResult> onFailure) =>
+        result.IsFailure ?
+            onFailure(result.Error) :
+            onSuccess(result.Value);
+
+    public static async Task<TResult> Match<TValue, TResult>(
+        this Result<TValue> result,
+        Func<TValue, Task<TResult>> onSuccessTask,
+        Func<Error, Task<TResult>> onFailureTask) =>
+        result.IsFailure ?
+            await onFailureTask(result.Error) :
+            await onSuccessTask(result.Value);
+
     public static async Task<TResult> Match<TValue, TResult>(
         this Task<Result<TValue>> resultTask,
         Func<TValue, TResult> onSuccess,
@@ -51,4 +34,15 @@ public static partial class ResultExtensions
         var result = await resultTask;
         return result.Match(onSuccess, onFailure);
     }
+}
+
+public static partial class ResultExtensions
+{
+    public static TResult Match<TResult>(
+        this Result result,
+        Func<TResult> onSuccess,
+        Func<Error, TResult> onFailure) =>
+        result.IsFailure ?
+            onFailure(result.Error) :
+            onSuccess();
 }
