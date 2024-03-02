@@ -5,6 +5,9 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Maybe<TValue>
 {
+    /// <summary>
+    /// Ensures that a value satisfies a condition.
+    /// </summary>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Maybe<TValue> Ensure(
@@ -22,7 +25,5 @@ public static partial class MaybeExtensions
         Func<TValue, bool> ensure) =>
         maybe.IsNull ?
             Maybe<TValue>.Null :
-            !ensure(maybe.Value) ?
-                Maybe<TValue>.Null :
-                maybe.Value.ToMaybe();
+            Maybe<TValue>.Ensure(maybe.Value, ensure);
 }
