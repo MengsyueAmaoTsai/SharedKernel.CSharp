@@ -25,4 +25,18 @@ public static partial class MaybeExtensions
         var value = await valueTask;
         return Maybe<TValue>.With(value);
     }
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Maybe<TValue> ToMaybe<TValue>(this ErrorOr<TValue> errorOr) =>
+        errorOr.HasError ?
+            Maybe<TValue>.Null :
+            Maybe<TValue>.With(errorOr.Value);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Maybe<TValue> ToMaybe<TValue>(this Result<TValue> result) =>
+        result.IsFailure ?
+            Maybe<TValue>.Null :
+            Maybe<TValue>.With(result.Value);
 }

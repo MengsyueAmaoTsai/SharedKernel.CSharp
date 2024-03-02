@@ -17,6 +17,8 @@ public abstract class MonadTests
         Error.NotFound("Error 5"),
     ];
 
+    protected static Error ErrorFactoryWithValue(int value) => Error.Invalid($"Invalid value: {value}");
+
     // Ensure 
     protected static readonly Func<int, bool> EnsureTrue = new(value => value == 5);
     protected static readonly Func<int, bool> EnsureFalse = new(value => value > 10);

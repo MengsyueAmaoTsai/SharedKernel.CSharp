@@ -68,4 +68,48 @@ public sealed class ErrorOrExtensionsConvertersTests : MonadTests
         // Assert
         errorOr.ShouldBeErrors(TestErrors);
     }
+
+    [Fact]
+    public void ToErrorOr_When_ResultIsFailure_Should_ConvertToErrorOrWithError()
+    {
+        // Arrange & Act
+        var result = TestError.ToResult<int>();
+        var errorOr = result.ToErrorOr();
+
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
+
+    [Fact]
+    public void ToErrorOr_When_ResultIsSuccess_Should_ConvertToErrorOrWithValue()
+    {
+        // Arrange & Act
+        var result = TestValue.ToResult();
+        var errorOr = result.ToErrorOr();
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue);
+    }
+
+    [Fact]
+    public void ToErrorOr_When_MaybeIsNull_Should_ConvertToErrorOrWithError()
+    {
+        // Arrange & Act
+        var maybe = Maybe<int>.Null;
+        var errorOr = maybe.ToErrorOr(TestError);
+
+        // Assert
+        errorOr.ShouldBeError(TestError);
+    }
+
+    [Fact]
+    public void ToErrorOr_When_MaybeHasValue_Should_ConvertToErrorOrWithValue()
+    {
+        // Arrange & Act
+        var maybe = TestValue.ToMaybe();
+        var errorOr = maybe.ToErrorOr(TestError);
+
+        // Assert
+        errorOr.ShouldBeValue(TestValue);
+    }
 }

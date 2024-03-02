@@ -33,4 +33,14 @@ public static partial class ErrorOr
     {
         return ErrorOr<TValue>.WithError(errors);
     }
+
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this Result<TValue> result) =>
+        result.IsFailure ?
+            ErrorOr<TValue>.WithError(result.Error) :
+            ErrorOr<TValue>.With(result.Value);
+
+    public static ErrorOr<TValue> ToErrorOr<TValue>(this Maybe<TValue> maybe, Error error) =>
+        maybe.IsNull ?
+            ErrorOr<TValue>.WithError(error) :
+            ErrorOr<TValue>.With(maybe.Value);
 }

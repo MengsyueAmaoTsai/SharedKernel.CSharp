@@ -37,6 +37,23 @@ public static partial class ResultExtensions
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TValue> ToResult<TValue>(this ErrorOr<TValue> errorOr) =>
+        errorOr.HasError ?
+            Result<TValue>.Failure(errorOr.Errors.First()) :
+            Result<TValue>.With(errorOr.Value);
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<TValue> ToResult<TValue>(this Maybe<TValue> maybe, Error error) =>
+        maybe.IsNull ?
+            Result<TValue>.Failure(error) :
+            Result<TValue>.With(maybe.Value);
+}
+
+public static partial class ResultExtensions
+{
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Result ToResult(this Error error)
     {
         return Result.Failure(error);

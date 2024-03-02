@@ -35,4 +35,28 @@ public sealed class MaybeExtensionsConvertersTests : MonadTests
         // Assert
         maybe.ShouldBeHas(TestValue);
     }
+
+    [Fact]
+    public void ToMaybe_When_ErrorOrHasError_Should_ConvertToNull()
+    {
+        // Arrange & Act
+        Maybe<int> maybe = TestErrors
+            .ToErrorOr<int>()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeNull();
+    }
+
+    [Fact]
+    public void ToMaybe_When_ErrorOrIsValue_Should_ConvertToMaybeWithValue()
+    {
+        // Arrange & Act
+        var maybe = TestValue
+            .ToErrorOr()
+            .ToMaybe();
+
+        // Assert
+        maybe.ShouldBeHas(TestValue);
+    }
 }
