@@ -3,7 +3,7 @@ using RichillCapital.SharedKernel.Monads;
 
 namespace RichillCapital.Extensions.Monads.UnitTests;
 
-public sealed class ErrorOrExtensionsConvertersTests : MonadTests
+public sealed class ErrorOrTConvertersTests : MonadTests
 {
     [Fact]
     public void ToErrorOr_When_FromValue_Should_ConvertToErrorOrWithValue()
