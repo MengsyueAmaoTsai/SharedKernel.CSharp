@@ -1,8 +1,9 @@
-name: Publish
+name: .NET Build
 
 on:
   push:
     branches: [ "master" ]
+
   pull_request:
     branches: [ "master" ]
 
@@ -13,8 +14,7 @@ env:
   NUGET_SOURCE: https://api.nuget.org/v3/index.json
   
 jobs:
-  deploy:
-
+  build:
     runs-on: ubuntu-latest
 
     steps:
