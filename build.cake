@@ -3,7 +3,7 @@ var release = Argument("Configuration", "Release");
 var outputDirectory = "./artifacts";
 
 // Load environment variables 
-var API_KEY = EnvironmentVariable("API_KEY");
+var API_KEY = Argument("API_KEY", "");
 
 Task("Clean")
     .Does(() =>
