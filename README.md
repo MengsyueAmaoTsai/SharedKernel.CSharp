@@ -1,19 +1,7 @@
 # SharedKernel
 
-## Description
+## Before push
 
-Include primitive extension classes, specification pattern, monad.
-
-## Installation
-
-```powershell
-dotnet add package RichillCapital.SharedKernel
+```bash
+dotnet cake
 ```
-
-## License
-
-## Todo
-
-- Throw
-- Ensure
-- Guard Clauses
