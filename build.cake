@@ -1,9 +1,12 @@
 var solutionFile = "./RichillCapital.SharedKernel.sln";
+
 var release = Argument("Configuration", "Release");
+
 var outputDirectory = "./artifacts";
 
-// Load environment variables 
-var apiKey = Argument("API_KEY", "");
+var nugetSource = "https://api.nuget.org/v3/index.json";
+
+var apiKey = Argument("ApiKey", "");
 
 Task("Clean")
     .Does(() =>
@@ -66,7 +69,7 @@ Task("Release")
     {
         DotNetNuGetPush("./artifacts/*.nupkg", new DotNetNuGetPushSettings()
         {
-            Source = "https://api.nuget.org/v3/index.json",
+            Source = nugetSource,
             ApiKey = apiKey,
         });
     });
