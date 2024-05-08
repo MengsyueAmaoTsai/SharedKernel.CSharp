@@ -3,7 +3,7 @@ var release = Argument("Configuration", "Release");
 var outputDirectory = "./artifacts";
 
 // Load environment variables 
-var API_KEY = Argument("API_KEY", "");
+var apiKey = Argument("API_KEY", "");
 
 Task("Clean")
     .Does(() =>
@@ -67,7 +67,7 @@ Task("Release")
         DotNetNuGetPush("./artifacts/*.nupkg", new DotNetNuGetPushSettings()
         {
             Source = "https://api.nuget.org/v3/index.json",
-            ApiKey = EnvironmentVariable("NUGET_API_KEY"),
+            ApiKey = apiKey,
         });
     });
 
