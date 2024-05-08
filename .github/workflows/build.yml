@@ -37,5 +37,5 @@ jobs:
     - name: Pack
       run: dotnet pack ${{ env.SOLUTION_FILE }} -c ${{ env.CONFIGURATION }} --no-build --no-restore --output ./publish
 
-    # - name: Publish to NuGet
-    #   run: dotnet nuget push ./publish/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s ${{ env.NUGET_SOURCE}}
+    - name: Publish to NuGet
+      run: dotnet nuget push ./publish/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s ${{ env.NUGET_SOURCE}}
