@@ -25,5 +25,4 @@ jobs:
       with:
         script-path: ./build.cake
         target: Release
-        arguments: --Configuration=${{ env.CONFIGURATION }} 
-        environment: API_KEY=${{ secrets.NUGET_API_KEY }}
+        arguments: --Configuration=${{ env.CONFIGURATION }} --ApiKey=${{ secrets.NUGET_API_KEY }}
