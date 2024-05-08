@@ -23,79 +23,269 @@ public readonly partial record struct Result<TValue>
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<(T1, T2)> Combine<T1, T2>(Result<T1> errorOr1, Result<T2> errorOr2)
+    public static Result<(T1, T2)> Combine<T1, T2>(
+        Result<T1> result1,
+        Result<T2> result2)
     {
-        if (errorOr1.IsFailure)
+        if (result1.IsFailure)
         {
-            return errorOr1.Error.ToResult<(T1, T2)>();
+            return result1.Error.ToResult<(T1, T2)>();
         }
 
-        if (errorOr2.IsFailure)
+        if (result2.IsFailure)
         {
-            return errorOr2.Error.ToResult<(T1, T2)>();
+            return result2.Error.ToResult<(T1, T2)>();
         }
 
-        return (errorOr1.Value, errorOr2.Value).ToResult();
+        return (result1.Value, result2.Value).ToResult();
     }
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<(T1, T2, T3)> Combine<T1, T2, T3>(Result<T1> errorOr1, Result<T2> errorOr2, Result<T3> errorOr3)
+    public static Result<(T1, T2, T3)> Combine<T1, T2, T3>(
+        Result<T1> result1,
+        Result<T2> result2,
+        Result<T3> result3)
     {
-        var errorOrs = Result<(T1, T2)>
-            .Combine(errorOr1, errorOr2);
+        var results = Result<(T1, T2)>
+            .Combine(result1, result2);
 
-        if (errorOrs.IsFailure)
+        if (results.IsFailure)
         {
-            return errorOrs.Error.ToResult<(T1, T2, T3)>();
+            return results.Error.ToResult<(T1, T2, T3)>();
         }
 
-        if (errorOr3.IsFailure)
+        if (result3.IsFailure)
         {
-            return errorOr3.Error.ToResult<(T1, T2, T3)>();
+            return result3.Error.ToResult<(T1, T2, T3)>();
         }
 
-        return (errorOr1.Value, errorOr2.Value, errorOr3.Value).ToResult();
+        return (result1.Value, result2.Value, result3.Value).ToResult();
     }
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<(T1, T2, T3, T4)> Combine<T1, T2, T3, T4>(Result<T1> errorOr1, Result<T2> errorOr2, Result<T3> errorOr3, Result<T4> errorOr4)
+    public static Result<(T1, T2, T3, T4)> Combine<T1, T2, T3, T4>(
+        Result<T1> result1,
+        Result<T2> result2,
+        Result<T3> result3,
+        Result<T4> result4)
     {
-        var errorOrs = Result<(T1, T2, T3)>
-            .Combine(errorOr1, errorOr2, errorOr3);
+        var results = Result<(T1, T2, T3)>
+            .Combine(result1, result2, result3);
 
-        if (errorOrs.IsFailure)
+        if (results.IsFailure)
         {
-            return errorOrs.Error.ToResult<(T1, T2, T3, T4)>();
+            return results.Error.ToResult<(T1, T2, T3, T4)>();
         }
 
-        if (errorOr4.IsFailure)
+        if (result4.IsFailure)
         {
-            return errorOr4.Error.ToResult<(T1, T2, T3, T4)>();
+            return result4.Error.ToResult<(T1, T2, T3, T4)>();
         }
 
-        return (errorOr1.Value, errorOr2.Value, errorOr3.Value, errorOr4.Value).ToResult();
+        return (result1.Value, result2.Value, result3.Value, result4.Value)
+            .ToResult();
     }
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<(T1, T2, T3, T4, T5)> Combine<T1, T2, T3, T4, T5>(Result<T1> errorOr1, Result<T2> errorOr2, Result<T3> errorOr3, Result<T4> errorOr4, Result<T5> errorOr5)
+    public static Result<(T1, T2, T3, T4, T5)> Combine<T1, T2, T3, T4, T5>(
+        Result<T1> result1,
+        Result<T2> result2,
+        Result<T3> result3,
+        Result<T4> result4,
+        Result<T5> result5)
     {
-        var errorOrs = Result<(T1, T2, T3, T4)>
-            .Combine(errorOr1, errorOr2, errorOr3, errorOr4);
+        var results = Result<(T1, T2, T3, T4)>
+            .Combine(result1, result2, result3, result4);
 
-        if (errorOrs.IsFailure)
+        if (results.IsFailure)
         {
-            return errorOrs.Error.ToResult<(T1, T2, T3, T4, T5)>();
+            return results.Error.ToResult<(T1, T2, T3, T4, T5)>();
         }
 
-        if (errorOr5.IsFailure)
+        if (result5.IsFailure)
         {
-            return errorOr5.Error.ToResult<(T1, T2, T3, T4, T5)>();
+            return result5.Error.ToResult<(T1, T2, T3, T4, T5)>();
         }
 
-        return (errorOr1.Value, errorOr2.Value, errorOr3.Value, errorOr4.Value, errorOr5.Value).ToResult();
+        return (result1.Value, result2.Value, result3.Value, result4.Value, result5.Value)
+            .ToResult();
+    }
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<(T1, T2, T3, T4, T5, T6)> Combine<T1, T2, T3, T4, T5, T6>(
+        Result<T1> result1,
+        Result<T2> result2,
+        Result<T3> result3,
+        Result<T4> result4,
+        Result<T5> result5,
+        Result<T6> result6)
+    {
+        var results = Result<(T1, T2, T3, T4, T5)>
+            .Combine(result1, result2, result3, result4, result5);
+
+        if (results.IsFailure)
+        {
+            return results.Error.ToResult<(T1, T2, T3, T4, T5, T6)>();
+        }
+
+        if (result6.IsFailure)
+        {
+            return result6.Error.ToResult<(T1, T2, T3, T4, T5, T6)>();
+        }
+
+        return (
+            result1.Value,
+            result2.Value,
+            result3.Value,
+            result4.Value,
+            result5.Value,
+            result6.Value)
+            .ToResult();
+    }
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<(T1, T2, T3, T4, T5, T6, T7)> Combine<T1, T2, T3, T4, T5, T6, T7>(
+        Result<T1> result1,
+        Result<T2> result2,
+        Result<T3> result3,
+        Result<T4> result4,
+        Result<T5> result5,
+        Result<T6> result6,
+        Result<T7> result7)
+    {
+        var results = Result<(T1, T2, T3, T4, T5, T6)>
+            .Combine(result1, result2, result3, result4, result5, result6);
+
+        if (results.IsFailure)
+        {
+            return results.Error.ToResult<(T1, T2, T3, T4, T5, T6, T7)>();
+        }
+
+        if (result7.IsFailure)
+        {
+            return result7.Error.ToResult<(T1, T2, T3, T4, T5, T6, T7)>();
+        }
+
+        return (
+            result1.Value,
+            result2.Value,
+            result3.Value,
+            result4.Value,
+            result5.Value,
+            result6.Value,
+            result7.Value)
+            .ToResult();
+    }
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<(T1, T2, T3, T4, T5, T6, T7, T8)> Combine<T1, T2, T3, T4, T5, T6, T7, T8>(
+        Result<T1> result1,
+        Result<T2> result2,
+        Result<T3> result3,
+        Result<T4> result4,
+        Result<T5> result5,
+        Result<T6> result6,
+        Result<T7> result7,
+        Result<T8> result8)
+    {
+        var results = Result<(T1, T2, T3, T4, T5, T6, T7)>
+            .Combine(result1, result2, result3, result4, result5, result6, result7);
+
+        if (results.IsFailure)
+        {
+            return results.Error.ToResult<(T1, T2, T3, T4, T5, T6, T7, T8)>();
+        }
+
+        if (result8.IsFailure)
+        {
+            return result8.Error.ToResult<(T1, T2, T3, T4, T5, T6, T7, T8)>();
+        }
+
+        return (
+            result1.Value,
+            result2.Value,
+            result3.Value,
+            result4.Value,
+            result5.Value,
+            result6.Value,
+            result7.Value,
+            result8.Value)
+            .ToResult();
+    }
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<(T1, T2, T3, T4, T5, T6, T7, T8, T9)> Combine<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+        Result<T1> result1,
+        Result<T2> result2,
+        Result<T3> result3,
+        Result<T4> result4,
+        Result<T5> result5,
+        Result<T6> result6,
+        Result<T7> result7,
+        Result<T8> result8,
+        Result<T9> result9)
+    {
+        var results = Result<(T1, T2, T3, T4, T5, T6, T7, T8)>
+            .Combine(result1, result2, result3, result4, result5, result6, result7, result8);
+
+        if (results.IsFailure)
+        {
+            return results.Error.ToResult<(T1, T2, T3, T4, T5, T6, T7, T8, T9)>();
+        }
+
+        if (result9.IsFailure)
+        {
+            return result9.Error.ToResult<(T1, T2, T3, T4, T5, T6, T7, T8, T9)>();
+        }
+
+        return (
+            result1.Value,
+            result2.Value,
+            result3.Value,
+            result4.Value,
+            result5.Value,
+            result6.Value,
+            result7.Value,
+            result8.Value,
+            result9.Value)
+            .ToResult();
+    }
+
+    [Pure]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Result<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)> Combine<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+        Result<T1> result1,
+        Result<T2> result2,
+        Result<T3> result3,
+        Result<T4> result4,
+        Result<T5> result5,
+        Result<T6> result6,
+        Result<T7> result7,
+        Result<T8> result8,
+        Result<T9> result9,
+        Result<T10> result10)
+    {
+        var results = Result<(T1, T2, T3, T4, T5, T6, T7, T8, T9)>
+            .Combine(result1, result2, result3, result4, result5, result6, result7, result8, result9);
+
+        if (results.IsFailure)
+        {
+            return results.Error.ToResult<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>();
+        }
+
+        if (result10.IsFailure)
+        {
+            return result10.Error.ToResult<(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>();
+        }
+
+        return (result1.Value, result2.Value, result3.Value, result4.Value, result5.Value, result6.Value, result7.Value, result8.Value, result9.Value, result10.Value).ToResult();
     }
 }
 
