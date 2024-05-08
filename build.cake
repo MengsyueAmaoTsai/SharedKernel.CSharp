@@ -1,7 +1,18 @@
 var solutionFile = "./RichillCapital.SharedKernel.sln";
 var release = Argument("Configuration", "Release");
+var outputDirectory = "./artifacts";
+
+// Load environment variables 
+var API_KEY = EnvironmentVariable("API_KEY");
+
+Task("Clean")
+    .Does(() =>
+    {
+        CleanDirectory(outputDirectory);
+    });
 
 Task("Restore")
+    .IsDependentOn("Clean")
     .Does(() =>
     {
         DotNetRestore(solutionFile);
@@ -39,7 +50,7 @@ Task("Pack")
             Configuration = release,
             NoBuild = true,
             NoRestore = true,
-            OutputDirectory = "./artifacts",
+            OutputDirectory = outputDirectory,
         });
     });
 
@@ -49,6 +60,18 @@ Task("Default")
     {
     });
 
+Task("Release")
+    .IsDependentOn("Pack")
+    .Does(() =>
+    {
+        DotNetNuGetPush("./artifacts/*.nupkg", new DotNetNuGetPushSettings()
+        {
+            Source = "https://api.nuget.org/v3/index.json",
+            ApiKey = EnvironmentVariable("NUGET_API_KEY"),
+        });
+    });
+
 // Run this target with no specified target
 var target = Argument("target", "Default");
+
 RunTarget(target);

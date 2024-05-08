@@ -24,5 +24,6 @@ jobs:
       uses: cake-build/cake-action@v2
       with:
         script-path: ./build.cake
-        target: Default
-        arguments: --configuration=${{ env.CONFIGURATION }} --source=${{ env.NUGET_SOURCE }}
+        target: Release
+        arguments: --Configuration=${{ env.CONFIGURATION }} 
+        environment: API_KEY=${{ secrets.NUGET_API_KEY }}
