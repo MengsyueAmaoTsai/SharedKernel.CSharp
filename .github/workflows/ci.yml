@@ -1,4 +1,4 @@
-name: .NET Continuous Integration
+name: RichillCapital.SharedKernel - Continuous Integration
 
 on:
   push:
@@ -41,3 +41,4 @@ jobs:
       with:
         name: RichillCapital.Domain-${{ steps.nbgv.outputs.GitCommitIdShort }}-${{ env.Configuration }}
         path: ./artifacts          
+

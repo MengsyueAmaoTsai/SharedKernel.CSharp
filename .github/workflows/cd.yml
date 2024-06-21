@@ -1,4 +1,4 @@
-name: .NET Continuous Deployment
+name: RichillCapital.SharedKernel - Continuous Deployment
 
 on:
   push:
@@ -11,8 +11,9 @@ env:
   Target: Default
   Configuration: Release
 
+
 jobs:
-  build:
+  push-nuget:
     runs-on: ubuntu-latest
     
     steps:
