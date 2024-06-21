@@ -18,11 +18,19 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    ## Get tag version
-    - name: Get tag version
-      id: get_tag_version
-      run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
+    - name: Use Nerdbank.GitVersioning to Set Version Variables
+      uses: dotnet/nbgv@master
+      id: nbgv
 
-    ## Set ./RichillCapital.SharedKernel.csproj version
-    - name: Set ./RichillCapital.SharedKernel.csproj version
-      run: dotnet build ./RichillCapital.SharedKernel.csproj -p:Version=${{ steps.get_tag_version.outputs.tag }}
+    - name: Update Package Version 
+      run: |
+        [xml]$manifest = Get-Content ".\$env:Wap_Project_Directory\Package.appxmanifest"
+
+        $manifest.Package.Identity.Version = "${{ steps.nbgv.outputs.SimpleVersion }}.0"
+        $manifest.save(".\$env:Wap_Project_Directory\Package.appxmanifest")
+
+    - name: Update version in csproj
+      run: |
+        sudo apt-get install -y xmlstarlet
+        latest_tag=${{ steps.nbgv.outputs.SimpleVersion }}
+        xmlstarlet ed --inplace -u "/Project/PropertyGroup/Version" -v "${latest_tag}" ./RichillCapital.SharedKernel.csproj
