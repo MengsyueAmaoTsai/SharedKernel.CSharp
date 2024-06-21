@@ -23,16 +23,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Use Nerdbank.GitVersioning to Set Version Variables
+    - name: Use Nerdbank.GitVersioning
       uses: dotnet/nbgv@master
       id: nbgv
 
-    - name: Update Version
-      run: |
-        sudo apt-get install -y xmlstarlet
-        latest_tag=${{ steps.nbgv.outputs.SimpleVersion }}
-        xmlstarlet ed --inplace -u "/Project/PropertyGroup/Version" -v "${latest_tag}" ${{ env.ProjectPath }}
-        
     - name: .NET Build and Tests
       uses: cake-build/cake-action@v2
       with:
@@ -45,5 +39,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: RichillCapital.Domain-${{ steps.nbgv.outputs.SimpleVersion }}-${{ env.Configuration }}
+        name: RichillCapital.Domain-${{ steps.nbgv.outputs.GitCommitId }}-${{ env.Configuration }}
         path: ./artifacts          
