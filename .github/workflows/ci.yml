@@ -23,9 +23,14 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
+
+    - name: Use Nerdbank.GitVersioning
+      uses: dotnet/nbgv@master
+      id: nbgv
+
     - name: Determine the build version
       id: version
-      run: echo "::set-output name=version::$(git describe --tags --abbrev=0 || date +'%Y%m%d')-${{ github.sha }}"
+      run: echo "::set-output name=version::$(git describe --tags --abbrev=0 || date +'%Y%m%d')-${{ steps.nbgv.outputs.GitCommitIdShort }}"
 
     - name: .NET Build and Tests
       uses: cake-build/cake-action@v2
@@ -39,6 +44,6 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ env.PACKAGE_ID }}-${{ steps.version.outputs.version }}-${{ github.sha }}-${{ env.Configuration }}
+        name: ${{ env.PACKAGE_ID }}-${{ steps.version.outputs.version }}-${{ steps.nbgv.outputs.GitCommitIdShort }}-${{ env.Configuration }}
         path: ./artifacts          
 
