@@ -11,9 +11,10 @@ on:
       - master
       - dev
 env:
+  ProjectPath: ./RichillCapital.SharedKernel.csproj
   CakeFilePath: ./build.cake
-  Configuration: Debug
   Target: Default
+  Configuration: Debug
 
 jobs:
   build:
@@ -30,9 +31,9 @@ jobs:
       run: |
         sudo apt-get install -y xmlstarlet
         latest_tag=${{ steps.nbgv.outputs.SimpleVersion }}
-        xmlstarlet ed --inplace -u "/Project/PropertyGroup/Version" -v "${latest_tag}" ./RichillCapital.SharedKernel.csproj
+        xmlstarlet ed --inplace -u "/Project/PropertyGroup/Version" -v "${latest_tag}" ${{ env.ProjectPath }}
         
-    - name: .NET Build and Test
+    - name: .NET Build and Tests
       uses: cake-build/cake-action@v2
       with:
         script-path: ${{ env.CakeFilePath }}
