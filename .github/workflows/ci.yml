@@ -31,17 +31,18 @@ jobs:
         sudo apt-get install -y xmlstarlet
         latest_tag=${{ steps.nbgv.outputs.SimpleVersion }}
         xmlstarlet ed --inplace -u "/Project/PropertyGroup/Version" -v "${latest_tag}" ./RichillCapital.SharedKernel.csproj
-        - name: .NET Build and Test
-        uses: cake-build/cake-action@v2
-        with:
-          script-path: ${{ env.CakeFilePath }}
-          target: ${{ env.Target }}
-          verbosity: Diagnostic
-          arguments: |
-            configuration: ${{ env.Configuration }}
+        
+    - name: .NET Build and Test
+      uses: cake-build/cake-action@v2
+      with:
+        script-path: ${{ env.CakeFilePath }}
+        target: ${{ env.Target }}
+        verbosity: Diagnostic
+        arguments: |
+          configuration: ${{ env.Configuration }}
       
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: RichillCapital.Domain-${{ env.Configuration }}
+        name: RichillCapital.Domain-${{ steps.nbgv.outputs.SimpleVersion }}-${{ env.Configuration }}
         path: ./artifacts          
