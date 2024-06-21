@@ -1,25 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
     <PackageId>RichillCapital.SharedKernel</PackageId>
     <Version>1.3.5</Version>
   </PropertyGroup>
 
-  <Import Project="./Solution.Build.props" />
-  <Import Project="./Solution.Packages.props" />
-
+  <ItemGroup>
+    <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.2" />
+  </ItemGroup>
+  
   <ItemGroup>
     <Compile Remove="Tests\**" />
     <EmbeddedResource Remove="Tests\**" />
     <None Remove="Tests\**" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Remove=".gitignore" />
-    <None Remove="LICENSE" />
-    <None Remove="README.md" />
-    <None Remove="Solution.Build.props" />
-    <None Remove="Solution.Packages.props" />
-    <None Remove="Solution.ruleset" />
-  </ItemGroup>
-
 </Project>
