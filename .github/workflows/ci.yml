@@ -27,18 +27,18 @@ jobs:
       id: version
       run: echo "::set-output name=version::$(git describe --tags --abbrev=0 || date +'%Y%m%d')-${{ github.sha }}"
 
-    # - name: .NET Build and Tests
-    #   uses: cake-build/cake-action@v2
-    #   with:
-    #     script-path: ${{ env.CAKE_FILE_PATH }}
-    #     target: ${{ env.TARGET }}
-    #     verbosity: Diagnostic
-    #     arguments: |
-    #       configuration: ${{ env.CONFIGURATION }}
+    - name: .NET Build and Tests
+      uses: cake-build/cake-action@v2
+      with:
+        script-path: ${{ env.CAKE_FILE_PATH }}
+        target: ${{ env.TARGET }}
+        verbosity: Diagnostic
+        arguments: |
+          configuration: ${{ env.CONFIGURATION }}
       
-    # - name: Upload Artifact
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: ${{ env.PACKAGE_ID }}-${date + '%Y%m%d'}-${{ github.sha }}-${{ env.Configuration }}
-    #     path: ./artifacts          
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.PACKAGE_ID }}-${{ steps.version.outputs.version }}-${{ github.sha }}-${{ env.Configuration }}
+        path: ./artifacts          
 
