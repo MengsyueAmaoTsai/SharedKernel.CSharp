@@ -11,10 +11,11 @@ on:
       - master
       - dev
 env:
-  ProjectPath: ./RichillCapital.SharedKernel.csproj
-  CakeFilePath: ./build.cake
-  Target: Default
-  Configuration: Debug
+  PACKAGE_ID: RichillCapital.SharedKernel
+  PROJECT_PATH: ./RichillCapital.SharedKernel.csproj
+  CAKE_FILE_PATH: ./build.cake
+  TARGET: Default
+  CONFIGURATION: Debug
 
 jobs:
   build:
@@ -22,23 +23,22 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Use Nerdbank.GitVersioning
-      uses: dotnet/nbgv@master
-      id: nbgv
+    - name: Determine the build version
+      id: version
+      run: echo "::set-output name=version::$(git describe --tags --abbrev=0 || date +'%Y%m%d')-${{ github.sha }}"
 
-    - name: .NET Build and Tests
-      uses: cake-build/cake-action@v2
-      with:
-        script-path: ${{ env.CakeFilePath }}
-        target: ${{ env.Target }}
-        verbosity: Diagnostic
-        arguments: |
-          configuration: ${{ env.Configuration }}
+    # - name: .NET Build and Tests
+    #   uses: cake-build/cake-action@v2
+    #   with:
+    #     script-path: ${{ env.CAKE_FILE_PATH }}
+    #     target: ${{ env.TARGET }}
+    #     verbosity: Diagnostic
+    #     arguments: |
+    #       configuration: ${{ env.CONFIGURATION }}
       
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: RichillCapital.Domain-${{ steps.nbgv.outputs.GitCommitIdShort }}-${{ env.Configuration }}
-        path: ./artifacts          
+    # - name: Upload Artifact
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: ${{ env.PACKAGE_ID }}-${date + '%Y%m%d'}-${{ github.sha }}-${{ env.Configuration }}
+    #     path: ./artifacts          
 
