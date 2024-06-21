@@ -18,3 +18,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
+    ## Get tag version
+    - name: Get tag version
+      id: get_tag_version
+      run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
+
+    ## Set ./RichillCapital.SharedKernel.csproj version
+    - name: Set ./RichillCapital.SharedKernel.csproj version
+      run: dotnet build ./RichillCapital.SharedKernel.csproj -p:Version=${{ steps.get_tag_version.outputs.tag }}
