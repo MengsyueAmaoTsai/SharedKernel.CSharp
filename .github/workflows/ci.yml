@@ -28,7 +28,7 @@ jobs:
       uses: dotnet/nbgv@master
       id: nbgv
 
-    - name: Determine the build version
+    - name: Determine the Build Version
       id: version
       run: echo "::set-output name=version::$(git describe --tags --abbrev=0 || date +'%Y%m%d')-${{ steps.nbgv.outputs.GitCommitIdShort }}"
 

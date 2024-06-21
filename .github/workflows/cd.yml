@@ -6,10 +6,10 @@ on:
       - '*'
 
 env:
-  ProjectPath: ./RichillCapital.SharedKernel.csproj
-  CakeFilePath: ./build.cake
-  Target: Default
-  Configuration: Release
+  PROJECT_PATH: ./RichillCapital.SharedKernel.csproj
+  CAKE_FILE_PATH: ./build.cake
+  TARGET: Default
+  CONFIGURATION: Release
 
 jobs:
   push-nuget:
@@ -18,21 +18,21 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Use Nerdbank.GitVersioning to Set Version Variables
-      uses: dotnet/nbgv@master
-      id: nbgv
-
+    - name: Determine the Deploy Version
+      id: version
+      run: echo "::set-output name=version::$(git describe --tags --abbrev=0)"
+    
     - name: Update Version
       run: |
         sudo apt-get install -y xmlstarlet
-        latest_tag=${{ steps.nbgv.outputs.SimpleVersion }}.0
-        xmlstarlet ed --inplace -u "/Project/PropertyGroup/Version" -v "${latest_tag}" ${{ env.ProjectPath }}
+        package_version=${{ steps.version.outputs.version }}
+        xmlstarlet ed --inplace -u "/Project/PropertyGroup/Version" -v "${package_version}" ${{ env.PROJECT_PATH }}
         
     - name: .NET Build and Tests
       uses: cake-build/cake-action@v2
       with:
-        script-path: ${{ env.CakeFilePath }}
-        target: ${{ env.Target }}
+        script-path: ${{ env.CAKE_FILE_PATH }}
+        target: ${{ env.TARGET }}
         verbosity: Diagnostic
         arguments: |
           configuration: ${{ env.Configuration }}
