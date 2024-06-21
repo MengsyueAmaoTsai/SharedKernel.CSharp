@@ -25,7 +25,7 @@ jobs:
     - name: Update Version
       run: |
         sudo apt-get install -y xmlstarlet
-        latest_tag=${{ steps.nbgv.outputs.SimpleVersion }}
+        latest_tag=${{ steps.nbgv.outputs.SimpleVersion }}.0
         xmlstarlet ed --inplace -u "/Project/PropertyGroup/Version" -v "${latest_tag}" ${{ env.ProjectPath }}
         
     - name: .NET Build and Tests
