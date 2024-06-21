@@ -1,7 +1,9 @@
-# SharedKernel
+# RichillCapital.SharedKernel
 
-## Before push
+## Installation
 
 ```bash
-dotnet cake
+dotnet add package RichillCapital.SharedKernel
 ```
+
+## [NuGet Gallery](https://www.nuget.org/packages/RichillCapital.SharedKernel)
