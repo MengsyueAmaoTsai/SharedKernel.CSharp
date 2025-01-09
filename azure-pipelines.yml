@@ -1,0 +1,58 @@
+trigger:
+  branches:
+    include:
+      - develop
+      - feature/**
+      - release/**
+      - master
+      - hotfix/**
+
+pr:
+  branches:
+    include:
+      - develop
+      - master
+
+pool:
+  name: 'Default' # Use self-host agent pool named 'Default'
+
+variables:
+  dotNetVersion: '8.0.x'
+
+resources:
+  - repo: self
+
+
+stages:
+  - stage: BuildStage
+    displayName: 'Build stage'
+    jobs:
+      - job: BuildJob
+        displayName: 'Build job'
+
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET sdk $(dotnetVersion)'
+            inputs:
+              packageType: 'sdk'
+              version: '$(dotNetVersion)'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Restore dependencies'
+            inputs:
+              command: 'restore'
+              projects: './RichillCapital.Api.sln'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Build'
+            inputs:
+              command: 'build'
+              projects: './RichillCapital.Api.sln'
+              arguments: '-c Release --no-restore'  
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Test'
+            inputs:
+              command: 'test'
+              projects: './RichillCapital.Api.sln'
+              arguments: '-c Release --no-restore --no-build'              
