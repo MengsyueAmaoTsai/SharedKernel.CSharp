@@ -46,3 +46,24 @@ stages:
           - script: dotnet test --configuration Release --no-build --no-restore
             displayName: 'Run tests'
 
+  - stage: ReleaseStage
+    displayName: Release stage
+    dependsOn: BuildStage
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
+
+    jobs:
+      - job: ReleaseJob
+        displayName: Release job
+
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET sdk $(dotnetVersion)'
+            inputs:
+              packageType: 'sdk'
+              version: '$(dotNetVersion)'
+
+          - script: dotnet restore --no-cache 
+            displayName: 'Restore dependencies'
+          
+          - script: dotnet build --configuration Release --no-restore
+            displayName: 'Build'
