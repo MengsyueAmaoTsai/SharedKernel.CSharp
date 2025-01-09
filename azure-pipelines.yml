@@ -18,7 +18,8 @@ pool:
 
 variables:
   dotNetVersion: '8.0.x'
-
+  solution: './RichillCapital.SharedKernel.sln'
+  
 resources:
   - repo: self
 
@@ -41,18 +42,18 @@ stages:
             displayName: 'Restore dependencies'
             inputs:
               command: 'restore'
-              projects: './RichillCapital.Api.sln'
+              projects: $(solution)
 
           - task: DotNetCoreCLI@2
             displayName: 'Build'
             inputs:
               command: 'build'
-              projects: './RichillCapital.Api.sln'
+              projects: $(solution)
               arguments: '-c Release --no-restore'  
 
           - task: DotNetCoreCLI@2
             displayName: 'Test'
             inputs:
               command: 'test'
-              projects: './RichillCapital.Api.sln'
+              projects: $(solution)
               arguments: '-c Release --no-restore --no-build'              
