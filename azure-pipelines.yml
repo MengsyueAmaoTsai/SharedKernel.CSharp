@@ -23,7 +23,6 @@ variables:
 resources:
   - repo: self
 
-
 stages:
   - stage: BuildStage
     displayName: 'Build stage'
@@ -38,22 +37,12 @@ stages:
               packageType: 'sdk'
               version: '$(dotNetVersion)'
 
-          - task: DotNetCoreCLI@2
+          - script: dotnet restore --no-cache 
             displayName: 'Restore dependencies'
-            inputs:
-              command: 'restore'
-              projects: $(solution)
 
-          - task: DotNetCoreCLI@2
+          - script: dotnet build --configuration Release --no-restore
             displayName: 'Build'
-            inputs:
-              command: 'build'
-              projects: $(solution)
-              arguments: '-c Release --no-restore'  
 
-          - task: DotNetCoreCLI@2
-            displayName: 'Test'
-            inputs:
-              command: 'test'
-              projects: $(solution)
-              arguments: '-c Release --no-restore --no-build'              
+          - script: dotnet test --configuration Release --no-build --no-restore
+            displayName: 'Run tests'
+
