@@ -88,6 +88,7 @@ stages:
                 Write-Host "Updated nuspec file with version: $(ReleaseVersion)"
 
           - task: NuGetCommand@2
+            displayName: NuGet pack 
             inputs:
               command: 'pack'
               packagesToPack: '**/*.nuspec'
