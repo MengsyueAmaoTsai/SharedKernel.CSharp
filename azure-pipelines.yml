@@ -106,5 +106,15 @@ stages:
       - job: ProductionJob
         displayName: Production job
         steps:
-          - script: echo "Deploying to production..."
-            displayName: Deploy to production                
+          - task: PowerShell@2
+            displayName: Generate release version from latest release branch
+            inputs:
+              targetType: inline
+              script: |
+                $latestReleaseBranch = git branch --sort=-committerdate | findstr release
+                Write-Host "Latest release branch: $latestReleaseBranch"
+
+                $latestReleaseBranch = $latestReleaseBranch -replace 'release/', ''
+                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$latestReleaseBranch"
+
+                Write-Host "Generated Release Version: $latestReleaseBranch"
