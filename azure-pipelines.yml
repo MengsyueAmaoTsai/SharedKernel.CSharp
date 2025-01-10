@@ -156,7 +156,7 @@ stages:
 
                 Write-Host "Updated nuspec file with version: $(ReleaseVersion)"
 
-          - script: nuget pack $(package) -OutputDirectory $(Build.ArtifactStagingDirectory)/artifacts -NoDefaultExcludes
+          - script: nuget pack $(package) -NoDefaultExcludes
             displayName: Pack package $(package)
 
           - task: UseDotNet@2
@@ -182,7 +182,7 @@ stages:
                   exit 0
                 }
 
-          - script: nuget push $(Build.ArtifactStagingDirectory)/**/*-$(ReleaseVersion).nupkg -src https://api.nuget.org/v3/index.json -ApiKey $(NUGET_API_KEY) -SkipDuplicate
+          - script: nuget push ./**/*-$(ReleaseVersion).nupkg -src https://api.nuget.org/v3/index.json -ApiKey $(NUGET_API_KEY) -SkipDuplicate
             displayName: Push package to NuGet  
 
 
