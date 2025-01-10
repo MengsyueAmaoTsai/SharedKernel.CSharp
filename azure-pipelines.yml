@@ -17,53 +17,72 @@ pool:
   name: 'Default' # Use self-host agent pool named 'Default'
 
 variables:
-  dotNetVersion: '8.0.x'
-  solution: './RichillCapital.SharedKernel.sln'
+  dotNetVersion: 8.0.x
+  solution: ./RichillCapital.SharedKernel.sln
   
 resources:
   - repo: self
 
 stages:
-  - stage: BuildStage
-    displayName: 'Build stage'
+  - stage: DevelopmentStage
+    displayName: Development stage 
+
+    variables:
+      buildConfiguration: Release 
+      
     jobs:
-      - job: BuildJob
-        displayName: 'Build job'
+      - job: DevelopmentJob
+        displayName: Development job 
 
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET sdk $(dotnetVersion)'
-            inputs:
-              packageType: 'sdk'
-              version: '$(dotNetVersion)'
+            displayName: Use .NET sdk $(dotNetVersion)
 
-          - script: dotnet restore --no-cache 
-            displayName: 'Restore dependencies'
+          - script: dotnet restore $(solution) --no-cache 
+            displayName: Restore dependencies 
 
-          - script: dotnet build --configuration Release --no-restore
-            displayName: 'Build'
+          - script: dotnet build $(solution) -c $(buildConfiguration) --no-restore 
+            displayName: Build solution ($(buildConfiguration))
 
-          - script: dotnet test --configuration Release --no-build --no-restore
-            displayName: 'Run tests'
+          - script: dotnet test $(solution) -c $(buildConfiguration) --no-build --no-restore
+            displayName: Test 
 
   - stage: ReleaseStage
     displayName: Release stage
-    dependsOn: BuildStage
-    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
 
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
+    
     jobs:
       - job: ReleaseJob
         displayName: Release job
 
+        variables:
+          buildConfiguration: Release
+
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET sdk $(dotnetVersion)'
-            inputs:
-              packageType: 'sdk'
-              version: '$(dotNetVersion)'
+            displayName: Use .NET sdk $(dotNetVersion)
 
-          - script: dotnet restore --no-cache 
-            displayName: 'Restore dependencies'
-          
-          - script: dotnet build --configuration Release --no-restore
-            displayName: 'Build'
+          - task: PowerShell@2
+            displayName: Generate release version 
+            inputs:
+              targetType: inline
+              script: |
+                Write-Host "Generating release version from branch: $(Build.SourceBranch)"
+
+                $branchName = "$(Build.SourceBranchName)"
+                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$branchName"
+                
+                Write-Host "Generated Release Version: $branchName"
+              
+
+  - stage: ProductionStage
+    displayName: Production stage 
+
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    jobs:
+      - job: ProductionJob
+        displayName: Production job
+        steps:
+          - script: echo "Deploying to production..."
+            displayName: Deploy to production                
