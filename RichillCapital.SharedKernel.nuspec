@@ -14,6 +14,7 @@
     <releaseNotes>
       Initial release
     </releaseNotes>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <packageTypes>
       <packageType name="package" />
     </packageTypes>

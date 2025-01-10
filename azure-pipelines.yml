@@ -75,6 +75,19 @@ stages:
                 
                 Write-Host "Generated Release Version: $branchName"
               
+          - task: NuGetCommand@2
+            displayName: Pack 
+            inputs:
+              command: pack
+              packagesToPack: ./RichillCapital.SharedKernel.nuspec
+              arguments: -NoDefaultExclude -OutputDirectory $(Build.ArtifactStagingDirectory)/artifacts -Properties Configuration=Release -Version $(ReleaseVersion) 
+            
+          - task: PublishPipelineArtifact@1
+            displayName: Publish artifact 
+            inputs:
+              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+              artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
+              publishLocation: pipeline
 
   - stage: ProductionStage
     displayName: Production stage 
