@@ -90,17 +90,12 @@ stages:
           - script: nuget pack $(package) -OutputDirectory $(Build.ArtifactStagingDirectory)/artifacts -NoDefaultExcludes
             displayName: Pack package $(package)
 
-          # - task: PublishPipelineArtifact@1
-          #   displayName: Publish artifact 
-          #   inputs:
-          #     targetPath: $(Build.ArtifactStagingDirectory)/artifacts
-          #     artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
-          #     publishLocation: pipeline
-          - task: PublishBuildArtifacts@1
-            displayName: Publish artifact
+          - task: PublishPipelineArtifact@1
+            displayName: Publish artifact 
             inputs:
-              PathtoPublish: $(Build.ArtifactStagingDirectory)/artifacts
-              ArtifactName: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
+              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+              artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
+              publishLocation: pipeline
 
   - stage: ProductionStage
     displayName: Production stage 
@@ -150,19 +145,13 @@ stages:
                     exit 1
                 }                
           
-          - task: DownloadBuildArtifacts@1
-            displayName: Download artifact 
+          - task: DownloadPipelineArtifact@2
+            displayName: Download release artifacts 
             inputs:
-              buildType: specific
-              downloadType: single
               artifactName: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
-              downloadPath: $(System.ArtifactsDirectory)
-               
-          # - task: DownloadPipelineArtifact@2
-          #   displayName: Download release artifacts 
-          #   inputs:
-          #     artifactName: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
-          #     targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+              buildType: specific
+              project: RichillCapital
 
           - task: UseDotNet@2
             displayName: Use .NET sdk $(dotNetVersion)
