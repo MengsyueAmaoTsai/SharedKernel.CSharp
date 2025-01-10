@@ -141,4 +141,21 @@ stages:
                     Write-Error "Failed to find the latest release branch."
                     exit 1
                 }                
-  
+                
+          - task: DownloadPipelineArtifact@2
+            displayName: Download release artifacts 
+            inputs:
+              artifactName: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
+              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+
+          - task: UseDotNet@2
+            displayName: Use .NET sdk $(dotNetVersion)
+            inputs:
+              packageType: 'sdk'
+              version: $(dotNetVersion)
+
+          - script: nuget push **/*-$(ReleaseVersion).nupkg -src https://api.nuget.org/v3/index.json -ApiKey -SkipDuplicate
+            displayName: Push package to NuGet  
+
+
+              
