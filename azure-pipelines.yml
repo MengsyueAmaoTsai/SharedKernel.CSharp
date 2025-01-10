@@ -100,7 +100,7 @@ stages:
   - stage: ProductionStage
     displayName: Production stage 
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-
+    dependsOn: DevelopmentStage
     jobs:
       - job: ProductionJob
         displayName: Production job
@@ -110,10 +110,14 @@ stages:
             inputs:
               targetType: inline
               script: |
-                $latestReleaseBranch = git branch --sort=-committerdate | findstr release
+                # Use powershell syntax to get latest release branch 
+                git fetch --all 
+                $latestReleaseBranch = git branch --sort=-committerdate --format='%(refname:short)' --list 'refs/heads/release/*' | Select-Object -First 1
+
                 Write-Host "Latest release branch: $latestReleaseBranch"
 
-                $latestReleaseBranch = $latestReleaseBranch -replace 'release/', ''
-                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$latestReleaseBranch"
+                $branchName = $latestReleaseBranch -replace 'refs/heads/release/', ''
 
-                Write-Host "Generated Release Version: $latestReleaseBranch"
+                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$branchName"
+
+                Write-Host "Generated Release Version: $branchName"
