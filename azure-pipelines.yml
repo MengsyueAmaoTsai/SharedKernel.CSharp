@@ -90,12 +90,17 @@ stages:
           - script: nuget pack $(package) -OutputDirectory $(Build.ArtifactStagingDirectory)/artifacts -NoDefaultExcludes
             displayName: Pack package $(package)
 
-          - task: PublishPipelineArtifact@1
-            displayName: Publish artifact 
+          # - task: PublishPipelineArtifact@1
+          #   displayName: Publish artifact 
+          #   inputs:
+          #     targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+          #     artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
+          #     publishLocation: pipeline
+          - task: PublishBuildArtifacts@1
+            displayName: Publish artifact
             inputs:
-              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
-              artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
-              publishLocation: pipeline
+              PathtoPublish: $(Build.ArtifactStagingDirectory)/artifacts
+              ArtifactName: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
 
   - stage: ProductionStage
     displayName: Production stage 
@@ -144,18 +149,43 @@ stages:
                     Write-Error "Failed to find the latest release branch."
                     exit 1
                 }                
-                
-          - task: DownloadPipelineArtifact@2
-            displayName: Download release artifacts 
+          
+          - task: DownloadBuildArtifacts@1
+            displayName: Download artifact 
             inputs:
+              buildType: specific
+              downloadType: single
               artifactName: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
-              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+              downloadPath: $(System.ArtifactsDirectory)
+               
+          # - task: DownloadPipelineArtifact@2
+          #   displayName: Download release artifacts 
+          #   inputs:
+          #     artifactName: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
+          #     targetPath: $(Build.ArtifactStagingDirectory)/artifacts
 
           - task: UseDotNet@2
             displayName: Use .NET sdk $(dotNetVersion)
             inputs:
               packageType: 'sdk'
               version: $(dotNetVersion)
+
+          - task: PowerShell@2
+            displayName: Create and push Git tag 
+            inputs:
+              targetType: inline
+              script: |
+                git config user.name "Mengsyue Amao Tsai"
+                git config user.email "mengsyue.tsai@outlook.com"
+
+                git fetch --tags 
+                $tagName = "v$(ReleaseVersion)"
+
+                $existingTags = git tag --list 
+                if ($existingTags -contains $tagName) {
+                  Write-Host "Tag $tagName already exists."
+                  exit 0
+                }
 
           - script: nuget push **/*-$(ReleaseVersion).nupkg -src https://api.nuget.org/v3/index.json -ApiKey -SkipDuplicate
             displayName: Push package to NuGet  
