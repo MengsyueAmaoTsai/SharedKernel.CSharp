@@ -182,7 +182,7 @@ stages:
                   exit 0
                 }
 
-          - script: nuget push ./**/*-$(ReleaseVersion).nupkg -src https://api.nuget.org/v3/index.json -ApiKey $(NUGET_API_KEY) -SkipDuplicate
+          - script: nuget push ./**/*.nupkg -src https://api.nuget.org/v3/index.json -ApiKey $(NUGET_API_KEY) -SkipDuplicate
             displayName: Push package to NuGet  
 
 
