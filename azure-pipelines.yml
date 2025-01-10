@@ -104,6 +104,10 @@ stages:
     jobs:
       - job: ProductionJob
         displayName: Production job
+
+        variables:
+          buildConfiguration: Release
+
         steps:
           - task: PowerShell@2
             displayName: Generate release version from latest release branch
@@ -134,9 +138,8 @@ stages:
                     Select-Object -First 1
 
                 if ($latestBranch) {
-                    Write-Host "##vso[task.setvariable variable=ReleaseVersion]$($latestBranch.BranchName)"
-                    Write-Host "Latest release branch: $($latestBranch.BranchName)"
-                    Write-Host "Version: $($latestBranch.Version)"
+                    Write-Host "##vso[task.setvariable variable=ReleaseVersion]$($latestBranch.Version)"
+                    Write-Host "Generated release version: $($latestBranch.Version)"
                 } else {
                     Write-Error "Failed to find the latest release branch."
                     exit 1
