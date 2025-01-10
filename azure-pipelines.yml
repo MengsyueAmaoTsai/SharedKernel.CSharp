@@ -51,6 +51,7 @@ stages:
   - stage: ReleaseStage  
     displayName: Release stage  
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
+    dependsOn: DevelopmentStage
     
     jobs:
       - job: PublishReleaseJob
