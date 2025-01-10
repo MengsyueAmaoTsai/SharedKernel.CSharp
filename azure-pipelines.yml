@@ -110,14 +110,35 @@ stages:
             inputs:
               targetType: inline
               script: |
-                # Use powershell syntax to get latest release branch 
                 git fetch --all 
-                $latestReleaseBranch = git branch --sort=-committerdate --format='%(refname:short)' --list 'refs/heads/release/*' | Select-Object -First 1
 
-                Write-Host "Latest release branch: $latestReleaseBranch"
+                $branches = git branch -r | Where-Object { $_ -match 'origin/release/\d+\.\d+\.\d+' }
+                
+                if (-not $branches) {
+                    Write-Error "No matching branches found."
+                    exit 1
+                }                
 
-                $branchName = $latestReleaseBranch -replace 'refs/heads/release/', ''
+                $versions = $branches |
+                ForEach-Object {
+                    if ($_ -match 'origin/release/(\d+\.\d+\.\d+)') {
+                        [PSCustomObject]@{
+                            BranchName = $_.Trim()
+                            Version = [System.Version]$matches[1]
+                        }
+                    }
+                }
+                
+                $latestBranch = $versions |
+                    Sort-Object -Property Version -Descending |
+                    Select-Object -First 1
 
-                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$branchName"
-
-                Write-Host "Generated Release Version: $branchName"
+                if ($latestBranch) {
+                    Write-Host "##vso[task.setvariable variable=ReleaseVersion]$($latestBranch.BranchName)"
+                    Write-Host "Latest release branch: $($latestBranch.BranchName)"
+                    Write-Host "Version: $($latestBranch.Version)"
+                } else {
+                    Write-Error "Failed to find the latest release branch."
+                    exit 1
+                }                
+  
