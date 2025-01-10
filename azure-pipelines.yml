@@ -90,7 +90,6 @@ stages:
           - script: nuget pack $(package) -OutputDirectory $(Build.ArtifactStagingDirectory)/artifacts -NoDefaultExcludes
             displayName: Pack package $(package)
 
-
           - task: PublishPipelineArtifact@1
             displayName: Publish artifact 
             inputs:
@@ -100,7 +99,8 @@ stages:
 
   - stage: ProductionStage
     displayName: Production stage 
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
     jobs:
       - job: ProductionJob
         displayName: Production job
