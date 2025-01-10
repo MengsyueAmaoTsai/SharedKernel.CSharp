@@ -32,8 +32,8 @@ stages:
       buildConfiguration: Release 
       
     jobs:
-      - job: DevelopmentJob
-        displayName: Development job 
+      - job: BuildAndTestJob
+        displayName: Build and Test  
 
         steps:
           - task: UseDotNet@2
@@ -48,14 +48,13 @@ stages:
           - script: dotnet test $(solution) -c $(buildConfiguration) --no-build --no-restore
             displayName: Test 
 
-  - stage: ReleaseStage
-    displayName: Release stage
-
+  - stage: ReleaseStage  
+    displayName: Release stage  
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
     
     jobs:
-      - job: ReleaseJob
-        displayName: Release job
+      - job: PublishReleaseJob
+        displayName: Publish release artifacts 
 
         variables:
           buildConfiguration: Release
@@ -87,15 +86,20 @@ stages:
 
                 Write-Host "Updated nuspec file with version: $(ReleaseVersion)"
 
-          - script: nuget pack $(package) -OutputDirectory $(Build.ArtifactStagingDirectory)/artifacts -NoDefaultExcludes
-            displayName: Pack package $(package)
+          - task: NuGetCommand@2
+            inputs:
+              command: 'pack'
+              packagesToPack: '**/*.nuspec'
+              packDestination: '$(Build.ArtifactStagingDirectory)/artifacts'
+              versioningScheme: 'off'
+              arguments: '-NoDefaultExcludes'
 
           - task: PublishPipelineArtifact@1
-            displayName: Publish artifact 
+            displayName: Publish artifacts
             inputs:
-              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
-              artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
-              publishLocation: pipeline
+              targetPath: '$(Build.ArtifactStagingDirectory)/artifacts'
+              artifact: 'RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)'
+              publishLocation: 'pipeline'
 
   - stage: ProductionStage
     displayName: Production stage 
