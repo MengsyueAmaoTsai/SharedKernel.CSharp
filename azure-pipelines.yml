@@ -19,6 +19,7 @@ pool:
 variables:
   dotNetVersion: 8.0.x
   solution: ./RichillCapital.SharedKernel.sln
+  package: ./RichillCapital.SharedKernel.nuspec
   
 resources:
   - repo: self
@@ -80,19 +81,16 @@ stages:
             inputs:
               targetType: inline
               script: |
-                $nuspecFile = Get-Content ./RichillCapital.SharedKernel.nuspec
+                $nuspecFile = Get-Content $(package)
                 $nuspecFile = $nuspecFile -replace '<version>.*</version>', "<version>$(ReleaseVersion)</version>"
-                $nuspecFile | Set-Content ./RichillCapital.SharedKernel.nuspec
+                $nuspecFile | Set-Content $(package)
 
                 Write-Host "Updated nuspec file with version: $(ReleaseVersion)"
 
-          - task: NuGetCommand@2
-            displayName: Pack 
-            inputs:
-              command: pack
-              packagesToPack: ./RichillCapital.SharedKernel.nuspec
-              arguments: -NoDefaultExclude -OutputDirectory $(Build.ArtifactStagingDirectory)/artifacts -Properties Configuration=Release  
-            
+          - script: nuget pack $(package) -OutputDirectory $(Build.ArtifactStagingDirectory)/artifacts -NoDefaultExcludes
+            displayName: Pack package $(package)
+
+
           - task: PublishPipelineArtifact@1
             displayName: Publish artifact 
             inputs:
