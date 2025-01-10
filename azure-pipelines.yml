@@ -100,7 +100,6 @@ stages:
 
   - stage: ProductionStage
     displayName: Production stage 
-
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
       - job: ProductionJob
