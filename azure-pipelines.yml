@@ -145,13 +145,17 @@ stages:
                     exit 1
                 }                
           
-          # - task: DownloadPipelineArtifact@2
-          #   displayName: Download release artifacts 
-          #   inputs:
-          #     artifactName: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
-          #     targetPath: $(Build.ArtifactStagingDirectory)/artifacts
-          #     buildType: specific
-          #     project: RichillCapital
+          - task: PowerShell@2
+            displayName: Update nuspec file
+            inputs:
+              targetType: inline
+              script: |
+                $nuspecFile = Get-Content $(package)
+                $nuspecFile = $nuspecFile -replace '<version>.*</version>', "<version>$(ReleaseVersion)</version>"
+                $nuspecFile | Set-Content $(package)
+
+                Write-Host "Updated nuspec file with version: $(ReleaseVersion)"
+
           - script: nuget pack $(package) -OutputDirectory $(Build.ArtifactStagingDirectory)/artifacts -NoDefaultExcludes
             displayName: Pack package $(package)
 
@@ -178,7 +182,7 @@ stages:
                   exit 0
                 }
 
-          - script: nuget push $(Build.ArtifactStagingDirectory)/artifacts/**/*-$(ReleaseVersion).nupkg -src https://api.nuget.org/v3/index.json -ApiKey -SkipDuplicate
+          - script: nuget push $(Build.ArtifactStagingDirectory)/artifacts/**/*-$(ReleaseVersion).nupkg -src https://api.nuget.org/v3/index.json -ApiKey $(NUGET_API_KEY) -SkipDuplicate
             displayName: Push package to NuGet  
 
 
