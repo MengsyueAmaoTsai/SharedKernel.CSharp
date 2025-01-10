@@ -193,6 +193,10 @@ stages:
                   Write-Host "Tag $tagName already exists."
                   exit 0
                 }
+                
+          - script: |
+                echo "Nuget api key is $(NUGET_API_KEY)"
+            displayName: NuGet API Key
 
           - script: nuget push $(Build.ArtifactStagingDirectory)\*.nupkg -src "https://api.nuget.org/v3/index.json" -ApiKey $(NUGET_API_KEY) -SkipDuplicate 
             displayName: NuGet push 
