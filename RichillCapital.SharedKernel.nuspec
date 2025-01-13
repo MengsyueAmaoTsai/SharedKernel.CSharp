@@ -15,9 +15,6 @@
       Initial release
     </releaseNotes>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <packageTypes>
-      <packageType name="dependency" />
-    </packageTypes>
     <readme>README.md</readme>
   </metadata>
   <files>
