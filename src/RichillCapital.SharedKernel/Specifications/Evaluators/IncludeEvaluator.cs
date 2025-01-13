@@ -118,7 +118,7 @@ public class IncludeEvaluator : IEvaluator
     private static Lazy<Func<IQueryable, LambdaExpression, IQueryable>> CreateThenIncludeDelegate((
         Type EntityType,
         Type PropertyType,
-        Type? PreviousPropertyType) cacheKey) => new(() =>
+        Type PreviousPropertyType) cacheKey) => new(() =>
         {
             var thenIncludeInfo = _thenIncludeAfterReferenceMethodInfo;
 
