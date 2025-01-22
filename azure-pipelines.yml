@@ -20,42 +20,60 @@ variables:
   dotNetVersion: 8.0.x
   solution: ./RichillCapital.SharedKernel.sln
   package: ./RichillCapital.SharedKernel.nuspec
-  
+
 resources:
   - repo: self
 
 stages:
   - stage: DevelopmentStage
-    displayName: Development stage 
+    displayName: Development stage
 
     variables:
-      buildConfiguration: Release 
-      
+      buildConfiguration: Release
+
     jobs:
       - job: BuildAndTestJob
-        displayName: Build and Test  
+        displayName: Build and Test
 
         steps:
           - task: UseDotNet@2
             displayName: Use .NET sdk $(dotNetVersion)
 
-          - script: dotnet restore $(solution) --no-cache 
-            displayName: Restore dependencies 
+          - script: dotnet restore $(solution) --no-cache
+            displayName: Restore dependencies
 
-          - script: dotnet build $(solution) -c $(buildConfiguration) --no-restore 
+          - script: dotnet build $(solution) -c $(buildConfiguration) --no-restore
             displayName: Build solution ($(buildConfiguration))
 
           - script: dotnet test $(solution) -c $(buildConfiguration) --no-build --no-restore
-            displayName: Test 
+            displayName: Test
 
-  - stage: ReleaseStage  
-    displayName: Release stage  
+      - job: Publish
+        displayName: Publish job
+        dependsOn: DevelopmentJob
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+
+        steps:
+          - task: PowerShell@2
+            displayName: Generate build version
+            inputs:
+              targetType: inline
+              script: |
+                Write-Host "Generating build version..."
+
+                $buildVersion = (Get-Date).ToString("yy.MMdd") + ".$(Build.BuildId)"
+                Write-Host "##vso[task.setvariable variable=BuildVersion]$buildVersion"
+
+                Write-Host "Generated Build Version: $buildVersion"
+
+  - stage: ReleaseStage
+    displayName: Release stage
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
     dependsOn: DevelopmentStage
-    
+
     jobs:
       - job: PublishReleaseJob
-        displayName: Publish release artifacts 
+        displayName: Publish release artifacts
 
         variables:
           buildConfiguration: Release
@@ -65,7 +83,7 @@ stages:
             displayName: Use .NET sdk $(dotNetVersion)
 
           - task: PowerShell@2
-            displayName: Generate release version 
+            displayName: Generate release version
             inputs:
               targetType: inline
               script: |
@@ -73,9 +91,9 @@ stages:
 
                 $branchName = "$(Build.SourceBranchName)"
                 Write-Host "##vso[task.setvariable variable=ReleaseVersion]$branchName"
-                
+
                 Write-Host "Generated Release Version: $branchName"
-              
+
           - task: PowerShell@2
             displayName: Update nuspec file
             inputs:
@@ -88,7 +106,7 @@ stages:
                 Write-Host "Updated nuspec file with version: $(ReleaseVersion)"
 
           - task: NuGetCommand@2
-            displayName: NuGet pack 
+            displayName: NuGet pack
             inputs:
               command: 'pack'
               packagesToPack: '**/*.nuspec'
@@ -104,7 +122,7 @@ stages:
               publishLocation: 'pipeline'
 
   - stage: ProductionStage
-    displayName: Production stage 
+    displayName: Production stage
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     dependsOn: DevelopmentStage
     jobs:
@@ -120,14 +138,14 @@ stages:
             inputs:
               targetType: inline
               script: |
-                git fetch --all 
+                git fetch --all
 
                 $branches = git branch -r | Where-Object { $_ -match 'origin/release/\d+\.\d+\.\d+' }
-                
+
                 if (-not $branches) {
                     Write-Error "No matching branches found."
                     exit 1
-                }                
+                }
 
                 $versions = $branches |
                 ForEach-Object {
@@ -138,7 +156,7 @@ stages:
                         }
                     }
                 }
-                
+
                 $latestBranch = $versions |
                     Sort-Object -Property Version -Descending |
                     Select-Object -First 1
@@ -149,8 +167,8 @@ stages:
                 } else {
                     Write-Error "Failed to find the latest release branch."
                     exit 1
-                }                
-          
+                }
+
           - task: PowerShell@2
             displayName: Update nuspec file
             inputs:
@@ -163,7 +181,7 @@ stages:
                 Write-Host "Updated nuspec file with version: $(ReleaseVersion)"
 
           - task: NuGetCommand@2
-            displayName: NuGet pack 
+            displayName: NuGet pack
             inputs:
               command: 'pack'
               packagesToPack: '**/*.nuspec'
@@ -178,21 +196,21 @@ stages:
               version: $(dotNetVersion)
 
           - task: PowerShell@2
-            displayName: Create and push Git tag 
+            displayName: Create and push Git tag
             inputs:
               targetType: inline
               script: |
                 git config user.name "Mengsyue Amao Tsai"
                 git config user.email "mengsyue.tsai@outlook.com"
 
-                git fetch --tags 
+                git fetch --tags
                 $tagName = "v$(ReleaseVersion)"
 
-                $existingTags = git tag --list 
+                $existingTags = git tag --list
                 if ($existingTags -contains $tagName) {
                   Write-Host "Tag $tagName already exists."
                   exit 0
                 }
-                
-          - script: nuget push $(Build.ArtifactStagingDirectory)\*.nupkg -src "https://api.nuget.org/v3/index.json" -ApiKey $(NUGET_API_KEY) -SkipDuplicate 
-            displayName: NuGet push 
+
+          - script: nuget push $(Build.ArtifactStagingDirectory)\*.nupkg -src "https://api.nuget.org/v3/index.json" -ApiKey $(NUGET_API_KEY) -SkipDuplicate
+            displayName: NuGet push
