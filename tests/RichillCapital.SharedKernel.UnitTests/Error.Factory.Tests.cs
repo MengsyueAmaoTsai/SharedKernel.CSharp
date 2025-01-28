@@ -68,6 +68,32 @@ public sealed partial class ErrorFactoryTests
     }
 
     [Fact]
+    public void MethodNowAllowed_Should_ReturnMethodNotAllowedError()
+    {
+        // Arrange
+        var message = "Method Not Allowed";
+        var error = Error.MethodNotAllowed(message);
+
+        // Act & Assert
+        error.Should().BeOfType<Error>();
+        error.Type.Should().Be(ErrorType.MethodNotAllowed);
+        error.Message.Should().Be(message);
+    }
+
+    [Fact]
+    public void UnsupportedMediaType_Should_ReturnUnsupportedMediaTypeError()
+    {
+        // Arrange
+        var message = "Unsupported Media Type";
+        var error = Error.UnsupportedMediaType(message);
+
+        // Act & Assert
+        error.Should().BeOfType<Error>();
+        error.Type.Should().Be(ErrorType.UnsupportedMediaType);
+        error.Message.Should().Be(message);
+    }
+
+    [Fact]
     public void Conflict_Should_ReturnConflictError()
     {
         // Arrange
