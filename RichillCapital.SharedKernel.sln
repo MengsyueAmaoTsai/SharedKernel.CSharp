@@ -5,19 +5,23 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0E02921B-85FB-412B-8CC3-6535AB385F30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichillCapital.SharedKernel", "src\RichillCapital.SharedKernel\RichillCapital.SharedKernel.csproj", "{DD8AE0F9-A896-447D-ACB5-944D37D04890}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RichillCapital.SharedKernel", "src\RichillCapital.SharedKernel\RichillCapital.SharedKernel.csproj", "{DD8AE0F9-A896-447D-ACB5-944D37D04890}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B1A604B0-ADE5-40F9-BBB3-4EF964E3E19C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichillCapital.SharedKernel.UnitTests", "tests\RichillCapital.SharedKernel.UnitTests\RichillCapital.SharedKernel.UnitTests.csproj", "{37D7C658-7B0D-47D2-82DF-CFF4FB05ED37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RichillCapital.SharedKernel.UnitTests", "tests\RichillCapital.SharedKernel.UnitTests\RichillCapital.SharedKernel.UnitTests.csproj", "{37D7C658-7B0D-47D2-82DF-CFF4FB05ED37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32C6CBFC-0004-47E8-9D0F-0F7E882482DB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DD8AE0F9-A896-447D-ACB5-944D37D04890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -28,6 +32,9 @@ Global
 		{37D7C658-7B0D-47D2-82DF-CFF4FB05ED37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37D7C658-7B0D-47D2-82DF-CFF4FB05ED37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37D7C658-7B0D-47D2-82DF-CFF4FB05ED37}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DD8AE0F9-A896-447D-ACB5-944D37D04890} = {0E02921B-85FB-412B-8CC3-6535AB385F30}
