@@ -1,0 +1,36 @@
+trigger:
+  branches:
+    include:
+      - develop
+      - feature/**
+      - release/**
+      - master
+      - hotfix/**
+
+pool:
+  name: Default # Use self-host agent pool named 'Default'
+
+resources:
+  - repo: self
+
+variables:
+  solution: ./RichillCapital.SharedKernel.sln
+  project: ./src/RichillCapital.SharedKernel/RichillCapital.SharedKernel.csproj
+
+stages:
+  - stage: BuildStage
+    displayName: Build
+    jobs:
+      - job: BuildJob
+        displayName: Build
+
+        steps:
+          - script: dotnet restore $(solution)
+            displayName: Restore
+
+          - script: dotnet build $(solution) -c Release --no-restore
+            displayName: Build
+
+          - script: |
+              dotnet test $(solution) -c Release --no-build --no-restore --verbosity normal
+            displayName: Test
