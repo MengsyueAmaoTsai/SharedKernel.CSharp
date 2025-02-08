@@ -180,6 +180,9 @@ dotnet_diagnostic.CA1848.severity = suggestion
 # CA1822: Mark members as static
 dotnet_diagnostic.CA1822.severity = suggestion
 
+# CA1716: Identifiers should not match keywords
+dotnet_diagnostic.CA1716.severity = suggestion
+
 [*.{cpp,h,in}]
 curly_bracket_next_line = true
 indent_brace_style = Allman
