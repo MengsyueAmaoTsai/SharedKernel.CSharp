@@ -1,10 +1,9 @@
 namespace RichillCapital.SharedKernel.UnitTests;
 
-public class UnitTest1
+public sealed class ErrorTests
 {
     [Fact]
-    public void Test1()
+    public void Should_Pass()
     {
-
     }
 }
