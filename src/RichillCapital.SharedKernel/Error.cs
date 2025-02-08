@@ -2,7 +2,7 @@
 
 public readonly record struct Error
 {
-    public static readonly Error None = new(ErrorType.None, string.Empty, string.Empty);
+    public static readonly Error Null = new(ErrorType.Null, string.Empty, string.Empty);
 
     private Error(ErrorType type, string code, string message) =>
         (Type, Code, Message) = (type, code, message);
@@ -16,9 +16,9 @@ public readonly record struct Error
         string code,
         string message)
     {
-        if (type == ErrorType.None)
+        if (type == ErrorType.Null)
         {
-            throw new ArgumentException("Error type cannot be None.", nameof(type));
+            throw new ArgumentException("Error type cannot be Null.", nameof(type));
         }
 
         return new(type, code, message);

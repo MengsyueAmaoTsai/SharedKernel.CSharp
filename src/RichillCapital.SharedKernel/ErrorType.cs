@@ -2,7 +2,7 @@ namespace RichillCapital.SharedKernel;
 
 public enum ErrorType
 {
-    None = 0,
+    Null = 0,
     Validation = 400,
     Unauthorized = 401,
     Forbidden = 403,

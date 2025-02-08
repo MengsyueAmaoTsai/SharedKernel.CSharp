@@ -5,7 +5,7 @@ public sealed class ErrorTests
     [Fact]
     public void Create_When_GivenErrorTypeNone_Should_ThrowArgumentException()
     {
-        Action action = () => Error.Create(ErrorType.None, "errorCode", "errorMessage");
+        Action action = () => Error.Create(ErrorType.Null, "errorCode", "errorMessage");
 
         action.ShouldThrow<ArgumentException>();
     }
