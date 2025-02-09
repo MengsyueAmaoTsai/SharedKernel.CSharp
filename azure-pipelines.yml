@@ -66,7 +66,7 @@ stages:
 
                 Write-Host "Updated assembly version to $(BuildVersion)"
 
-          - script: dotnet publish $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts
+          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts
             displayName: Publish build artifacts
 
           - task: PublishPipelineArtifact@1
