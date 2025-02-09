@@ -6,16 +6,14 @@ public sealed class ErrorTests
     public void Create_When_GivenErrorTypeNull_Should_ThrowArgumentException()
     {
         Action action = () => Error.Create(ErrorType.Null, "errorCode", "errorMessage");
-
-        action.ShouldThrow<ArgumentException>();
+        action.ShouldThrow<ArgumentException>().Message.ShouldBe(Error.NullMessage);
     }
 
     [Fact]
     public void Create_When_GivenEmptyErrorCode_Should_ThrowArgumentException()
     {
         Action action = () => Error.Create(ErrorType.Validation, string.Empty, "errorMessage");
-
-        action.ShouldThrow<ArgumentException>();
+        action.ShouldThrow<ArgumentException>().Message.ShouldBe(Error.EmptyCodeMessage);
     }
 
     [Theory]

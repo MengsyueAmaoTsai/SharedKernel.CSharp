@@ -2,6 +2,9 @@
 
 public readonly record struct Error
 {
+    internal const string NullMessage = "Error type cannot be Null.";
+    internal const string EmptyCodeMessage = "Error code cannot be null or empty.";
+
     public static readonly Error Null = new(ErrorType.Null, nameof(ErrorType.Null), string.Empty);
 
     private Error(ErrorType type, string code, string message) =>
@@ -18,12 +21,12 @@ public readonly record struct Error
     {
         if (type == ErrorType.Null)
         {
-            throw new ArgumentException("Error type cannot be Null.", nameof(type));
+            throw new ArgumentException(NullMessage, nameof(type));
         }
 
         if (string.IsNullOrEmpty(code))
         {
-            throw new ArgumentException("Error code cannot be null or empty.", nameof(code));
+            throw new ArgumentException(EmptyCodeMessage, nameof(code));
         }
 
         return new(type, code, message);
