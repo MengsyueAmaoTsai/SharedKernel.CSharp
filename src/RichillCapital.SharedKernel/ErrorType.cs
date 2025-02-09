@@ -1,5 +1,8 @@
 namespace RichillCapital.SharedKernel;
 
+/// <summary>
+/// Represents the types of errors that can occur.
+/// </summary>
 public enum ErrorType
 {
     Null = 0,
