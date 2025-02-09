@@ -21,12 +21,12 @@ public readonly record struct Error
     {
         if (type == ErrorType.Null)
         {
-            throw new ArgumentException(NullMessage, nameof(type));
+            throw new ArgumentException(NullMessage);
         }
 
         if (string.IsNullOrEmpty(code))
         {
-            throw new ArgumentException(EmptyCodeMessage, nameof(code));
+            throw new ArgumentException(EmptyCodeMessage);
         }
 
         return new(type, code, message);
