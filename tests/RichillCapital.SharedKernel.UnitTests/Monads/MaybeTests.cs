@@ -68,4 +68,16 @@ public sealed class MaybeTests
 
         maybe1.ShouldBe(maybe2);
     }
+
+    [Fact]
+    public void NullMaybe_Should_NotBeEqualToValueMaybe()
+    {
+        var value = "value";
+
+        (Maybe<string> maybe1, Maybe<string> maybe2) = (
+            Maybe<string>.Null(),
+            Maybe<string>.With(value));
+
+        maybe1.ShouldNotBe(maybe2);
+    }
 }
