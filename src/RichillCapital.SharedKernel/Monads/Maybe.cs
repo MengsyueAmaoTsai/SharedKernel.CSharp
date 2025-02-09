@@ -12,9 +12,9 @@ public readonly partial record struct Maybe<TValue>
     internal const string AccessValueOnNullMaybeMessage = "Can not access value on a null Maybe";
 
     private readonly bool _hasValue;
-    private readonly TValue _value;
+    private readonly TValue? _value;
 
-    private Maybe(bool hasValue, TValue value)
+    private Maybe(bool hasValue, TValue? value)
     {
         _hasValue = hasValue;
         _value = value;
@@ -33,7 +33,7 @@ public readonly partial record struct Maybe<TValue>
     /// <summary>
     /// Gets the value of the Maybe. Throws an exception if the Maybe is null.
     /// </summary>
-    public TValue Value => HasValue ? _value :
+    public TValue Value => _value is not null ? _value :
         throw new InvalidOperationException(AccessValueOnNullMaybeMessage);
 
     /// <summary>
