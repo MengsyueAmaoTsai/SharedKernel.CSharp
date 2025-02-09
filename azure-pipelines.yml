@@ -34,3 +34,44 @@ stages:
           - script: |
               dotnet test $(solution) -c Release --no-build --no-restore --verbosity normal
             displayName: Test
+
+      - job: PublishJob
+        displayName: Publish
+        dependsOn: BuildJob
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+
+        steps:
+          - task: PowerShell@2
+            displayName: Generate build version
+            inputs:
+              targetType: inline
+              script: |
+                Write-Host "Generating build version..."
+
+                $buildVersion = (Get-Date).ToString("yy.MMdd") + ".$(Build.BuildId)"
+                Write-Host "##vso[task.setvariable variable=BuildVersion]$buildVersion"
+
+                Write-Host "Generated Build Version: $buildVersion"
+
+          - task: PowerShell@2
+            displayName: Update assembly info
+            inputs:
+              targetType: inline
+              script: |
+                Write-Host "Updating assembly version to $(BuildVersion)"
+
+                $assemblyInfo = Get-Content -Path $(project)
+                $assemblyInfo = $assemblyInfo -replace '<AssemblyVersion>.*</AssemblyVersion>', "<AssemblyVersion>$(BuildVersion)</AssemblyVersion>"
+                $assemblyInfo | Set-Content -Path $(project)
+
+                Write-Host "Updated assembly version to $(BuildVersion)"
+
+          - script: dotnet publish $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts
+            displayName: Publish build artifacts
+
+          - task: PublishPipelineArtifact@1
+            displayName: Publish pipeline artifact
+            inputs:
+              targetPath: '$(Build.ArtifactStagingDirectory)/artifacts'
+              artifact: 'RichillCapital.Identity.Web-Release-$(BuildVersion)'
+              publishLocation: 'pipeline'
