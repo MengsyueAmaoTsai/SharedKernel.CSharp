@@ -87,4 +87,47 @@ public sealed class ErrorTests
         error.Code.ShouldBe(nameof(ErrorType.Null));
         error.Message.ShouldBe(string.Empty);
     }
+
+    [Fact]
+    public void Errors_WithSameProperties_Should_BeEqual()
+    {
+        string sameCode = "Error.Code";
+        string sameMessage = "Error message";
+
+        Error error1 = Error.Create(ErrorType.Validation, sameCode, sameMessage);
+        Error error2 = Error.Create(ErrorType.Validation, sameCode, sameMessage);
+
+        error1.ShouldBe(error2);
+    }
+
+    [Fact]
+    public void Errors_With_DifferentType_Should_NotBeEqual()
+    {
+        string sameCode = "Error.Code";
+        string sameMessage = "Error message";
+        Error error1 = Error.Create(ErrorType.Validation, sameCode, sameMessage);
+        Error error2 = Error.Create(ErrorType.Unauthorized, sameCode, sameMessage);
+
+        error1.ShouldNotBe(error2);
+    }
+
+    [Fact]
+    public void Errors_With_DifferentCode_Should_NotBeEqual()
+    {
+        string sameMessage = "Error message";
+        Error error1 = Error.Create(ErrorType.Validation, "Error.Code1", sameMessage);
+        Error error2 = Error.Create(ErrorType.Validation, "Error.Code2", sameMessage);
+
+        error1.ShouldNotBe(error2);
+    }
+
+    [Fact]
+    public void Errors_With_DifferentMessage_Should_NotBeEqual()
+    {
+        string sameCode = "Error.Code";
+        Error error1 = Error.Create(ErrorType.Validation, sameCode, "Error message 1");
+        Error error2 = Error.Create(ErrorType.Validation, sameCode, "Error message 2");
+
+        error1.ShouldNotBe(error2);
+    }
 }
