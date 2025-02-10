@@ -11,6 +11,7 @@ public readonly partial record struct Result<TValue>
 {
     internal const string AccessErrorOnSuccessMessage = "Cannot access error on success result";
     internal const string AccessValueOnFailureMessage = "Cannot access value on failure result";
+    internal const string NullErrorMessage = "Error cannot be Error.Null";
 
     private readonly bool _isSuccess;
     private readonly Error _error;
@@ -77,5 +78,8 @@ public readonly partial record struct Result<TValue>
     /// <returns>A failure result with the specified error.</returns>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Result<TValue> Failure(Error error) => new(error);
+    public static Result<TValue> Failure(Error error) =>
+        error == Error.Null ?
+            throw new ArgumentNullException(nameof(error)) :
+            new(error);
 }

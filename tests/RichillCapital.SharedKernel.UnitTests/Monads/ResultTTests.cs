@@ -29,6 +29,11 @@ public sealed class ResultTTests
     }
 
     [Fact]
+    public void Failure_GivenNullError_ShouldThrowArgumentNullException() =>
+        Should.Throw<ArgumentNullException>(() =>
+            Result<int>.Failure(Error.Null), Result<int>.NullErrorMessage);
+
+    [Fact]
     public void Results_WithSameValue_ShouldBeEqual()
     {
         var value = 20;
