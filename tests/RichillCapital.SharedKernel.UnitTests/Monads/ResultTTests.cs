@@ -69,7 +69,8 @@ public sealed class ResultTTests
     [Fact]
     public void SuccessResult_Should_NotBeEqualToFailureResult()
     {
-        (Result<int> result1, Result<int> result2) = (Result<int>.Success(20), Result<int>.Failure(Error.Invalid("Invalid operation")));
+        (Result<int> result1, Result<int> result2) =
+            (Result<int>.Success(20), Result<int>.Failure(Error.Invalid("Invalid operation")));
 
         result1.ShouldNotBe(result2);
     }
