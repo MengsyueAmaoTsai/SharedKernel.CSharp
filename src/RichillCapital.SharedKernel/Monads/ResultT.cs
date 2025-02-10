@@ -5,6 +5,9 @@ namespace RichillCapital.SharedKernel.Monads;
 
 public readonly partial record struct Result<TValue>
 {
+    internal const string AccessErrorOnSuccessMessage = "Cannot access error on success result";
+    internal const string AccessValueOnFailureMessage = "Cannot access value on failure result";
+
     private readonly bool _isSuccess;
     private readonly Error _error;
     private readonly TValue _value;
@@ -24,6 +27,14 @@ public readonly partial record struct Result<TValue>
 
     public bool IsSuccess => _isSuccess;
     public bool IsFailure => !_isSuccess;
+    public Error Error => !_isSuccess ?
+        _error :
+        throw new InvalidOperationException(AccessErrorOnSuccessMessage);
+
+    public TValue Value =>
+        _isSuccess ?
+            _value :
+            throw new InvalidOperationException(AccessValueOnFailureMessage);
 
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
