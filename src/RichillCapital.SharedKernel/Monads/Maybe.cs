@@ -14,11 +14,11 @@ public readonly partial record struct Maybe<TValue>
     private readonly bool _hasValue;
     private readonly TValue? _value;
 
-    private Maybe(bool hasValue, TValue? value)
-    {
-        _hasValue = hasValue;
-        _value = value;
-    }
+    private Maybe(bool hasValue, TValue? value) =>
+        (_hasValue, _value) = (hasValue, value);
+
+    private Maybe(TValue value) =>
+        (_hasValue, _value) = (true, value);
 
     /// <summary>
     /// Gets a value indicating whether the Maybe has a value.
@@ -50,7 +50,7 @@ public readonly partial record struct Maybe<TValue>
             return Null();
         }
 
-        return new Maybe<TValue>(true, value);
+        return new Maybe<TValue>(value);
     }
 
     /// <summary>
