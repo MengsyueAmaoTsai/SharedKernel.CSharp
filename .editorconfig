@@ -189,6 +189,9 @@ dotnet_diagnostic.CA1000.severity = suggestion
 # CA1030: Use events where appropriate
 dotnet_diagnostic.CA1030.severity = suggestion
 
+# CA1002: Do not expose generic lists
+dotnet_diagnostic.CA1002.severity = suggestion
+
 [*.{cpp,h,in}]
 curly_bracket_next_line = true
 indent_brace_style = Allman
