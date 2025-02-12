@@ -55,7 +55,7 @@ public sealed class EntityTests
     public void Equals_When_WithSameId_Should_ReturnTrue()
     {
         var entity1 = new TestEntity(new TestEntityId("1"), "TestEntity");
-        var entity2 = new TestEntity(new TestEntityId("1"), "TestEntity");
+        var entity2 = new TestEntity(new TestEntityId("1"), "TestEntity2");
 
         entity1.Equals(entity2).ShouldBeTrue();
     }
