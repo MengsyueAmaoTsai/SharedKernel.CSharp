@@ -43,7 +43,7 @@ public readonly partial record struct Maybe<TValue>
     /// <returns>A Maybe instance containing the specified value.</returns>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Maybe<TValue> With(TValue value)
+    public static Maybe<TValue> WithValue(TValue value)
     {
         if (value is null)
         {

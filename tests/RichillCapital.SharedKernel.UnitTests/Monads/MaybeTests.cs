@@ -3,9 +3,9 @@ namespace RichillCapital.SharedKernel.UnitTests.Monads;
 public sealed class MaybeTests
 {
     [Fact]
-    public void With_GivenNullValue_Should_ReturnNullMaybe()
+    public void WithValue_GivenNullValue_Should_ReturnNullMaybe()
     {
-        Maybe<string> maybe = Maybe<string>.With(null!);
+        Maybe<string> maybe = Maybe<string>.WithValue(null!);
 
         maybe.IsNull.ShouldBeTrue();
         maybe.HasValue.ShouldBeFalse();
@@ -15,10 +15,10 @@ public sealed class MaybeTests
     }
 
     [Fact]
-    public void With_GivenNonNullValue_Should_ReturnMaybeWithValue()
+    public void WithValue_GivenNonNullValue_Should_ReturnMaybeWithValue()
     {
         var stringValue = "value";
-        Maybe<string> maybe = Maybe<string>.With(stringValue);
+        Maybe<string> maybe = Maybe<string>.WithValue(stringValue);
 
         maybe.HasValue.ShouldBeTrue();
         maybe.IsNull.ShouldBeFalse();
@@ -43,8 +43,8 @@ public sealed class MaybeTests
         var sameValue = "value";
 
         (Maybe<string> maybe1, Maybe<string> maybe2) = (
-            Maybe<string>.With(sameValue),
-            Maybe<string>.With(sameValue));
+            Maybe<string>.WithValue(sameValue),
+            Maybe<string>.WithValue(sameValue));
 
         maybe1.ShouldBe(maybe2);
     }
@@ -53,8 +53,8 @@ public sealed class MaybeTests
     public void Maybes_WithDifferentValues_ShouldNotBeEqual()
     {
         (Maybe<string> maybe1, Maybe<string> maybe2) = (
-            Maybe<string>.With("value1"),
-            Maybe<string>.With("value2"));
+            Maybe<string>.WithValue("value1"),
+            Maybe<string>.WithValue("value2"));
 
         maybe1.ShouldNotBe(maybe2);
     }
@@ -76,7 +76,7 @@ public sealed class MaybeTests
 
         (Maybe<string> maybe1, Maybe<string> maybe2) = (
             Maybe<string>.Null(),
-            Maybe<string>.With(value));
+            Maybe<string>.WithValue(value));
 
         maybe1.ShouldNotBe(maybe2);
     }
