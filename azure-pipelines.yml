@@ -75,3 +75,47 @@ stages:
               targetPath: '$(Build.ArtifactStagingDirectory)/artifacts'
               artifact: 'RichillCapital.Identity.Web-Release-$(BuildVersion)'
               publishLocation: 'pipeline'
+
+  - stage: ReleaseStage
+    displayName: Build release artifacts
+    dependsOn: BuildStage
+    condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+
+    jobs:
+      - job: ReleaseJob
+        displayName: Build release artifacts
+        steps:
+          - task: PowerShell@2
+            displayName: Generate release version
+            inputs:
+              targetType: inline
+              script: |
+                Write-Host "Generating release version from branch: $(Build.SourceBranch)"
+
+                $branchName = "$(Build.SourceBranchName)"
+                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$branchName"
+
+                Write-Host "Generated Release Version: $branchName"
+
+          - task: PowerShell@2
+            displayName: Update assembly info
+            inputs:
+              targetType: inline
+              script: |
+                Write-Host "Updating assembly version to $(ReleaseVersion)"
+
+                $assemblyInfo = Get-Content -Path $(project)
+                $assemblyInfo = $assemblyInfo -replace '<AssemblyVersion>.*</AssemblyVersion>', "<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>"
+                $assemblyInfo | Set-Content -Path $(project)
+
+                Write-Host "Updated assembly version to $(ReleaseVersion)"
+
+          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts
+            displayName: Publish build artifacts
+
+          - task: PublishPipelineArtifact@1
+            displayName: Publish pipeline artifact
+            inputs:
+              targetPath: $(Build.SourcesDirectory)/artifacts
+              artifact: 'RichillCapital.SharedKernel-$(BuildVersion)'
+              publishLocation: 'pipeline'
