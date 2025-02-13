@@ -116,7 +116,7 @@ stages:
           - task: PublishPipelineArtifact@1
             displayName: Publish pipeline artifact
             inputs:
-              targetPath: $(Build.SourcesDirectory)/artifacts
+              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
               artifact: 'RichillCapital.SharedKernel-$(ReleaseVersion)'
               publishLocation: 'pipeline'
 
