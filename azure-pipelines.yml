@@ -199,5 +199,5 @@ stages:
                 git tag -a "v$(ReleaseVersion)" -m "Release version $(ReleaseVersion)"
                 git push origin "v$(ReleaseVersion)"
 
-          - script: dotnet nuget push $(Build.ArtifactStagingDirectory)/artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $(NUGET_API_KEY)
+          - script: dotnet nuget push $(Build.ArtifactStagingDirectory)/artifacts/RichillCapital.SharedKernel.*.nupkg --source https://api.nuget.org/v3/index.json --api-key $(NUGET_API_KEY) --skip-duplicate
             displayName: Publish to NuGet gallery
