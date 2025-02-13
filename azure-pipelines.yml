@@ -53,20 +53,7 @@ stages:
 
                 Write-Host "Generated Build Version: $buildVersion"
 
-          - task: PowerShell@2
-            displayName: Update assembly info
-            inputs:
-              targetType: inline
-              script: |
-                Write-Host "Updating assembly version to $(BuildVersion)"
-
-                $assemblyInfo = Get-Content -Path $(project)
-                $assemblyInfo = $assemblyInfo -replace '<AssemblyVersion>.*</AssemblyVersion>', "<AssemblyVersion>$(BuildVersion)</AssemblyVersion>"
-                $assemblyInfo | Set-Content -Path $(project)
-
-                Write-Host "Updated assembly version to $(BuildVersion)"
-
-          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts
+          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
             displayName: Publish build artifacts
 
           - task: PublishPipelineArtifact@1
@@ -97,20 +84,7 @@ stages:
 
                 Write-Host "Generated Release Version: $branchName"
 
-          - task: PowerShell@2
-            displayName: Update assembly info
-            inputs:
-              targetType: inline
-              script: |
-                Write-Host "Updating assembly version to $(ReleaseVersion)"
-
-                $assemblyInfo = Get-Content -Path $(project)
-                $assemblyInfo = $assemblyInfo -replace '<AssemblyVersion>.*</AssemblyVersion>', "<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>"
-                $assemblyInfo | Set-Content -Path $(project)
-
-                Write-Host "Updated assembly version to $(ReleaseVersion)"
-
-          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts
+          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
             displayName: Publish build artifacts
 
           - task: PublishPipelineArtifact@1
@@ -164,20 +138,7 @@ stages:
                     exit 1
                 }
 
-          - task: PowerShell@2
-            displayName: Update assembly info
-            inputs:
-              targetType: inline
-              script: |
-                Write-Host "Updating assembly version to $(ReleaseVersion)"
-
-                $assemblyInfo = Get-Content -Path $(project)
-                $assemblyInfo = $assemblyInfo -replace '<AssemblyVersion>.*</AssemblyVersion>', "<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>"
-                $assemblyInfo | Set-Content -Path $(project)
-
-                Write-Host "Updated assembly version to $(ReleaseVersion)"
-
-          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts
+          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
             displayName: Generate production build
 
           - task: PowerShell@2
