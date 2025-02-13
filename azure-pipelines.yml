@@ -117,5 +117,87 @@ stages:
             displayName: Publish pipeline artifact
             inputs:
               targetPath: $(Build.SourcesDirectory)/artifacts
-              artifact: 'RichillCapital.SharedKernel-$(BuildVersion)'
+              artifact: 'RichillCapital.SharedKernel-$(ReleaseVersion)'
               publishLocation: 'pipeline'
+
+  - stage: ProductionStage
+    displayName: Production deployment
+    dependsOn: BuildStage
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    jobs:
+      - job: DeployProductionJob
+        displayName: Publish to NuGet gallery
+        steps:
+          - task: PowerShell@2
+            displayName: Generate release version from latest release branch
+            inputs:
+              targetType: inline
+              script: |
+                git fetch --all
+
+                $branches = git branch -r | Where-Object { $_ -match 'origin/release/\d+\.\d+\.\d+' }
+
+                if (-not $branches) {
+                    Write-Error "No matching branches found."
+                    exit 1
+                }
+
+                $versions = $branches |
+                ForEach-Object {
+                    if ($_ -match 'origin/release/(\d+\.\d+\.\d+)') {
+                        [PSCustomObject]@{
+                            BranchName = $_.Trim()
+                            Version = [System.Version]$matches[1]
+                        }
+                    }
+                }
+
+                $latestBranch = $versions |
+                    Sort-Object -Property Version -Descending |
+                    Select-Object -First 1
+
+                if ($latestBranch) {
+                    Write-Host "##vso[task.setvariable variable=ReleaseVersion]$($latestBranch.Version)"
+                    Write-Host "Generated release version: $($latestBranch.Version)"
+                } else {
+                    Write-Error "Failed to find the latest release branch."
+                    exit 1
+                }
+
+          - task: PowerShell@2
+            displayName: Update assembly info
+            inputs:
+              targetType: inline
+              script: |
+                Write-Host "Updating assembly version to $(ReleaseVersion)"
+
+                $assemblyInfo = Get-Content -Path $(project)
+                $assemblyInfo = $assemblyInfo -replace '<AssemblyVersion>.*</AssemblyVersion>', "<AssemblyVersion>$(ReleaseVersion)</AssemblyVersion>"
+                $assemblyInfo | Set-Content -Path $(project)
+
+                Write-Host "Updated assembly version to $(ReleaseVersion)"
+
+          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts
+            displayName: Generate production build
+
+          - task: PowerShell@2
+            displayName: Create and push git tag
+            inputs:
+              targetType: inline
+              script: |
+                git config user.name "Mengsyue Amao Tsai"
+                git config user.email "mengsyue.tsai@outlook.com"
+                git fetch --tags
+
+                $tagName = "v$(ReleaseVersion)"
+                $existingTags = git tag --list
+                if ($existingTags -contains $tagName) {
+                  Write-Host "Tag $tagName already exists."
+                  exit 0
+                }
+
+                git tag -a "v$(ReleaseVersion)" -m "Release version $(ReleaseVersion)"
+                git push origin "v$(ReleaseVersion)"
+
+          - script: dotnet nuget push $(Build.ArtifactStagingDirectory)/artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $(NUGET_API_KEY)
+            displayName: Publish to NuGet gallery
