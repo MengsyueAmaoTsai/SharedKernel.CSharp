@@ -190,6 +190,22 @@ public readonly record struct Error
     /// <param name="message">The message of the error.</param>
     /// <returns>The created unavailable error.</returns>
     public static Error Unavailable(string message) => Create(ErrorType.Unavailable, nameof(ErrorType.Unavailable), message);
+
+
+    /// <summary>
+    /// Creates a new timeout error with the specified code and message.
+    /// </summary>
+    /// <param name="code">The code of the error.</param>
+    /// <param name="message">The message of the error.</param>
+    /// <returns>The created timeout error.</returns>
+    public static Error Timeout(string code, string message) => Create(ErrorType.Timeout, code, message);
+
+    /// <summary>
+    /// Creates a new timeout error with the specified message.
+    /// </summary>
+    /// <param name="message">The message of the error.</param>
+    /// <returns>The created timeout error.</returns>
+    public static Error Timeout(string message) => Create(ErrorType.Timeout, nameof(ErrorType.Timeout), message);
 }
 
 /// <summary>
@@ -207,4 +223,5 @@ public enum ErrorType
     UnsupportedMediaType = 415,
     Unexpected = 500,
     Unavailable = 503,
+    Timeout = 504,
 }

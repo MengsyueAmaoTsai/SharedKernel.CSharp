@@ -53,7 +53,7 @@ stages:
 
                 Write-Host "Generated Build Version: $buildVersion"
 
-          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
+          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(BuildVersion)
             displayName: Publish build artifacts
 
           - task: PublishPipelineArtifact@1
