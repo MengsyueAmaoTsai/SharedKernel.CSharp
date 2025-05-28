@@ -26,6 +26,7 @@ public sealed class ErrorTests
     [InlineData(ErrorType.UnsupportedMediaType)]
     [InlineData(ErrorType.Unexpected)]
     [InlineData(ErrorType.Unavailable)]
+    [InlineData(ErrorType.Timeout)]
     public void Create_Should_CreateError(ErrorType errorType)
     {
         var errorCode = "Error.Code";
@@ -48,6 +49,7 @@ public sealed class ErrorTests
     [InlineData(ErrorType.UnsupportedMediaType, nameof(ErrorType.UnsupportedMediaType))]
     [InlineData(ErrorType.Unexpected, nameof(ErrorType.Unexpected))]
     [InlineData(ErrorType.Unavailable, nameof(ErrorType.Unavailable))]
+    [InlineData(ErrorType.Timeout, nameof(ErrorType.Timeout))]
     public void FactoryMethods_Should_CreateCorrectError(
         ErrorType errorType,
         string defaultErrorCode)
@@ -66,6 +68,7 @@ public sealed class ErrorTests
             ErrorType.UnsupportedMediaType => (Error.UnsupportedMediaType(customErrorCode, errorMessage), Error.UnsupportedMediaType(errorMessage)),
             ErrorType.Unexpected => (Error.Unexpected(customErrorCode, errorMessage), Error.Unexpected(errorMessage)),
             ErrorType.Unavailable => (Error.Unavailable(customErrorCode, errorMessage), Error.Unavailable(errorMessage)),
+            ErrorType.Timeout => (Error.Timeout(customErrorCode, errorMessage), Error.Timeout(errorMessage)),
             _ => throw new ArgumentOutOfRangeException(nameof(errorType), errorType, null),
         };
 
