@@ -41,7 +41,7 @@ stages:
             inputs:
               targetType: inline
               script: |
-                $buildVersion = $(Build.SourcesDirectory)/scripts/GenerateBuildVersion.ps1 -Revision $(Build.BuildId)
+                $buildVersion = & $(Build.SourcesDirectory)/scripts/GenerateBuildVersion.ps1 -Revision $(Build.BuildId)
                 Write-Host "##vso[task.setvariable variable=BuildVersion]$buildVersion"
 
           - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(BuildVersion)
@@ -67,10 +67,8 @@ stages:
             inputs:
               targetType: inline
               script: |
-                Write-Host "Generating release version from branch: $(Build.SourceBranch)"
-                $branchName = "$(Build.SourceBranchName)"
-                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$branchName"
-                Write-Host "Generated Release Version: $branchName"
+                $releaseVersion = & $(Build.SourcesDirectory)/scripts/GenerateReleaseVersion.ps1 -BranchName "$(Build.SourceBranchName)"
+                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$releaseVersion"
 
           - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
             displayName: Publish build artifacts
@@ -95,34 +93,8 @@ stages:
             inputs:
               targetType: inline
               script: |
-                git fetch --all
-                $branches = git branch -r | Where-Object { $_ -match 'origin/release/\d+\.\d+\.\d+' }
-                if (-not $branches) {
-                    Write-Error "No matching branches found."
-                    exit 1
-                }
-
-                $versions = $branches |
-                ForEach-Object {
-                    if ($_ -match 'origin/release/(\d+\.\d+\.\d+)') {
-                        [PSCustomObject]@{
-                            BranchName = $_.Trim()
-                            Version = [System.Version]$matches[1]
-                        }
-                    }
-                }
-
-                $latestBranch = $versions |
-                    Sort-Object -Property Version -Descending |
-                    Select-Object -First 1
-
-                if ($latestBranch) {
-                    Write-Host "##vso[task.setvariable variable=ReleaseVersion]$($latestBranch.Version)"
-                    Write-Host "Generated release version: $($latestBranch.Version)"
-                } else {
-                    Write-Error "Failed to find the latest release branch."
-                    exit 1
-                }
+                $releaseVersion = & $(Build.SourcesDirectory)/scripts/GetLatestReleaseVersion.ps1
+                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$releaseVersion"
 
           - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
             displayName: Generate production build
