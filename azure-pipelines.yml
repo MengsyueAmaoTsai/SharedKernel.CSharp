@@ -14,8 +14,9 @@ resources:
   - repo: self
 
 variables:
-  solution: ./RichillCapital.SharedKernel.sln
-  project: ./src/RichillCapital.SharedKernel/RichillCapital.SharedKernel.csproj
+  buildConfiguration: Release
+  solutionPath: ./RichillCapital.SharedKernel.slnx
+  projectPath: ./src/RichillCapital.SharedKernel/RichillCapital.SharedKernel.csproj
 
 stages:
   - stage: BuildStage
@@ -23,51 +24,40 @@ stages:
     jobs:
       - job: BuildJob
         displayName: Build
-
         steps:
-          - script: dotnet restore $(solution)
-            displayName: Restore
-
-          - script: dotnet build $(solution) -c Release --no-restore
+          - script: dotnet build $(solutionPath) -c $(buildConfiguration)
             displayName: Build
 
-          - script: |
-              dotnet test $(solution) -c Release --no-build --no-restore --verbosity normal
+          - script: dotnet test $(solutionPath) -c $(buildConfiguration) --no-build --no-restore --verbosity normal
             displayName: Test
 
       - job: PublishJob
         displayName: Publish
         dependsOn: BuildJob
         condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
-
         steps:
           - task: PowerShell@2
             displayName: Generate build version
             inputs:
               targetType: inline
               script: |
-                Write-Host "Generating build version..."
-
-                $buildVersion = (Get-Date).ToString("yy.MMdd") + ".$(Build.BuildId)"
+                $buildVersion = $(Build.SourcesDirectory)/scripts/GenerateBuildVersion.ps1 -Revision $(Build.BuildId)
                 Write-Host "##vso[task.setvariable variable=BuildVersion]$buildVersion"
 
-                Write-Host "Generated Build Version: $buildVersion"
-
-          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(BuildVersion)
+          - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(BuildVersion)
             displayName: Publish build artifacts
 
           - task: PublishPipelineArtifact@1
             displayName: Publish pipeline artifact
             inputs:
-              targetPath: '$(Build.ArtifactStagingDirectory)/artifacts'
-              artifact: 'RichillCapital.Identity.Web-Release-$(BuildVersion)'
-              publishLocation: 'pipeline'
+              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+              artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(BuildVersion)
+              publishLocation: pipeline
 
   - stage: ReleaseStage
     displayName: Build release artifacts
     dependsOn: BuildStage
     condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
-
     jobs:
       - job: ReleaseJob
         displayName: Build release artifacts
@@ -78,21 +68,19 @@ stages:
               targetType: inline
               script: |
                 Write-Host "Generating release version from branch: $(Build.SourceBranch)"
-
                 $branchName = "$(Build.SourceBranchName)"
                 Write-Host "##vso[task.setvariable variable=ReleaseVersion]$branchName"
-
                 Write-Host "Generated Release Version: $branchName"
 
-          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
+          - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
             displayName: Publish build artifacts
 
           - task: PublishPipelineArtifact@1
             displayName: Publish pipeline artifact
             inputs:
               targetPath: $(Build.ArtifactStagingDirectory)/artifacts
-              artifact: 'RichillCapital.SharedKernel-$(ReleaseVersion)'
-              publishLocation: 'pipeline'
+              artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
+              publishLocation: pipeline
 
   - stage: ProductionStage
     displayName: Production deployment
@@ -108,9 +96,7 @@ stages:
               targetType: inline
               script: |
                 git fetch --all
-
                 $branches = git branch -r | Where-Object { $_ -match 'origin/release/\d+\.\d+\.\d+' }
-
                 if (-not $branches) {
                     Write-Error "No matching branches found."
                     exit 1
@@ -138,7 +124,7 @@ stages:
                     exit 1
                 }
 
-          - script: dotnet pack $(project) -c Release -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
+          - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
             displayName: Generate production build
 
           - task: PowerShell@2
