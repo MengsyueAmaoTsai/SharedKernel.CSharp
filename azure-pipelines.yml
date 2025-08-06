@@ -15,8 +15,8 @@ resources:
 
 variables:
   buildConfiguration: Release
-  solutionPath: $(Build.SourceDirectory)/RichillCapital.SharedKernel.slnx
-  projectPath: $(Build.SourceDirectory)/src/RichillCapital.SharedKernel/RichillCapital.SharedKernel.csproj
+  solutionPath: $(Build.SourcesDirectory)/RichillCapital.SharedKernel.slnx
+  projectPath: $(Build.SourcesDirectory)/src/RichillCapital.SharedKernel/RichillCapital.SharedKernel.csproj
   artifactsPath: $(Build.ArtifactStagingDirectory)/artifacts
 
 stages:
