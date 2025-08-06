@@ -25,98 +25,141 @@ stages:
       - job: BuildJob
         displayName: Build
         steps:
-          - script: dotnet build $(solutionPath) -c $(buildConfiguration)
+          - task: PowerShell@2
             displayName: Build
+            inputs:
+              targetType: inline
+              script: |
+                dotnet build $(solutionPath) -c $(buildConfiguration)
 
-          - script: dotnet test $(solutionPath) -c $(buildConfiguration) --no-build --no-restore --verbosity normal
-            displayName: Test
+  - stage: TestStage
+    displayName: Test
+    dependsOn: BuildStage
+    jobs:
+      - job: UnitTestsJob
+        displayName: Run Unit Tests
+        steps:
+          - task: PowerShell@2
+            displayName: Run Unit Tests
+            inputs:
+              targetType: inline
+              script: |
+                dotnet test $(solutionPath) -c $(buildConfiguration) --no-build --no-restore --verbosity normal
 
+  - stage: PublishStage
+    displayName: Publish
+    dependsOn: TestStage
+    jobs:
       - job: PublishJob
-        displayName: Publish
-        dependsOn: BuildJob
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+        displayName:  Publish Artifacts
         steps:
           - task: PowerShell@2
-            displayName: Generate build version
+            displayName: Generate Version
             inputs:
               targetType: inline
               script: |
-                $buildVersion = & $(Build.SourcesDirectory)/scripts/GenerateBuildVersion.ps1 -Revision $(Build.BuildId)
-                Write-Host "##vso[task.setvariable variable=BuildVersion]$buildVersion"
+                $version = & $(Build.SourcesDirectory)/scripts/GenerateBuildVersion.ps1 -Revision $(Build.BuildId)
+                Write-Host "##vso[task.setvariable variable=BuildVersion]$version"
+                
 
-          - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(BuildVersion)
-            displayName: Publish build artifacts
+  # - stage: BuildStage
+  #   displayName: Build
+  #   jobs:
+  #     - job: BuildJob
+  #       displayName: Build
+  #       steps:
+  #         - script: dotnet build $(solutionPath) -c $(buildConfiguration)
+  #           displayName: Build
 
-          - task: PublishPipelineArtifact@1
-            displayName: Publish pipeline artifact
-            inputs:
-              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
-              artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(BuildVersion)
-              publishLocation: pipeline
+  #         - script: dotnet test $(solutionPath) -c $(buildConfiguration) --no-build --no-restore --verbosity normal
+  #           displayName: Test
 
-  - stage: ReleaseStage
-    displayName: Build release artifacts
-    dependsOn: BuildStage
-    condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
-    jobs:
-      - job: ReleaseJob
-        displayName: Build release artifacts
-        steps:
-          - task: PowerShell@2
-            displayName: Generate release version
-            inputs:
-              targetType: inline
-              script: |
-                $releaseVersion = & $(Build.SourcesDirectory)/scripts/GenerateReleaseVersion.ps1 -BranchName "$(Build.SourceBranchName)"
-                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$releaseVersion"
+  #     - job: PublishJob
+  #       displayName: Publish
+  #       dependsOn: BuildJob
+  #       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  #       steps:
+  #         - task: PowerShell@2
+  #           displayName: Generate build version
+  #           inputs:
+  #             targetType: inline
+  #             script: |
+  #               $buildVersion = & $(Build.SourcesDirectory)/scripts/GenerateBuildVersion.ps1 -Revision $(Build.BuildId)
+  #               Write-Host "##vso[task.setvariable variable=BuildVersion]$buildVersion"
 
-          - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
-            displayName: Publish build artifacts
+  #         - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(BuildVersion)
+  #           displayName: Publish build artifacts
 
-          - task: PublishPipelineArtifact@1
-            displayName: Publish pipeline artifact
-            inputs:
-              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
-              artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
-              publishLocation: pipeline
+  #         - task: PublishPipelineArtifact@1
+  #           displayName: Publish pipeline artifact
+  #           inputs:
+  #             targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+  #             artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(BuildVersion)
+  #             publishLocation: pipeline
 
-  - stage: ProductionStage
-    displayName: Production deployment
-    dependsOn: BuildStage
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-    jobs:
-      - job: DeployProductionJob
-        displayName: Publish to NuGet gallery
-        steps:
-          - task: PowerShell@2
-            displayName: Generate release version from latest release branch
-            inputs:
-              targetType: inline
-              script: |
-                $releaseVersion = & $(Build.SourcesDirectory)/scripts/GetLatestReleaseVersion.ps1
-                Write-Host "##vso[task.setvariable variable=ReleaseVersion]$releaseVersion"
+  # - stage: ReleaseStage
+  #   displayName: Build release artifacts
+  #   dependsOn: BuildStage
+  #   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+  #   jobs:
+  #     - job: ReleaseJob
+  #       displayName: Build release artifacts
+  #       steps:
+  #         - task: PowerShell@2
+  #           displayName: Generate release version
+  #           inputs:
+  #             targetType: inline
+  #             script: |
+  #               $releaseVersion = & $(Build.SourcesDirectory)/scripts/GenerateReleaseVersion.ps1 -BranchName "$(Build.SourceBranchName)"
+  #               Write-Host "##vso[task.setvariable variable=ReleaseVersion]$releaseVersion"
 
-          - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
-            displayName: Generate production build
+  #         - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
+  #           displayName: Publish build artifacts
 
-          - task: PowerShell@2
-            displayName: Create and push git tag
-            inputs:
-              targetType: inline
-              script: |
-                git config user.name "Mengsyue Amao Tsai"
-                git config user.email "mengsyue.tsai@outlook.com"
-                git fetch --tags
+  #         - task: PublishPipelineArtifact@1
+  #           displayName: Publish pipeline artifact
+  #           inputs:
+  #             targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+  #             artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(ReleaseVersion)
+  #             publishLocation: pipeline
 
-                $tagName = "v$(ReleaseVersion)"
-                $existingTags = git tag --list
-                if ($existingTags -contains $tagName) {
-                  Write-Host "Tag $tagName already exists."
-                  exit 0
-                }
+  # - stage: ProductionStage
+  #   displayName: Production deployment
+  #   dependsOn: BuildStage
+  #   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  #   jobs:
+  #     - job: DeployProductionJob
+  #       displayName: Publish to NuGet gallery
+  #       steps:
+  #         - task: PowerShell@2
+  #           displayName: Generate release version from latest release branch
+  #           inputs:
+  #             targetType: inline
+  #             script: |
+  #               $releaseVersion = & $(Build.SourcesDirectory)/scripts/GetLatestReleaseVersion.ps1
+  #               Write-Host "##vso[task.setvariable variable=ReleaseVersion]$releaseVersion"
 
-                git tag -a "v$(ReleaseVersion)" -m "Release version $(ReleaseVersion)"
-                git push origin "v$(ReleaseVersion)"
+  #         - script: dotnet pack $(projectPath) -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/artifacts -p:PackageVersion=$(ReleaseVersion)
+  #           displayName: Generate production build
 
-          - script: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $(NUGET_API_KEY) --skip-duplicate
-            displayName: Publish to NuGet gallery
+  #         - task: PowerShell@2
+  #           displayName: Create and push git tag
+  #           inputs:
+  #             targetType: inline
+  #             script: |
+  #               git config user.name "Mengsyue Amao Tsai"
+  #               git config user.email "mengsyue.tsai@outlook.com"
+  #               git fetch --tags
+
+  #               $tagName = "v$(ReleaseVersion)"
+  #               $existingTags = git tag --list
+  #               if ($existingTags -contains $tagName) {
+  #                 Write-Host "Tag $tagName already exists."
+  #                 exit 0
+  #               }
+
+  #               git tag -a "v$(ReleaseVersion)" -m "Release version $(ReleaseVersion)"
+  #               git push origin "v$(ReleaseVersion)"
+
+  #         - script: dotnet nuget push $(Build.ArtifactStagingDirectory)/**/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $(NUGET_API_KEY) --skip-duplicate
+  #           displayName: Publish to NuGet gallery
