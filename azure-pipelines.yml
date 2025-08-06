@@ -44,7 +44,7 @@ stages:
             inputs:
               targetType: inline
               script: |
-                dotnet test $(solutionPath) -c $(buildConfiguration) --no-build --no-restore --verbosity normal
+                dotnet test $(solutionPath) -c $(buildConfiguration) --verbosity normal
 
   - stage: PublishStage
     displayName: Publish
@@ -60,20 +60,25 @@ stages:
               script: |
                 $version = & $(Build.SourcesDirectory)/scripts/GenerateBuildVersion.ps1 -Revision $(Build.BuildId)
                 Write-Host "##vso[task.setvariable variable=BuildVersion]$version"
-                
+
+          - task: PowerShell@2
+            displayName: Publish Artifacts
+            inputs:
+              targetType: inline
+              script: |
+                dotnet pack $(projectPath) `
+                  -c $(buildConfiguration) `
+                  -o $(Build.ArtifactStagingDirectory)/artifacts `
+                  -p:PackageVersion=$(BuildVersion)
+
+          - task: PublishPipelineArtifact@1
+            displayName: Publish RichillCapital.SharedKernel Artifacts
+            inputs:
+              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+              artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(BuildVersion)
+              publishLocation: pipeline
 
   # - stage: BuildStage
-  #   displayName: Build
-  #   jobs:
-  #     - job: BuildJob
-  #       displayName: Build
-  #       steps:
-  #         - script: dotnet build $(solutionPath) -c $(buildConfiguration)
-  #           displayName: Build
-
-  #         - script: dotnet test $(solutionPath) -c $(buildConfiguration) --no-build --no-restore --verbosity normal
-  #           displayName: Test
-
   #     - job: PublishJob
   #       displayName: Publish
   #       dependsOn: BuildJob
