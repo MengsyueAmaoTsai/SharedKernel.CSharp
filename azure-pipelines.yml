@@ -15,8 +15,9 @@ resources:
 
 variables:
   buildConfiguration: Release
-  solutionPath: ./RichillCapital.SharedKernel.slnx
-  projectPath: ./src/RichillCapital.SharedKernel/RichillCapital.SharedKernel.csproj
+  solutionPath: $(Build.SourceDirectory)/RichillCapital.SharedKernel.slnx
+  projectPath: $(Build.SourceDirectory)/src/RichillCapital.SharedKernel/RichillCapital.SharedKernel.csproj
+  artifactsPath: $(Build.ArtifactStagingDirectory)/artifacts
 
 stages:
   - stage: BuildStage
@@ -68,13 +69,13 @@ stages:
               script: |
                 dotnet pack $(projectPath) `
                   -c $(buildConfiguration) `
-                  -o $(Build.ArtifactStagingDirectory)/artifacts `
+                  -o $(artifactsPath) `
                   -p:PackageVersion=$(BuildVersion)
 
           - task: PublishPipelineArtifact@1
             displayName: Publish RichillCapital.SharedKernel Artifacts
             inputs:
-              targetPath: $(Build.ArtifactStagingDirectory)/artifacts
+              targetPath: $(artifactsPath)
               artifact: RichillCapital.SharedKernel-$(buildConfiguration)-$(BuildVersion)
               publishLocation: pipeline
 
