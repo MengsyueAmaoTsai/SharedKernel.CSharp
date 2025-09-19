@@ -1,4 +1,4 @@
 {
     "dotnet.defaultSolution": "./RichillCapital.SharedKernel.sln",
-    "cSpell.words": ["Shouldly", "Xunit"]
+    "cSpell.words": ["Shouldly", "slnx", "Xunit"]
 }

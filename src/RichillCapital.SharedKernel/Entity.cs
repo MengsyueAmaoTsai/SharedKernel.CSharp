@@ -2,7 +2,7 @@ namespace RichillCapital.SharedKernel;
 
 public interface IEntity
 {
-    IEnumerable<IDomainEvent> GetDomainEvents();
+    IReadOnlyCollection<IDomainEvent> GetDomainEvents();
     void RaiseDomainEvent(IDomainEvent domainEvent);
     void ClearDomainEvents();
 }
@@ -26,13 +26,9 @@ public abstract class Entity<TEntityId> :
 
     public static bool operator !=(Entity<TEntityId>? a, Entity<TEntityId>? b) => !(a == b);
 
+    public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => [.. _domainEvents];
+    public void RaiseDomainEvent(IDomainEvent domainEvent) => _domainEvents.Add(domainEvent);
     public void ClearDomainEvents() => _domainEvents.Clear();
-
-    public IEnumerable<IDomainEvent> GetDomainEvents() =>
-        _domainEvents.AsReadOnly();
-
-    public void RaiseDomainEvent(IDomainEvent domainEvent) =>
-        _domainEvents.Add(domainEvent);
 
     public override bool Equals(object? obj) =>
         obj is not null &&
