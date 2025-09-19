@@ -20,7 +20,7 @@ public sealed class EntityTests
         }
     }
 
-    internal sealed record TestDomainEvent : DomainEvent
+    internal sealed record TestDomainEvent : IDomainEvent
     {
     }
 
